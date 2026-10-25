@@ -8,7 +8,10 @@ import {
   Link2,
   ArrowRight,
 } from "lucide-react";
+import { Chip } from "./chip";
 import { Reveal } from "./reveal";
+import { Container, Section } from "./section";
+import { cn } from "@/lib/utils";
 
 const SMALL = [
   {
@@ -24,7 +27,7 @@ const SMALL = [
   {
     icon: PackageCheck,
     title: "Back-in-stock alerts",
-    body: "Sold out? Price Tracker keeps watching and pings the moment inventory returns.",
+    body: "Sold out? Plummet keeps watching and pings the moment inventory returns.",
   },
   {
     icon: SlidersHorizontal,
@@ -38,94 +41,89 @@ const SMALL = [
   },
 ];
 
+const GLYPH = "size-6 shrink-0 text-rds-icon-accent";
+
+/** A link going in and a price coming out, drawn as the old figures were: hairline boxes on the glass. */
 function ExtractionFlow() {
   return (
-    <div className="mt-7 border border-line bg-ink p-4">
-      <div className="flex items-center gap-3">
-        <span className="flex min-w-0 flex-1 items-center gap-2 border border-line bg-ink-2 px-3 py-2.5">
-          <Link2 className="h-4 w-4 shrink-0 text-faint" />
-          <span className="tnum truncate text-xs text-muted">
+    <figure className="m-0">
+      <div className="flex items-center gap-rds-3">
+        <span className="flex min-w-0 flex-1 items-center gap-rds-2 rounded-rds-xs border border-rds-dusk-90 bg-white/[0.03] px-rds-3 py-[10px]">
+          <Link2 className="size-4 shrink-0 text-rds-dusk-50" strokeWidth={1.5} aria-hidden />
+          <span className="rds-tnum truncate font-rds-mono text-rds-body-xs text-rds-dusk-30">
             amazon.com/dp/B0C33XXL
           </span>
         </span>
-        <ArrowRight className="h-4 w-4 shrink-0 text-faint" />
-        <span className="flex shrink-0 items-center border border-cyan bg-cyan/10 px-3 py-2.5">
-          <span className="tnum text-sm font-semibold text-cyan">$278.00</span>
+        <ArrowRight className="size-4 shrink-0 text-rds-dusk-50" strokeWidth={1.5} aria-hidden />
+        <span className="flex shrink-0 items-center rounded-rds-xs border border-rds-dusk-90 bg-white/[0.03] px-rds-3 py-[10px]">
+          <span className="rds-tnum font-rds-mono text-rds-body-sm text-rds-yellow">$278.00</span>
         </span>
       </div>
-      <p className="mt-3 font-mono text-[0.7rem] leading-relaxed text-faint">
+      <figcaption className="mt-rds-3 border-t border-rds-dusk pt-rds-3 font-rds-mono text-rds-body-xs text-pretty text-rds-dusk-30">
         Structured data, per-site adapters, then a stealth browser when a site
         fights back. Every tier, so a link is all you give it.
-      </p>
-    </div>
+      </figcaption>
+    </figure>
   );
 }
 
 export function Features() {
   return (
-    <section id="features" className="relative scroll-mt-20 px-5 py-24">
-      <div className="mx-auto max-w-6xl">
-        <Reveal className="max-w-2xl">
-          <p className="eyebrow">[ features ]</p>
-          <h2 className="mt-4 font-pixel text-[clamp(1.4rem,3.5vw,2.4rem)] leading-tight">
-            Deal toolkit
+    <Section id="features" labelledBy="features-heading" className="rds-screen">
+      <Container>
+        <Reveal variant="wipe">
+          <h2 id="features-heading" className="rds-jobs-title">
+            Deal <em data-emphasis>toolkit</em>
           </h2>
-          <p className="mt-4 text-muted">
-            Everything your server needs to never overpay again.
-          </p>
         </Reveal>
 
-        <div className="mt-12 grid gap-px border border-line bg-line lg:grid-cols-6">
-          {/* Big tile */}
-          <Reveal className="lg:col-span-3 lg:row-span-2">
-            <div className="lift flex h-full flex-col bg-ink-1 p-7">
-              <span className="grid h-11 w-11 place-items-center border border-line text-cyan">
-                <Boxes className="h-5 w-5" />
-              </span>
-              <h3 className="mt-5 text-2xl font-semibold">
-                Drop a link from anywhere
-              </h3>
-              <p className="mt-3 max-w-md text-muted">
+        <Reveal as="p" variant="settle" delay={140} className="rds-jobs-lede">
+          Everything your server needs to never overpay again.
+        </Reveal>
+
+        <div className="rds-toolkit mt-rds-6 grid gap-rds-4 md:grid-cols-2 xl:grid-cols-6">
+          <Reveal variant="lift" className="min-w-0 md:col-span-2 xl:col-span-3 xl:row-span-2">
+            <div className="rds-card rds-card--feature rds-glass rds-stroke rds-jobs-card h-full">
+              <Boxes className={GLYPH} strokeWidth={1.5} aria-hidden />
+              <h3 className="rds-jobs-name text-rds-h-xs">Drop a link from anywhere</h3>
+              <p className="max-w-[46ch] font-rds-sans text-rds-body-md text-rds-fg-muted">
                 Amazon, eBay, AliExpress, Walmart, Best Buy, Target and most
-                stores in between. Paste a URL and Price Tracker resolves the
+                stores in between. Paste a URL and Plummet resolves the
                 price, even on sites that try to hide it.
               </p>
-              <ExtractionFlow />
-              <div className="mt-auto flex flex-wrap gap-2 pt-6">
-                {["Amazon", "eBay", "Walmart", "AliExpress", "Best Buy", "Target"].map(
-                  (s) => (
-                    <span
-                      key={s}
-                      className="border border-line px-3 py-1 font-mono text-[0.7rem] uppercase tracking-wide text-muted"
-                    >
-                      {s}
-                    </span>
-                  ),
-                )}
+              <div className="mt-rds-2">
+                <ExtractionFlow />
+              </div>
+              <div className="mt-auto flex flex-wrap gap-rds-2 border-t border-rds-dusk pt-rds-4">
+                {["Amazon", "eBay", "Walmart", "AliExpress", "Best Buy", "Target"].map((s) => (
+                  <Chip key={s} size="sm">
+                    {s}
+                  </Chip>
+                ))}
               </div>
             </div>
           </Reveal>
 
-          {/* Small tiles */}
           {SMALL.map((f, i) => (
             <Reveal
               key={f.title}
-              delay={i * 50}
-              className={i < 2 ? "lg:col-span-3" : "lg:col-span-2"}
+              variant="lift"
+              delay={(i + 1) * 110}
+              className={cn(
+                "min-w-0",
+                i < 2 ? "xl:col-span-3" : "xl:col-span-2",
+                i === SMALL.length - 1 && "md:col-span-2 xl:col-span-2",
+              )}
             >
-              <div className="lift flex h-full flex-col bg-ink-1 p-6">
-                <span className="grid h-10 w-10 place-items-center border border-line text-cyan">
-                  <f.icon className="h-[1.1rem] w-[1.1rem]" />
-                </span>
-                <h3 className="mt-4 text-lg font-semibold">{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
-                  {f.body}
-                </p>
+              <div className="rds-card rds-card--feature rds-glass rds-stroke rds-jobs-card h-full">
+                <f.icon className={GLYPH} strokeWidth={1.5} aria-hidden />
+                <h3 className="rds-jobs-name">{f.title}</h3>
+                <p className="font-rds-sans text-rds-body-sm text-rds-fg-muted">{f.body}</p>
               </div>
             </Reveal>
           ))}
         </div>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }

@@ -1,48 +1,80 @@
-import Link from "next/link";
+import type { HTMLAttributes, ReactNode } from "react";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const base =
-  "group inline-flex items-center justify-center gap-2 border font-mono text-xs font-semibold uppercase tracking-[0.12em] transition-colors duration-200 focus-visible:outline-2";
+export type ButtonTheme = "primary" | "secondary" | "tertiary";
+export type ButtonSize = "sm" | "md" | "lg";
 
 type Props = {
-  href: string;
-  children: React.ReactNode;
+  children: ReactNode;
+  theme?: ButtonTheme;
+  size?: ButtonSize;
+  /** Tertiary links carry the two-arrow aperture. */
+  arrow?: boolean;
+  icon?: ReactNode;
+  href?: string;
+  external?: boolean;
+  fullWidth?: boolean;
   className?: string;
-  size?: "md" | "lg";
-};
+} & Omit<HTMLAttributes<HTMLElement>, "children" | "className">;
 
-/** Solid cyan, sharp corners. Inverts to outline on hover. */
-export function PrimaryButton({ href, children, className, size = "md" }: Props) {
-  return (
-    <Link
-      href={href}
-      className={cn(
-        base,
-        size === "lg" ? "px-6 py-3.5" : "px-4 py-2.5",
-        "border-cyan bg-cyan text-ink hover:bg-transparent hover:text-cyan",
-        className,
-      )}
-    >
-      {children}
-      <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-    </Link>
+/**
+ * Primary is a maroon fill inside a 1px hyper-red ring that floods red when
+ * pressed; secondary is a dusk control; tertiary is a red link with an arrow.
+ */
+export function Button({
+  children,
+  theme = "primary",
+  size = "md",
+  arrow,
+  icon,
+  href,
+  external = false,
+  fullWidth = false,
+  className,
+  ...rest
+}: Props) {
+  const classes = cn(
+    "rds-btn",
+    `rds-btn--${theme}`,
+    theme !== "tertiary" && `rds-btn--${size}`,
+    fullWidth && "rds-btn--full",
+    className,
   );
-}
 
-/** Hairline outline. Border + text go cyan on hover. */
-export function GhostButton({ href, children, className, size = "md" }: Props) {
+  const content = (
+    <>
+      {icon ? (
+        <span aria-hidden className="flex size-4 shrink-0 items-center justify-center">
+          {icon}
+        </span>
+      ) : null}
+      <span>{children}</span>
+      {arrow ? (
+        <span aria-hidden className="rds-arrows">
+          <ArrowRight strokeWidth={1.5} />
+          <ArrowRight strokeWidth={1.5} />
+        </span>
+      ) : null}
+    </>
+  );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        className={classes}
+        {...(external ? { target: "_blank", rel: "noreferrer noopener" } : null)}
+        {...rest}
+      >
+        {content}
+      </a>
+    );
+  }
+
   return (
-    <Link
-      href={href}
-      className={cn(
-        base,
-        size === "lg" ? "px-6 py-3.5" : "px-4 py-2.5",
-        "border-line-strong text-fg hover:border-cyan hover:text-cyan",
-        className,
-      )}
-    >
-      {children}
-    </Link>
+    <button type="button" className={classes} {...rest}>
+      {content}
+    </button>
   );
 }

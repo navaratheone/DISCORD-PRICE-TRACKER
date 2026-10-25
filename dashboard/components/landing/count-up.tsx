@@ -60,7 +60,7 @@ export function CountUp({
   }, [to, durationMs]);
 
   return (
-    <span ref={ref} className="tnum">
+    <span ref={ref} className="rds-tnum">
       {prefix}
       {value.toLocaleString("en-US", {
         minimumFractionDigits: decimals,
