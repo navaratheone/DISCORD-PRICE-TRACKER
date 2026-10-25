@@ -1,0 +1,108 @@
+@layer components {
+  /* The signed-in bar is the site bar settled: the full-width 70px midnight bar, with one hairline under it. */
+  .rds-app-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: var(--rds-header-h);
+    border-bottom: 1px solid var(--rds-dusk);
+    background: var(--rds-midnight);
+  }
+
+  /* The back link: the tertiary red link reversed, its arrow nudging 3px back on hover. */
+  .rds-back {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rds-s-2);
+    font-family: var(--rds-font-sans);
+    font-size: var(--rds-body-sm);
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--rds-link);
+    transition: color var(--rds-dur-fast) var(--rds-ease-default);
+  }
+
+  .rds-back svg {
+    width: 16px;
+    height: 16px;
+    transition: transform var(--rds-dur-base) var(--rds-ease-default);
+  }
+
+  @media (width >= 769px) {
+    .rds-back:hover {
+      color: var(--rds-link-hover);
+      text-decoration: none !important;
+    }
+
+    .rds-back:hover svg {
+      transform: translateX(-3px);
+    }
+  }
+
+  .rds-page-title {
+    font-family: var(--rds-font-sans);
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--rds-fg);
+  }
+
+  .rds-label {
+    font-family: var(--rds-font-mono);
+    font-size: var(--rds-label-sm);
+    line-height: 1.2;
+    letter-spacing: var(--rds-label-ls);
+    text-transform: uppercase;
+    color: var(--rds-dusk-30);
+  }
+
+  .rds-label--xs {
+    font-size: var(--rds-label-xs);
+  }
+
+  /* Tables are ledgers: mono column heads, hairline rows, tabular figures. */
+  .rds-ledger {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  .rds-ledger th {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--rds-dusk);
+    font-family: var(--rds-font-mono);
+    font-size: var(--rds-label-sm);
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: var(--rds-label-ls);
+    text-transform: uppercase;
+    color: var(--rds-dusk-30);
+  }
+
+  .rds-ledger td {
+    padding: 12px 16px;
+    vertical-align: middle;
+  }
+
+  .rds-ledger tbody tr {
+    border-bottom: 1px solid var(--rds-dusk);
+    transition: background-color var(--rds-dur-fast) var(--rds-ease-default);
+  }
+
+  .rds-ledger tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  @media (hover: hover) {
+    .rds-ledger tbody tr:hover {
+      background: rgb(255 255 255 / 0.04);
+    }
+  }
+
+  .rds-skeleton {
+    border-radius: var(--rds-r-lg);
+    background: var(--rds-glass);
+    animation: rds-pulse 1.5s ease-in-out infinite;
+  }
+}

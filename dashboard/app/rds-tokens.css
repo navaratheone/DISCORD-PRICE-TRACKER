@@ -1,0 +1,122 @@
+:root{
+  --rds-white:#fff; --rds-black:#000; --rds-midnight:#091a23; --rds-dusk-09:#0d212c; --rds-dusk:#163341; --rds-dusk-90:#2d4754;
+  --rds-dusk-70:#5c707a; --rds-dusk-50:#8a99a0; --rds-dusk-30:#b9c2c6; --rds-dusk-10:#d9d9d9; --rds-dusk-01:#f3f3f3;
+  --rds-light-gray:#f8f8f8; --rds-grey-10:#fcfcfc; --rds-grey-20:#e9e9e9;
+  --rds-hyper-04:#fd736a; --rds-hyper-05:#ff4438; --rds-hyper-06:#eb352a; --rds-hyper-07:#e4291e; --rds-hyper-08:#d1281e; --rds-hyper-09:#8a221c; --rds-hyper-10:#351d22;
+  --rds-yellow:#dcff1e; --rds-yellow-06:#d0f41d; --rds-yellow-09:#8caa00; --rds-yellow-10:#fbffe8; --rds-sky-blue:#80dbff; --rds-violet:#c795e3;
+  --rds-font-display: var(--font-display-loaded), Impact, sans-serif;
+  --rds-font-sans: var(--font-sans-loaded), ui-sans-serif, system-ui, sans-serif;
+  --rds-font-mono: var(--font-mono-loaded), ui-monospace, "SF Mono", Menlo, monospace;
+  --rds-font-logo: var(--font-display-loaded), Impact, sans-serif;
+  --rds-display-lg:180px; --rds-display-md:120px; --rds-display-sm:100px; --rds-display-lh:.9; --rds-display-ls:-0.01em;
+  --rds-h-2xl:80px; --rds-h-xl:64px; --rds-h-lg:48px; --rds-h-md:40px; --rds-h-sm:32px; --rds-h-xs:24px;
+  --rds-h-2xl-lh:1; --rds-h-xl-lh:1; --rds-h-lg-lh:1.1; --rds-h-md-lh:1.1; --rds-h-sm-lh:1.2; --rds-h-xs-lh:1.2;
+  --rds-body-xl:20px; --rds-body-lg:18px; --rds-body-md:16px; --rds-body-sm:14px; --rds-body-xs:12px; --rds-body-xxs:10px; --rds-body-lh:1.5;
+  --rds-label-md:14px; --rds-label-sm:12px; --rds-label-xs:11px; --rds-label-lh:1.2; --rds-label-ls:1.5px;
+  --rds-s-1:4px; --rds-s-2:8px; --rds-s-3:12px; --rds-s-4:16px; --rds-s-5:24px; --rds-s-6:32px; --rds-s-7:48px; --rds-s-8:64px;
+  --rds-section-xs:32px; --rds-section-sm:48px; --rds-section-md:56px; --rds-section-lg:72px; --rds-section-xl:96px;
+  --rds-container-max:1390px; --rds-container-pad:24px; --rds-header-h:60px;
+  --rds-r-xs:4px; --rds-r-sm:5px; --rds-r-md:8px; --rds-r-lg:10px; --rds-r-xl:12px; --rds-r-2xl:20px; --rds-r-full:200px;
+  --rds-shadow-card-drop:0 4px 16px 0 rgba(0,0,0,.10); --rds-shadow-sm:0 1px 2px 0 rgba(0,0,0,.05);
+  --rds-shadow-lg:0 4px 52px 0 rgba(0,0,0,.10); --rds-shadow-glow:0 0 15px 0 rgba(220,255,30,.8);
+  --rds-dur-fast:200ms; --rds-dur-base:300ms; --rds-dur-slow:600ms; --rds-dur-reveal:1000ms;
+  --rds-ease-default:ease-in-out; --rds-ease-standard:cubic-bezier(.4,0,.2,1); --rds-ease-out:ease-out; --rds-ease-expressive:cubic-bezier(.22,1,.36,1);
+  --rds-btn-gap:10px; --rds-focus:#ff4438; --rds-focus-w:2px; --rds-focus-offset:2px;
+  --rds-glass:rgb(255 255 255 / 0.04);
+}
+@media (max-width:1599px){:root{--rds-container-max:1280px; --rds-container-pad:80px}}
+@media (max-width:1259px){:root{--rds-container-pad:24px}}
+@media (max-width:768px){:root{
+  --rds-display-lg:100px; --rds-display-md:80px; --rds-display-sm:64px;
+  --rds-h-2xl:64px; --rds-h-xl:48px; --rds-h-lg:40px; --rds-h-md:32px; --rds-h-sm:24px; --rds-h-xs:20px;
+  --rds-section-xs:12px; --rds-section-sm:16px; --rds-section-md:24px; --rds-section-lg:48px; --rds-section-xl:64px;
+}}
+[data-rds-theme="midnight"]{ color-scheme:dark;
+  --rds-bg:#091a23; --rds-bg-hover:#000; --rds-bg-subtle:#163341; --rds-bg-muted:#0d212c; --rds-bg-card:#0d212c;
+  --rds-fg:#fff; --rds-fg-body:#d9d9d9; --rds-fg-muted:#b9c2c6; --rds-fg-brand:#dcff1e; --rds-fg-tagline:#b9c2c6;
+  --rds-link:#ff4438; --rds-link-hover:#fd736a;
+  --rds-border:#163341; --rds-border-hover:#5c707a; --rds-border-active:#dcff1e; --rds-divider:#8a99a0;
+  --rds-btn-p-bg:#351d22; --rds-btn-p-bg-h:#8a221c; --rds-btn-p-bg-a:#ff4438; --rds-btn-p-bd:#ff4438; --rds-btn-p-bd-h:#eb352a; --rds-btn-p-bd-a:#ff4438; --rds-btn-p-fg:#fff;
+  --rds-btn-p-bg-dis:#0d212c; --rds-btn-p-bd-dis:#2d4754; --rds-btn-p-fg-dis:#5c707a;
+  --rds-btn-s-bg:#163341; --rds-btn-s-bg-h:#2d4754; --rds-btn-s-bg-a:#2d4754; --rds-btn-s-bd:#2d4754; --rds-btn-s-bd-h:#5c707a; --rds-btn-s-bd-a:#5c707a; --rds-btn-s-fg:#fff;
+  --rds-in-bg:#163341; --rds-in-fg:#d9d9d9; --rds-in-ph:#8a99a0; --rds-in-bd:#2d4754; --rds-in-bd-f:#5c707a; --rds-in-err:#ff4438; --rds-in-err-bg:#351d22;
+  --rds-chip-bg:var(--rds-glass); --rds-chip-bd:#163341; --rds-chip-fg:#b9c2c6;
+  --rds-ctl-bg:#163341; --rds-ctl-bg-h:#2d4754; --rds-ctl-bd:#2d4754; --rds-ctl-bd-h:#5c707a; --rds-ctl-fg:#fff;
+  --rds-logo-mono:#fff; --rds-icon-accent:#ff4438;
+}
+[data-rds-theme="white"]{ color-scheme:light;
+  --rds-bg:#fff; --rds-bg-hover:#fcfcfc; --rds-bg-subtle:#f3f3f3; --rds-bg-muted:#f8f8f8; --rds-bg-card:#fcfcfc;
+  --rds-fg:#091a23; --rds-fg-body:#091a23; --rds-fg-muted:#5c707a; --rds-fg-brand:#ff4438; --rds-fg-tagline:#5c707a;
+  --rds-link:#e4291e; --rds-link-hover:#8a221c;
+  --rds-border:#d9d9d9; --rds-border-hover:#d9d9d9; --rds-border-active:#ff4438; --rds-divider:#091a23;
+  --rds-btn-p-bg:#e4291e; --rds-btn-p-bg-h:#d1281e; --rds-btn-p-bg-a:#e4291e; --rds-btn-p-bd:#d1281e; --rds-btn-p-bd-h:#8a221c; --rds-btn-p-bd-a:#e4291e; --rds-btn-p-fg:#fff;
+  --rds-btn-p-bg-dis:#d9d9d9; --rds-btn-p-bd-dis:#b9c2c6; --rds-btn-p-fg-dis:#5c707a;
+  --rds-btn-s-bg:#fcfcfc; --rds-btn-s-bg-h:#fcfcfc; --rds-btn-s-bg-a:#e9e9e9; --rds-btn-s-bd:#d9d9d9; --rds-btn-s-bd-h:#d9d9d9; --rds-btn-s-bd-a:#8a99a0; --rds-btn-s-fg:#091a23;
+  --rds-in-bg:#fff; --rds-in-fg:#091a23; --rds-in-ph:#5c707a; --rds-in-bd:#b9c2c6; --rds-in-bd-f:#163341; --rds-in-err:#e4291e; --rds-in-err-bg:#fff3f2;
+  --rds-chip-bg:#fcfcfc; --rds-chip-bd:#e9e9e9; --rds-chip-fg:#163341;
+  --rds-ctl-bg:#f3f3f3; --rds-ctl-bg-h:#e9e9e9; --rds-ctl-bd:#d9d9d9; --rds-ctl-bd-h:#b9c2c6; --rds-ctl-fg:#091a23;
+  --rds-logo-mono:#8a99a0; --rds-icon-accent:#ff4438;
+}
+
+[data-rds-theme="lightGray"]{ color-scheme:light;
+  --rds-bg:#f8f8f8; --rds-bg-hover:#fff; --rds-bg-subtle:#f3f3f3; --rds-bg-muted:#fff; --rds-bg-card:#fcfcfc;
+  --rds-fg:#091a23; --rds-fg-body:#091a23; --rds-fg-muted:#5c707a; --rds-fg-brand:#ff4438; --rds-fg-tagline:#5c707a;
+  --rds-link:#e4291e; --rds-link-hover:#8a221c;
+  --rds-border:#d9d9d9; --rds-border-hover:#d9d9d9; --rds-border-active:#ff4438; --rds-divider:#091a23;
+  --rds-btn-p-bg:#e4291e; --rds-btn-p-bg-h:#d1281e; --rds-btn-p-bg-a:#e4291e; --rds-btn-p-bd:#d1281e; --rds-btn-p-bd-h:#8a221c; --rds-btn-p-bd-a:#e4291e; --rds-btn-p-fg:#fff;
+  --rds-btn-p-bg-dis:#d9d9d9; --rds-btn-p-bd-dis:#b9c2c6; --rds-btn-p-fg-dis:#5c707a;
+  --rds-btn-s-bg:#fcfcfc; --rds-btn-s-bg-h:#fcfcfc; --rds-btn-s-bg-a:#e9e9e9; --rds-btn-s-bd:#d9d9d9; --rds-btn-s-bd-h:#d9d9d9; --rds-btn-s-bd-a:#8a99a0; --rds-btn-s-fg:#091a23;
+  --rds-in-bg:#fff; --rds-in-fg:#091a23; --rds-in-ph:#5c707a; --rds-in-bd:#b9c2c6; --rds-in-bd-f:#163341; --rds-in-err:#e4291e; --rds-in-err-bg:#fff3f2;
+  --rds-chip-bg:#fcfcfc; --rds-chip-bd:#e9e9e9; --rds-chip-fg:#163341;
+  --rds-ctl-bg:#f3f3f3; --rds-ctl-bg-h:#e9e9e9; --rds-ctl-bd:#d9d9d9; --rds-ctl-bd-h:#b9c2c6; --rds-ctl-fg:#091a23;
+  --rds-logo-mono:#8a99a0; --rds-icon-accent:#ff4438;
+}
+[data-rds-theme="dusk"]{ color-scheme:dark;
+  --rds-bg:#163341; --rds-bg-hover:#091a23; --rds-bg-subtle:#2d4754; --rds-bg-muted:#091a23; --rds-bg-card:#0d212c;
+  --rds-fg:#fff; --rds-fg-body:#fff; --rds-fg-muted:#b9c2c6; --rds-fg-brand:#dcff1e; --rds-fg-tagline:#dcff1e;
+  --rds-link:#ff4438; --rds-link-hover:#fd736a;
+  --rds-border:#2d4754; --rds-border-hover:#5c707a; --rds-border-active:#dcff1e; --rds-divider:#8a99a0;
+  --rds-btn-p-bg:#351d22; --rds-btn-p-bg-h:#8a221c; --rds-btn-p-bg-a:#ff4438; --rds-btn-p-bd:#ff4438; --rds-btn-p-bd-h:#eb352a; --rds-btn-p-bd-a:#ff4438; --rds-btn-p-fg:#fff;
+  --rds-btn-p-bg-dis:#0d212c; --rds-btn-p-bd-dis:#2d4754; --rds-btn-p-fg-dis:#5c707a;
+  --rds-btn-s-bg:#2d4754; --rds-btn-s-bg-h:#5c707a; --rds-btn-s-bg-a:#5c707a; --rds-btn-s-bd:#5c707a; --rds-btn-s-bd-h:#8a99a0; --rds-btn-s-bd-a:#8a99a0; --rds-btn-s-fg:#fff;
+  --rds-in-bg:#091a23; --rds-in-fg:#d9d9d9; --rds-in-ph:#8a99a0; --rds-in-bd:#2d4754; --rds-in-bd-f:#5c707a; --rds-in-err:#ff4438; --rds-in-err-bg:#351d22;
+  --rds-chip-bg:#091a23; --rds-chip-bd:#2d4754; --rds-chip-fg:#b9c2c6;
+  --rds-ctl-bg:#2d4754; --rds-ctl-bg-h:#5c707a; --rds-ctl-bd:#5c707a; --rds-ctl-bd-h:#8a99a0; --rds-ctl-fg:#fff;
+  --rds-logo-mono:#fff; --rds-icon-accent:#ff4438;
+}
+
+@media (max-width:359px){:root{--rds-display-md:64px}}
+
+:root{
+  --rds-hero-size:3.8vw; --rds-hero-lh:92%; --rds-hero-ls:-0.01em;
+  --rds-hero-pt:110px; --rds-hero-pb:118px; --rds-hero-gap:48px;
+  --rds-rail-h:48px; --rds-rail-space:28px;
+  --rds-prompt-pad:20px; --rds-prompt-gap:12px;
+  /* Four fifths of the reference's statement scale: 32px at 1440, 38px from 1600, two lines on a phone. */
+  --rds-hero-title:min(calc(var(--rds-hero-size) * 0.8), 6.4vw);
+  --rds-hero-pair-w:max(700px, calc(var(--rds-hero-size) * 18.02));
+}
+@media (min-width:1260px){:root{--rds-hero-size:40px}}
+@media (min-width:1600px){:root{--rds-hero-size:48px}}
+@media (max-width:768px){:root{
+  --rds-hero-size:30px; --rds-hero-pt:48px; --rds-hero-pb:56px; --rds-hero-gap:24px;
+  --rds-rail-h:40px; --rds-rail-space:20px;
+  --rds-prompt-pad:14px 16px;
+}}
+@media (max-width:359px){:root{--rds-hero-size:28px}}
+
+/* From a laptop up the hero is the first screen. 150px never flexes (the lede, the actions, the rail); the recording
+   takes four fifths of what is left, scaled like a video, and the gaps share the rest as 2.29 / 1 / 1 / 1 / 2.46. */
+@media (min-width:769px){:root{
+  --rds-screen:calc(100svh - var(--rds-header-h));
+  --rds-hero-fold:var(--rds-screen);
+  --rds-hero-title:min(calc(var(--rds-hero-size) * 0.8), 4.6svh);
+  --rds-hero-free:calc(var(--rds-hero-fold) - var(--rds-hero-title) * 1.32 - 134px);
+  --rds-demo-h:clamp(240px, calc(var(--rds-hero-free) * 0.8), 620px);
+  --rds-demo-w:calc(var(--rds-demo-h) * 1040 / 540);
+  --rds-hero-gap:clamp(9px, calc((var(--rds-hero-free) - var(--rds-demo-h)) / 7.75), 48px);
+  --rds-hero-pt:calc(var(--rds-hero-gap) * 2.29); --rds-hero-pb:calc(var(--rds-hero-gap) * 2.46);
+}}
+
+:root{ --rds-cta-size:clamp(22px, 2.5vw, 40px); }
+

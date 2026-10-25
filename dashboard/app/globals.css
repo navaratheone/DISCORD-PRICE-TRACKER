@@ -1,350 +1,340 @@
 @import "tailwindcss";
-
-/* ============================================================
-   Price Tracker — brutalist / technical design system
-   Flat surfaces, hard hairlines, sharp corners, one cyan accent.
-   No glow, no glass, no radial blooms, no decorative gradients.
-   ============================================================ */
+@import "./rds-tokens.css";
+@import "./rds-components.css";
+@import "./rds-landing.css";
+@import "./rds-discord.css";
+@import "./rds-app.css";
 
 @theme {
-  /* Surfaces — near-black, faintly cool, almost no chroma */
-  --color-ink: oklch(0.165 0.005 240);
-  --color-ink-1: oklch(0.195 0.006 240);
-  --color-ink-2: oklch(0.235 0.007 240);
-  --color-ink-3: oklch(0.3 0.008 240);
+  --breakpoint-*: initial;
+  --breakpoint-xs: 500px;
+  --breakpoint-sm: 660px;
+  --breakpoint-md: 769px;
+  --breakpoint-lg: 900px;
+  --breakpoint-xl: 1025px;
+  --breakpoint-nav: 1140px;
+  --breakpoint-2xl: 1260px;
+  --breakpoint-3xl: 1600px;
 
-  /* Hairlines — visible, structural (brutalist borders carry the design) */
-  --color-line: oklch(1 0 0 / 12%);
-  --color-line-strong: oklch(1 0 0 / 26%);
-
-  /* Text */
-  --color-fg: oklch(0.97 0.003 240);
-  --color-muted: oklch(0.72 0.006 240);
-  --color-faint: oklch(0.54 0.008 240);
-
-  /* The single accent — cyan-400 */
-  --color-cyan: oklch(0.8 0.13 215);
-  --color-cyan-bright: oklch(0.87 0.12 210);
-  --color-cyan-deep: oklch(0.66 0.13 218);
-  --color-cyan-dim: oklch(0.5 0.08 220);
-
-  /* Type */
-  --font-display: var(--font-archivo), "Segoe UI", sans-serif;
-  --font-sans: var(--font-archivo), "Segoe UI", sans-serif;
-  --font-mono: var(--font-martian), ui-monospace, monospace;
-  --font-pixel: var(--font-silkscreen), var(--font-martian), monospace;
-
-  /* Sharp by default */
-  --radius: 0px;
-
-  /* Motion */
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-rds-caret: rds-caret 1s steps(1, end) infinite;
+  --animate-rds-pulse: rds-pulse 1.5s ease-in-out infinite;
 }
 
-/* ============================================================
-   Base
-   ============================================================ */
+@theme inline {
+  --font-rds-display: var(--rds-font-display);
+  --font-rds-sans: var(--rds-font-sans);
+  --font-rds-mono: var(--rds-font-mono);
+  --font-rds-logo: var(--rds-font-logo);
 
-* {
-  border-color: var(--color-line);
+  --color-rds-bg: var(--rds-bg);
+  --color-rds-bg-hover: var(--rds-bg-hover);
+  --color-rds-bg-subtle: var(--rds-bg-subtle);
+  --color-rds-bg-muted: var(--rds-bg-muted);
+  --color-rds-bg-card: var(--rds-bg-card);
+
+  --color-rds-fg: var(--rds-fg);
+  --color-rds-fg-body: var(--rds-fg-body);
+  --color-rds-fg-muted: var(--rds-fg-muted);
+  --color-rds-fg-brand: var(--rds-fg-brand);
+  --color-rds-fg-tagline: var(--rds-fg-tagline);
+
+  --color-rds-link: var(--rds-link);
+  --color-rds-link-hover: var(--rds-link-hover);
+
+  --color-rds-border: var(--rds-border);
+  --color-rds-border-hover: var(--rds-border-hover);
+  --color-rds-border-active: var(--rds-border-active);
+  --color-rds-divider: var(--rds-divider);
+
+  --color-rds-icon-accent: var(--rds-icon-accent);
+  --color-rds-focus: var(--rds-focus);
+
+  --color-rds-midnight: var(--rds-midnight);
+  --color-rds-dusk-09: var(--rds-dusk-09);
+  --color-rds-dusk: var(--rds-dusk);
+  --color-rds-dusk-90: var(--rds-dusk-90);
+  --color-rds-dusk-70: var(--rds-dusk-70);
+  --color-rds-dusk-50: var(--rds-dusk-50);
+  --color-rds-dusk-30: var(--rds-dusk-30);
+  --color-rds-dusk-10: var(--rds-dusk-10);
+  --color-rds-maroon: var(--rds-hyper-10);
+  --color-rds-red: var(--rds-hyper-05);
+  --color-rds-red-light: var(--rds-hyper-04);
+  --color-rds-yellow: var(--rds-yellow);
+  --color-rds-violet: var(--rds-violet);
+  --color-rds-sky: var(--rds-sky-blue);
+
+  --text-rds-h-lg: var(--rds-h-lg);
+  --text-rds-h-lg--line-height: var(--rds-h-lg-lh);
+  --text-rds-h-md: var(--rds-h-md);
+  --text-rds-h-md--line-height: var(--rds-h-md-lh);
+  --text-rds-h-sm: var(--rds-h-sm);
+  --text-rds-h-sm--line-height: var(--rds-h-sm-lh);
+  --text-rds-h-xs: var(--rds-h-xs);
+  --text-rds-h-xs--line-height: var(--rds-h-xs-lh);
+
+  --text-rds-body-xl: var(--rds-body-xl);
+  --text-rds-body-xl--line-height: var(--rds-body-lh);
+  --text-rds-body-lg: var(--rds-body-lg);
+  --text-rds-body-lg--line-height: var(--rds-body-lh);
+  --text-rds-body-md: var(--rds-body-md);
+  --text-rds-body-md--line-height: var(--rds-body-lh);
+  --text-rds-body-sm: var(--rds-body-sm);
+  --text-rds-body-sm--line-height: var(--rds-body-lh);
+  --text-rds-body-xs: var(--rds-body-xs);
+  --text-rds-body-xs--line-height: var(--rds-body-lh);
+  --text-rds-body-xxs: var(--rds-body-xxs);
+  --text-rds-body-xxs--line-height: var(--rds-body-lh);
+
+  --text-rds-label-md: var(--rds-label-md);
+  --text-rds-label-md--line-height: var(--rds-label-lh);
+  --text-rds-label-sm: var(--rds-label-sm);
+  --text-rds-label-sm--line-height: var(--rds-label-lh);
+  --text-rds-label-xs: var(--rds-label-xs);
+  --text-rds-label-xs--line-height: var(--rds-label-lh);
+
+  --tracking-rds-display: var(--rds-display-ls);
+  --tracking-rds-label: var(--rds-label-ls);
+
+  --spacing-rds-1: var(--rds-s-1);
+  --spacing-rds-2: var(--rds-s-2);
+  --spacing-rds-3: var(--rds-s-3);
+  --spacing-rds-4: var(--rds-s-4);
+  --spacing-rds-5: var(--rds-s-5);
+  --spacing-rds-6: var(--rds-s-6);
+  --spacing-rds-7: var(--rds-s-7);
+  --spacing-rds-8: var(--rds-s-8);
+  --spacing-rds-section-lg: var(--rds-section-lg);
+  --spacing-rds-section-xl: var(--rds-section-xl);
+  --spacing-rds-container-pad: var(--rds-container-pad);
+  --spacing-rds-header: var(--rds-header-h);
+
+  --radius-rds-xs: var(--rds-r-xs);
+  --radius-rds-sm: var(--rds-r-sm);
+  --radius-rds-md: var(--rds-r-md);
+  --radius-rds-lg: var(--rds-r-lg);
+  --radius-rds-full: var(--rds-r-full);
+
+  --shadow-rds-card-drop: var(--rds-shadow-card-drop);
+  --shadow-rds-lg: var(--rds-shadow-lg);
+
+  --container-rds: var(--rds-container-max);
+
+  --duration-rds-fast: var(--rds-dur-fast);
+  --duration-rds-base: var(--rds-dur-base);
+  --duration-rds-slow: var(--rds-dur-slow);
+
+  --ease-rds-default: var(--rds-ease-default);
+  --ease-rds-standard: var(--rds-ease-standard);
+  --ease-rds-out: var(--rds-ease-out);
+  --ease-rds-expressive: var(--rds-ease-expressive);
 }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
+@layer base {
+  html {
+    scroll-behavior: auto;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  [data-rds-root] {
+    font-family: var(--rds-font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--rds-fg-body);
+    background: var(--rds-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    text-shadow: 0 0 1px transparent;
+    scroll-padding-top: var(--rds-header-h);
+    -webkit-tap-highlight-color: rgba(255, 68, 56, 0.24);
+    caret-color: var(--rds-yellow);
+    scrollbar-color: var(--rds-dusk-90) var(--rds-midnight);
+  }
+
+  [data-rds-root] body {
+    font-synthesis-weight: none;
+    overflow-x: clip;
+  }
+
+  [data-rds-root] ::selection {
+    background: #dcff1e;
+    color: #091a23;
+  }
+
+  [data-rds-root] strong,
+  [data-rds-root] b {
+    font-weight: 500;
+  }
+
+  [data-rds-root] a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  @media (min-width: 769px) {
+    [data-rds-root] a:hover {
+      text-decoration-line: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+  }
+
+  @supports selector(::-webkit-scrollbar) {
+    [data-rds-root] ::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+    [data-rds-root] ::-webkit-scrollbar-track {
+      background-color: var(--rds-midnight);
+    }
+    [data-rds-root] ::-webkit-scrollbar-thumb {
+      background-color: var(--rds-dusk-90);
+      border: 3px solid var(--rds-midnight);
+      border-radius: var(--rds-r-full);
+    }
+    [data-rds-root] ::-webkit-scrollbar-thumb:hover {
+      background-color: var(--rds-dusk-70);
+    }
+  }
+
+  [data-rds-root] :focus-visible {
+    outline-width: var(--rds-focus-w);
+    outline-style: solid;
+    outline-color: var(--rds-focus);
+    outline-offset: var(--rds-focus-offset);
+    /* Omits outline-* so focus rings skip the components' all-property fade; !important beats later layers. */
+    transition-property: color, background-color, border-color, box-shadow, opacity,
+      transform !important;
+  }
+
+  [data-rds-root] button,
+  [data-rds-root] input,
+  [data-rds-root] textarea,
+  [data-rds-root] select {
+    font: inherit;
+    color: inherit;
+  }
+
+  [data-rds-root] button {
+    cursor: pointer;
+  }
 }
 
-body {
-  background-color: var(--color-ink);
-  color: var(--color-fg);
-  font-family: var(--font-sans);
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  overflow-x: clip;
+@layer utilities {
+  .rds-tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
 }
 
-::selection {
-  background: oklch(0.8 0.13 215 / 0.3);
-  color: var(--color-fg);
+@keyframes rds-marquee {
+  to {
+    transform: translateX(-50%);
+  }
 }
 
-h1, h2, h3, h4 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
+@keyframes rds-caret {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
-:focus-visible {
-  outline: 2px solid var(--color-cyan);
-  outline-offset: 2px;
-  border-radius: 0;
+@keyframes rds-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
 }
 
-/* ============================================================
-   Page-wide technical grid (kept across the entire page)
-   ============================================================ */
-
-.grid-bg {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, oklch(1 0 0 / 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, oklch(1 0 0 / 0.045) 1px, transparent 1px);
-  background-size: 3.25rem 3.25rem;
+/* Registered so the mask's edge can travel; a gradient on its own does not animate. */
+@property --rds-wipe {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 140%;
 }
 
-/* ============================================================
-   Surfaces — flat, bordered, sharp
-   ============================================================ */
-
-.panel {
-  background: var(--color-ink-1);
-  border: 1px solid var(--color-line);
+.js [data-rds-reveal="wipe"] {
+  --rds-wipe: -30%;
+  -webkit-mask-image: linear-gradient(105deg, #000 calc(var(--rds-wipe) - 30%), #0000 var(--rds-wipe));
+  mask-image: linear-gradient(105deg, #000 calc(var(--rds-wipe) - 30%), #0000 var(--rds-wipe));
+  transform: translateY(28px);
+  filter: blur(8px);
 }
 
-.panel-quiet {
-  background: oklch(0.18 0.006 240);
-  border: 1px solid var(--color-line);
+.js [data-rds-reveal="wipe"][data-rds-shown="true"] {
+  --rds-wipe: 140%;
+  transform: none;
+  filter: none;
+  transition:
+    --rds-wipe 1300ms var(--rds-ease-expressive),
+    transform 1200ms var(--rds-ease-expressive),
+    filter 900ms var(--rds-ease-expressive);
+  transition-delay: var(--rds-reveal-delay, 0ms);
 }
 
-/* Interactive surface: border reacts, minimal lift, no shadow bloom */
-.lift {
-  transition: transform 0.35s var(--ease-out-expo),
-    border-color 0.35s var(--ease-out-expo),
-    background-color 0.35s var(--ease-out-expo);
-}
-.lift:hover {
-  transform: translateY(-2px);
-  border-color: var(--color-line-strong);
-}
-
-/* ============================================================
-   Accent helpers
-   ============================================================ */
-
-.text-cyan { color: var(--color-cyan); }
-
-/* Status marker: a static cyan square (terminal-style, no pulse/glow) */
-.beacon {
-  display: inline-block;
-  width: 0.45rem;
-  height: 0.45rem;
-  background: var(--color-cyan);
-}
-
-/* Corner ticks for the technical framing of the bot */
-.corner {
-  position: absolute;
-  width: 1rem;
-  height: 1rem;
-  border: 0 solid var(--color-cyan);
-}
-
-/* ============================================================
-   Typography helpers
-   ============================================================ */
-
-.eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--color-faint);
-}
-
-.tnum {
-  font-family: var(--font-mono);
-  font-feature-settings: "tnum";
-  font-variant-numeric: tabular-nums;
-}
-
-.font-pixel {
-  font-family: var(--font-pixel);
-}
-
-/* Hero title — Hermes-style blocky pixel face with a layered cyan
-   outline-echo extrusion. Title stays white; cyan carries the depth. */
-.title-hermes {
-  color: oklch(0.985 0.003 230);
-  text-shadow:
-    0.014em 0.018em 0 var(--color-cyan),
-    0.03em 0.038em 0 var(--color-cyan-deep),
-    0.046em 0.058em 0 var(--color-cyan-dim),
-    0.064em 0.08em 0 oklch(0.4 0.07 222 / 0.7),
-    0.03em 0.06em 0.05em oklch(0.8 0.13 215 / 0.45);
-}
-
-/* Hero-only atmosphere (allowed exception to the flat rule):
-   one subtle radial highlight + a faint noise grain. */
-.hero-glow {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(38rem 26rem at 50% 38%, oklch(0.8 0.13 215 / 0.1), transparent 70%),
-    radial-gradient(28rem 20rem at 50% 92%, oklch(0.66 0.13 218 / 0.07), transparent 72%);
-}
-
-.hero-noise {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.05;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 170px 170px;
-}
-
-/* Subtle floating for the hero bot */
-.float-bot {
-  animation: float-bot 6s ease-in-out infinite;
-}
-@keyframes float-bot {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-/* Terminal caret for the command console */
-.caret {
-  display: inline-block;
-  width: 0.5em;
-  height: 1.05em;
-  background: var(--color-cyan);
-  vertical-align: -0.15em;
-  animation: blink 1.1s steps(1) infinite;
-}
-@keyframes blink {
-  50% { opacity: 0; }
-}
-
-/* ============================================================
-   Hero HUD / tactical-telemetry enhancements (scoped to hero)
-   The mascot is framed as the subject of a targeting scope.
-   ============================================================ */
-
-/* Faint CRT scanlines, masked so they bloom out toward the edges */
-.hero-scanlines {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.6;
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent 0,
-    transparent 2px,
-    oklch(1 0 0 / 0.02) 2px,
-    oklch(1 0 0 / 0.02) 3px
-  );
-  -webkit-mask-image: radial-gradient(72% 64% at 50% 44%, #000 18%, transparent 100%);
-  mask-image: radial-gradient(72% 64% at 50% 44%, #000 18%, transparent 100%);
-}
-
-/* The reticle/scan field that sits behind the mascot, clipped to a soft disc */
-.hero-field {
-  -webkit-mask-image: radial-gradient(circle at center, #000 58%, transparent 94%);
-  mask-image: radial-gradient(circle at center, #000 58%, transparent 94%);
-}
-
-/* Radar sweep traveling down the scope */
-.hero-scan {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 34%;
-  top: -34%;
-  pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    oklch(0.8 0.13 215 / 0.1) 72%,
-    oklch(0.87 0.12 210 / 0.32)
-  );
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
-  animation: hero-scan 4.4s var(--ease-out-quint) infinite;
-}
-@keyframes hero-scan {
-  0% { top: -34%; opacity: 0; }
-  12% { opacity: 1; }
-  88% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-
-/* Slow-rotating outer reticle ring */
-.reticle-spin {
-  transform-origin: center;
-  transform-box: fill-box;
-  animation: reticle-spin 36s linear infinite;
-}
-@keyframes reticle-spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Live alert chip — a gentle drift, offset from the mascot float so they
-   never beat in sync (the asymmetry reads as "alive"). */
-.chip-float {
-  animation: chip-float 5.5s ease-in-out infinite;
-}
-@keyframes chip-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-7px); }
-}
-
-/* Vertical edge rail label */
-.rail-y {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-}
-
-/* ============================================================
-   Ticker marquee (a genuine data feed, kept intentionally)
-   ============================================================ */
-
-.marquee {
-  display: flex;
-  width: max-content;
-  animation: marquee 50s linear infinite;
-}
-.marquee-track:hover .marquee {
-  animation-play-state: paused;
-}
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-/* ============================================================
-   Scroll reveal — restrained (short, opacity-led)
-   ============================================================ */
-
-.reveal {
+.js [data-rds-reveal="settle"] {
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s var(--ease-out-quint),
-    transform 0.5s var(--ease-out-quint);
+  transform: translateY(32px);
+  filter: blur(8px);
 }
-.reveal.is-visible {
+
+.js [data-rds-reveal="settle"][data-rds-shown="true"] {
   opacity: 1;
   transform: none;
+  filter: none;
+  transition:
+    opacity 900ms var(--rds-ease-expressive),
+    transform 1100ms var(--rds-ease-expressive),
+    filter 900ms var(--rds-ease-expressive);
+  transition-delay: var(--rds-reveal-delay, 0ms);
 }
 
-/* ============================================================
-   Reduced motion
-   ============================================================ */
+.js [data-rds-reveal="lift"] {
+  opacity: 0;
+  transform: translateY(64px) scale(0.94);
+  transform-origin: 50% 100%;
+  filter: blur(12px);
+}
+
+.js [data-rds-reveal="lift"][data-rds-shown="true"] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition:
+    opacity 800ms var(--rds-ease-expressive),
+    transform 1200ms var(--rds-ease-expressive),
+    filter 1000ms var(--rds-ease-expressive);
+  transition-delay: var(--rds-reveal-delay, 0ms);
+}
+
+[data-rds-root] :is(main, section, footer)[tabindex="-1"]:focus {
+  outline: none;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .reveal { opacity: 1; transform: none; transition: none; }
-  .marquee { animation: none; }
-  .lift:hover { transform: none; }
-  .float-bot { animation: none; }
-  .caret { animation: none; }
-  .hero-scan,
-  .reticle-spin,
-  .chip-float { animation: none; }
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .js [data-rds-reveal] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    clip-path: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
 }

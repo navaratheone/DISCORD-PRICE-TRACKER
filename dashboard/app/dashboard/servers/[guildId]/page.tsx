@@ -5,6 +5,7 @@ import { use } from "react";
 import { ChevronRight } from "lucide-react";
 import { getServer, getWatches } from "@/lib/api";
 import { useAsync } from "@/lib/use-async";
+import { Chip } from "@/components/landing/chip";
 import {
   EmptyState,
   ErrorPanel,
@@ -31,7 +32,7 @@ export default function ServerPage({
     return (
       <>
         <PageHeader
-          eyebrow="Server"
+          meta="Server"
           title="Dashboard"
           back={{ href: "/dashboard", label: "All servers" }}
         />
@@ -43,23 +44,21 @@ export default function ServerPage({
   return (
     <>
       <PageHeader
-        eyebrow="Server overview"
+        meta="Server overview"
         title={server.data?.name ?? (server.loading ? "Loading…" : "Server")}
         back={{ href: "/dashboard", label: "All servers" }}
       >
         {server.data && (
-          <div className="flex flex-wrap items-center gap-2">
+          <>
             <AdminBadge isAdmin={server.data.isAdmin} />
             {server.data.regionDefault && (
-              <span className="border border-line px-2 py-0.5 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-muted">
-                {server.data.regionDefault}
-              </span>
+              <Chip size="sm">{server.data.regionDefault}</Chip>
             )}
-            <span className="border border-line px-2 py-0.5 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-faint">
-              <span className="tnum text-muted">{server.data.watchCount}</span>{" "}
+            <Chip size="sm">
+              <span className="rds-tnum text-rds-fg">{server.data.watchCount}</span>
               watches
-            </span>
-          </div>
+            </Chip>
+          </>
         )}
       </PageHeader>
 
@@ -70,15 +69,12 @@ export default function ServerPage({
       ) : !watches.data || watches.data.length === 0 ? (
         <EmptyState title="No watches yet. Use /track <url> in Discord." />
       ) : (
-        <div className="panel overflow-x-auto">
-          <table className="w-full min-w-[640px] border-collapse text-sm">
+        <div className="rds-glass overflow-x-auto rounded-rds-lg">
+          <table className="rds-ledger min-w-[640px]">
             <thead>
-              <tr className="border-b border-line text-left">
+              <tr>
                 {["Product", "Price", "Stock", "Status", ""].map((h, i) => (
-                  <th
-                    key={i}
-                    className="px-4 py-3 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-faint"
-                  >
+                  <th key={i} scope="col">
                     {h}
                   </th>
                 ))}
@@ -86,41 +82,38 @@ export default function ServerPage({
             </thead>
             <tbody>
               {watches.data.map((w) => (
-                <tr
-                  key={w.id}
-                  className="group border-b border-line transition-colors last:border-0 hover:bg-ink-2"
-                >
-                  <td className="px-4 py-3">
+                <tr key={w.id} className="group">
+                  <td>
                     <Link
                       href={`/dashboard/watches/${w.id}`}
-                      className="block min-w-0"
+                      className="block min-w-0 hover:no-underline"
                     >
-                      <p className="truncate font-medium text-fg group-hover:text-cyan">
+                      <p className="truncate font-rds-sans text-rds-body-sm font-medium text-rds-fg">
                         {w.title ?? w.sourceUrl}
                       </p>
-                      <p className="mt-0.5 font-mono text-[0.7rem] text-faint">
+                      <p className="mt-0.5 font-rds-mono text-rds-body-xs text-rds-dusk-30">
                         {w.domain}
                       </p>
                     </Link>
                   </td>
-                  <td className="px-4 py-3">
-                    <span className="tnum text-fg">
+                  <td>
+                    <span className="rds-tnum font-rds-mono text-rds-body-sm text-rds-dusk-10">
                       {formatPrice(w.lastPrice, w.currency)}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
+                  <td>
                     <StockPill inStock={w.inStock} />
                   </td>
-                  <td className="px-4 py-3">
+                  <td>
                     <StatusPill isActive={w.isActive} paused={w.paused} />
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="text-right">
                     <Link
                       href={`/dashboard/watches/${w.id}`}
                       aria-label="Open watch"
-                      className="inline-flex text-faint transition-colors hover:text-cyan"
+                      className="inline-flex text-rds-dusk-50 transition-colors duration-rds-fast group-hover:text-rds-red"
                     >
-                      <ChevronRight className="h-4 w-4" />
+                      <ChevronRight className="h-4 w-4" strokeWidth={1.5} />
                     </Link>
                   </td>
                 </tr>

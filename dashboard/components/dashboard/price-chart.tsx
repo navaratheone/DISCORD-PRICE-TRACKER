@@ -27,8 +27,8 @@ export function PriceChart({
 
   if (priced.length < 2) {
     return (
-      <div className="panel-quiet grid h-[240px] place-items-center p-6 text-center">
-        <p className="text-balance text-sm text-muted">
+      <div className="rds-glass grid h-[240px] place-items-center rounded-rds-lg p-rds-6 text-center">
+        <p className="max-w-[44ch] font-rds-sans text-rds-body-sm text-balance text-rds-dusk-30">
           Not enough price history in this range yet. Check back once the watch
           has recorded a few snapshots.
         </p>
@@ -60,9 +60,6 @@ export function PriceChart({
   }));
 
   const line = coords.map((c) => `${c.x},${c.y}`).join(" ");
-  const area = `${PAD.left},${PAD.top + innerH} ${line} ${
-    PAD.left + innerW
-  },${PAD.top + innerH}`;
 
   const lowIdx = prices.indexOf(minP);
   const low = coords[lowIdx];
@@ -70,7 +67,7 @@ export function PriceChart({
   const ticks = [maxP, (maxP + minP) / 2, minP];
 
   return (
-    <div className="panel p-4">
+    <div className="rds-glass rounded-rds-lg p-rds-4 md:p-rds-5">
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className="h-auto w-full"
@@ -87,15 +84,16 @@ export function PriceChart({
                 y1={y}
                 x2={W - PAD.right}
                 y2={y}
-                stroke="var(--color-line)"
+                stroke="var(--rds-dusk)"
                 strokeWidth="1"
               />
               <text
                 x={PAD.left - 8}
                 y={y + 3}
                 textAnchor="end"
-                className="tnum"
-                fill="var(--color-faint)"
+                className="rds-tnum"
+                fill="var(--rds-dusk-30)"
+                fontFamily="var(--rds-font-mono)"
                 fontSize="10"
               >
                 {formatPrice(p, currency)}
@@ -105,15 +103,9 @@ export function PriceChart({
         })}
 
         <polyline
-          points={area}
-          fill="var(--color-cyan)"
-          fillOpacity="0.07"
-          stroke="none"
-        />
-        <polyline
           points={line}
           fill="none"
-          stroke="var(--color-cyan)"
+          stroke="var(--rds-yellow)"
           strokeWidth="2"
           strokeLinejoin="round"
           strokeLinecap="round"
@@ -124,23 +116,27 @@ export function PriceChart({
           y1={PAD.top}
           x2={low.x}
           y2={PAD.top + innerH}
-          stroke="var(--color-cyan-dim)"
+          stroke="var(--rds-yellow)"
+          strokeOpacity="0.5"
           strokeWidth="1"
           strokeDasharray="3 4"
         />
         <rect
-          x={low.x - 3}
-          y={low.y - 3}
-          width="6"
-          height="6"
-          fill="var(--color-cyan-bright)"
+          x={low.x - 4}
+          y={low.y - 4}
+          width="8"
+          height="8"
+          fill="var(--rds-midnight)"
+          stroke="var(--rds-yellow)"
+          strokeWidth="2"
         />
         <text
           x={Math.min(Math.max(low.x, PAD.left + 40), W - PAD.right - 40)}
           y={PAD.top + innerH + 20}
           textAnchor="middle"
-          className="tnum"
-          fill="var(--color-cyan)"
+          className="rds-tnum"
+          fill="var(--rds-yellow)"
+          fontFamily="var(--rds-font-mono)"
           fontSize="10"
         >
           low {formatPrice(minP, currency)}

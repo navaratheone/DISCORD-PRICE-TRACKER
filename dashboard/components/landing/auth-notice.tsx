@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { X } from "lucide-react";
+import { CircleAlert, X } from "lucide-react";
 
 const MESSAGES: Record<string, string> = {
   "auth:cancelled": "Sign-in was cancelled.",
@@ -23,18 +23,24 @@ function NoticeInner() {
   const message = key ? MESSAGES[key] : undefined;
   if (!message || !open) return null;
 
+  const failed = key?.endsWith(":error");
+
   return (
-    <div className="fixed inset-x-0 top-[4.5rem] z-40 flex justify-center px-5">
-      <div className="panel mt-3 flex items-center gap-4 px-4 py-2.5">
-        <span className="beacon" aria-hidden />
-        <p className="text-sm text-muted">{message}</p>
+    <div className="fixed inset-x-0 top-[calc(var(--rds-header-h)+8px)] z-90 flex justify-center px-rds-container-pad">
+      <div
+        role={failed ? "alert" : "status"}
+        data-tone={failed ? "error" : undefined}
+        className="rds-message w-full max-w-[480px] shadow-rds-lg"
+      >
+        <CircleAlert strokeWidth={1.5} aria-hidden />
+        <p className="text-rds-fg">{message}</p>
         <button
           type="button"
           onClick={() => setOpen(false)}
           aria-label="Dismiss"
-          className="text-faint transition-colors hover:text-cyan focus-visible:outline-2"
+          className="-my-1 -mr-1 grid size-7 place-items-center rounded-rds-xs text-rds-dusk-30 transition-colors duration-rds-fast hover:bg-white/6 hover:text-rds-fg"
         >
-          <X className="h-4 w-4" />
+          <X className="h-4 w-4" strokeWidth={1.5} />
         </button>
       </div>
     </div>

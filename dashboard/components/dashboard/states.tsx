@@ -3,18 +3,13 @@ import { cn } from "@/lib/utils";
 import { ApiError } from "@/lib/api";
 
 export function Skeleton({ className }: { className?: string }) {
-  return (
-    <div
-      className={cn("animate-pulse border border-line bg-ink-1", className)}
-      aria-hidden
-    />
-  );
+  return <div className={cn("rds-skeleton", className)} aria-hidden />;
 }
 
 export function Spinner({ label = "Loading" }: { label?: string }) {
   return (
-    <div className="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.18em] text-faint">
-      <Loader2 className="h-4 w-4 animate-spin" />
+    <div role="status" className="rds-label flex items-center gap-rds-3">
+      <Loader2 className="h-4 w-4 animate-spin text-rds-dusk-50" strokeWidth={1.5} aria-hidden />
       {label}
     </div>
   );
@@ -36,23 +31,17 @@ export function ErrorPanel({
         : "Something went wrong while loading this view.";
 
   return (
-    <div className="panel flex flex-col items-start gap-4 p-6">
-      <div className="flex items-center gap-3 text-fg">
-        <AlertTriangle className="h-5 w-5 text-cyan" />
-        <span className="font-mono text-xs uppercase tracking-[0.18em] text-faint">
-          {status ? `Error ${status}` : "Error"}
-        </span>
+    <div role="alert" data-tone="error" className="rds-message px-rds-5 py-rds-4">
+      <AlertTriangle strokeWidth={1.5} aria-hidden />
+      <div className="min-w-0">
+        <p className="font-medium text-rds-fg">{status ? `Error ${status}` : "Error"}</p>
+        <p className="mt-rds-1 text-rds-dusk-10">{message}</p>
+        {onRetry && (
+          <button type="button" onClick={onRetry} className="rds-btn rds-btn--secondary rds-btn--sm mt-rds-4">
+            Retry
+          </button>
+        )}
       </div>
-      <p className="text-sm text-muted">{message}</p>
-      {onRetry && (
-        <button
-          type="button"
-          onClick={onRetry}
-          className="border border-line-strong px-4 py-2 font-mono text-xs uppercase tracking-[0.12em] text-fg transition-colors hover:border-cyan hover:text-cyan"
-        >
-          Retry
-        </button>
-      )}
     </div>
   );
 }
@@ -65,9 +54,9 @@ export function EmptyState({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="panel flex flex-col items-start gap-4 p-8">
-      <span className="eyebrow">No data</span>
-      <p className="text-balance text-sm text-muted">{title}</p>
+    <div className="rds-glass flex flex-col items-start gap-rds-4 rounded-rds-lg p-rds-6 max-md:p-rds-5">
+      <span className="rds-label">No data</span>
+      <p className="font-rds-sans text-rds-body-md text-balance text-rds-dusk-10">{title}</p>
       {children}
     </div>
   );

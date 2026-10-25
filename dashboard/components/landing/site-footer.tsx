@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { TrackerMark } from "./logo";
-import { PrimaryButton } from "./buttons";
+import { Wordmark } from "./logo";
+import { Button } from "./buttons";
+import { Container } from "./section";
 import { inviteUrl } from "@/lib/api";
 
 const COLUMNS = [
@@ -33,29 +33,22 @@ const COLUMNS = [
 
 export function SiteFooter() {
   return (
-    <footer className="relative z-10 border-t-2 border-line-strong bg-ink">
-      <div className="mx-auto max-w-6xl px-5 sm:px-6">
-        {/* strong top band */}
-        <div className="flex flex-col gap-6 border-b border-line py-12 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-4">
-            <span className="grid h-12 w-12 place-items-center border border-cyan">
-              <TrackerMark className="h-6 w-6" />
-            </span>
-            <div>
-              <p className="font-pixel text-base uppercase tracking-[0.06em]">
-                Price&nbsp;Tracker
-              </p>
-              <p className="mt-1 font-mono text-xs text-faint">
-                Price-drop alerts, straight to Discord.
-              </p>
-            </div>
+    <footer className="border-t border-rds-dusk bg-rds-bg pt-rds-section-lg pb-rds-section-lg">
+      <Container>
+        <div className="flex flex-col gap-rds-6 md:flex-row md:items-center md:justify-between">
+          <div className="max-w-[320px]">
+            <a href="#top" aria-label="Plummet, back to top" className="inline-block text-[20px] hover:no-underline">
+              <Wordmark />
+            </a>
+            <p className="mt-rds-4 font-rds-sans text-rds-body-sm text-rds-fg-muted">
+              Price-drop alerts, straight to Discord.
+            </p>
           </div>
-          <PrimaryButton href={inviteUrl} size="lg">
+          <Button href={inviteUrl} theme="primary" size="lg" className="self-start md:self-auto">
             Add to Discord
-          </PrimaryButton>
+          </Button>
         </div>
-    </div>
-        
+      </Container>
     </footer>
   );
 }

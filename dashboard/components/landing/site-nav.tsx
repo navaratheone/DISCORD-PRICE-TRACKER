@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import { TrackerMark, Wordmark } from "./logo";
-import { PrimaryButton, GhostButton } from "./buttons";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { Menu, UserRound, X } from "lucide-react";
+import { Wordmark } from "./logo";
+import { Button } from "./buttons";
 import { inviteUrl, loginUrl } from "@/lib/api";
 
 const LINKS = [
@@ -13,79 +12,108 @@ const LINKS = [
   { label: "Dashboard", href: "#dashboard" },
 ];
 
+const TEXT_LINK =
+  "rds-nav-link whitespace-nowrap font-rds-sans font-medium text-rds-fg-body transition-colors duration-rds-fast ease-rds-default hover:text-rds-fg hover:no-underline";
+
+const ROW =
+  "block w-full border-b border-white/30 py-rds-3 text-left font-rds-sans text-rds-body-lg font-medium text-rds-fg";
+
 export function SiteNav() {
   const [open, setOpen] = useState(false);
+  const [menuTop, setMenuTop] = useState<number | undefined>(undefined);
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const toggleMenu = () => {
+    // The panel hangs from the bar.
+    if (!open) setMenuTop(headerRef.current?.getBoundingClientRect().bottom);
+    setOpen((v) => !v);
+  };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-line bg-ink">
-      <nav className="mx-auto flex h-[4.5rem] max-w-6xl items-center justify-between gap-6 px-5 sm:px-6">
-        <Link
-          href="/"
-          className="group flex items-center gap-3"
-          aria-label="Price Tracker home"
-        >
-          <span className="grid h-9 w-9 place-items-center border border-line-strong transition-colors duration-200 group-hover:border-cyan">
-            <TrackerMark className="h-5 w-5" />
-          </span>
-          <Wordmark className="text-[0.85rem]" />
-        </Link>
+    <>
+      <header
+        ref={headerRef}
+        className="rds-nav"
+      >
+        <div className="rds-nav-inner">
+          <a href="#top" aria-label="Plummet home" className="rds-nav-logo shrink-0 justify-self-start hover:no-underline">
+            <Wordmark />
+          </a>
 
-        <div className="hidden items-center gap-1 md:flex">
-          {LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="px-3.5 py-2 font-mono text-xs uppercase tracking-[0.14em] text-muted transition-colors duration-150 hover:text-cyan"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
-        <div className="hidden items-center gap-3 md:flex">
-          <GhostButton href={loginUrl} size="lg">
-            Sign in
-          </GhostButton>
-          <PrimaryButton href={inviteUrl} size="lg">
-            Add to Discord
-          </PrimaryButton>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 items-center justify-center border border-line-strong text-fg transition-colors hover:border-cyan hover:text-cyan md:hidden"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
-      </nav>
-
-      {open && (
-        <div className="border-t border-line bg-ink md:hidden">
-          <div className="mx-auto flex max-w-6xl flex-col px-5 py-3">
+          <nav aria-label="Primary" className="rds-nav-links hidden items-center xl:flex">
             {LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="border-b border-line py-3 font-mono text-xs uppercase tracking-[0.14em] text-muted transition-colors hover:text-cyan"
-              >
+              <a key={link.href} href={link.href} className={TEXT_LINK}>
                 {link.label}
-              </Link>
+              </a>
             ))}
-            <div className="mt-4 flex flex-col gap-3">
-              <GhostButton href={loginUrl} className="w-full" size="lg">
-                Sign in
-              </GhostButton>
-              <PrimaryButton href={inviteUrl} className="w-full" size="lg">
-                Add to Discord
-              </PrimaryButton>
-            </div>
+          </nav>
+
+          <div className="rds-nav-right flex shrink-0 items-center justify-self-end">
+            <a href={loginUrl} aria-label="Sign in" className="rds-nav-icon hidden xl:flex">
+              <UserRound strokeWidth={1.5} />
+            </a>
+            <a
+              href={loginUrl}
+              className="rds-nav-link hidden whitespace-nowrap font-rds-sans font-medium text-rds-fg transition-colors duration-rds-fast ease-rds-default hover:text-rds-fg-body hover:no-underline xl:inline-flex"
+            >
+              Sign in
+            </a>
+            <Button href={inviteUrl} theme="primary" size="sm" className="rds-nav-cta">
+              Add to Discord
+            </Button>
+
+            <button
+              type="button"
+              onClick={toggleMenu}
+              aria-expanded={open}
+              aria-controls="rds-mobile-panel"
+              aria-label={open ? "Close menu" : "Open menu"}
+              className="rds-nav-menu -mr-rds-1 flex shrink-0 items-center justify-center rounded-rds-sm text-rds-fg-body transition-colors duration-rds-fast ease-rds-default hover:text-rds-fg xl:hidden"
+            >
+              {open ? <X strokeWidth={1.5} /> : <Menu strokeWidth={1.5} />}
+            </button>
           </div>
         </div>
-      )}
-    </header>
+
+        <div
+          id="rds-mobile-panel"
+          hidden={!open}
+          className="fixed inset-x-0 top-rds-header h-[calc(100dvh-var(--rds-menu-top,var(--rds-header-h)))] overflow-y-auto bg-rds-midnight px-rds-container-pad py-rds-4 xl:hidden"
+          style={menuTop === undefined ? undefined : ({ top: menuTop, "--rds-menu-top": `${menuTop}px` } as CSSProperties)}
+        >
+          <ul>
+            {LINKS.map((link) => (
+              <li key={link.href}>
+                <a href={link.href} onClick={() => setOpen(false)} className={ROW}>
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-rds-6 flex flex-col gap-rds-3">
+            <Button href={inviteUrl} theme="primary" size="lg" fullWidth>
+              Add to Discord
+            </Button>
+            <Button href={loginUrl} theme="secondary" size="lg" fullWidth>
+              Sign in
+            </Button>
+          </div>
+        </div>
+      </header>
+    </>
   );
 }

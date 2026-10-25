@@ -1,37 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Martian_Mono, Silkscreen } from "next/font/google";
+import { fontVariables } from "./fonts";
 // @ts-ignore: allow side-effect import of CSS in Next.js app directory
 import "./globals.css";
-
-const archivo = Archivo({
-  subsets: ["latin"],
-  variable: "--font-archivo",
-  display: "swap",
-});
-
-const mono = Martian_Mono({
-  subsets: ["latin"],
-  variable: "--font-martian",
-  display: "swap",
-});
-
-const pixel = Silkscreen({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-silkscreen",
-  display: "swap",
-});
 
 const SITE = "https://pricetracker.bot";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: {
-    default: "Price Tracker — price-drop alerts for your Discord",
-    template: "%s · Price Tracker",
+    default: "Plummet — price-drop alerts for your Discord",
+    template: "%s · Plummet",
   },
   description:
-    "Price Tracker is a Discord bot that watches product prices across Amazon, eBay, Walmart and more, then pings your server the moment a price drops or a sold-out item is back in stock.",
+    "Plummet is a Discord bot that watches product prices across Amazon, eBay, Walmart and more, then pings your server the moment a price drops or a sold-out item is back in stock.",
   keywords: [
     "discord price tracker",
     "price drop alerts",
@@ -42,23 +23,26 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: SITE,
-    title: "Price Tracker — price-drop alerts for your Discord",
+    title: "Plummet — price-drop alerts for your Discord",
     description:
       "Track any product. Get pinged the second it drops. A Discord-first price watchdog with a read-only analytics dashboard.",
-    siteName: "Price Tracker",
+    siteName: "Plummet",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Price Tracker — price-drop alerts for your Discord",
+    title: "Plummet — price-drop alerts for your Discord",
     description: "Track any product. Get pinged the second it drops.",
   },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#16181d",
+  themeColor: "#091a23",
   colorScheme: "dark",
 };
+
+// Entrances arm only once script has marked the document, so nothing is hidden from a visitor without it.
+const MARK_JS = 'document.documentElement.classList.add("js")';
 
 export default function RootLayout({
   children,
@@ -66,12 +50,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${mono.variable} ${pixel.variable}`}
+      data-rds-root
+      data-rds-theme="midnight"
+      className={fontVariables}
+      suppressHydrationWarning
     >
-      <body>
-        <div className="grid-bg" aria-hidden />
-        <div className="relative z-10">{children}</div>
-      </body>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: MARK_JS }} />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }

@@ -6,6 +6,7 @@ import { useAsync } from "@/lib/use-async";
 import { MeProvider } from "@/components/dashboard/me-context";
 import { AppBar } from "@/components/dashboard/app-bar";
 import { ErrorPanel, Skeleton } from "@/components/dashboard/states";
+import { Container } from "@/components/landing/section";
 
 export default function DashboardLayout({
   children,
@@ -22,25 +23,27 @@ export default function DashboardLayout({
 
   if (loading || (error instanceof ApiError && error.status === 401)) {
     return (
-      <div className="mx-auto max-w-6xl px-5 py-6 sm:px-6">
+      <Container className="py-rds-6">
         <Skeleton className="h-16 w-full" />
-        <Skeleton className="mt-6 h-64 w-full" />
-      </div>
+        <Skeleton className="mt-rds-6 h-64 w-full" />
+      </Container>
     );
   }
 
   if (error || !me) {
     return (
-      <div className="mx-auto max-w-6xl px-5 py-10 sm:px-6">
+      <Container className="py-rds-7">
         <ErrorPanel error={error} onRetry={reload} />
-      </div>
+      </Container>
     );
   }
 
   return (
     <MeProvider me={me}>
       <AppBar />
-      <main className="mx-auto max-w-6xl px-5 py-8 sm:px-6">{children}</main>
+      <main>
+        <Container className="pt-rds-7 pb-rds-section-xl max-md:pt-rds-6">{children}</Container>
+      </main>
     </MeProvider>
   );
 }

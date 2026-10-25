@@ -1,4 +1,5 @@
 import { ArrowDown, Box } from "lucide-react";
+import { Marquee } from "./marquee";
 
 type Tick =
   | { kind: "drop"; name: string; pct: string; price: string }
@@ -19,37 +20,33 @@ const TICKS: Tick[] = [
 
 function TickItem({ tick }: { tick: Tick }) {
   return (
-    <span className="flex items-center gap-2.5 whitespace-nowrap border-r border-line px-6 py-3.5">
+    <span className="rds-tick" data-kind={tick.kind}>
       {tick.kind === "drop" ? (
-        <ArrowDown className="h-3.5 w-3.5 text-cyan" />
+        <ArrowDown strokeWidth={1.5} aria-hidden />
       ) : (
-        <Box className="h-3.5 w-3.5 text-cyan" />
+        <Box strokeWidth={1.5} aria-hidden />
       )}
-      <span className="font-mono text-xs text-muted">{tick.name}</span>
+      <span className="rds-tick-name">{tick.name}</span>
       {tick.kind === "drop" ? (
-        <span className="tnum text-xs font-semibold text-cyan">{tick.pct}</span>
+        <span className="rds-tick-pct">{tick.pct}</span>
       ) : (
-        <span className="font-mono text-[0.65rem] uppercase tracking-wide text-cyan">
-          restock
-        </span>
+        <span className="rds-tick-flag">restock</span>
       )}
-      <span className="tnum text-xs text-faint">{tick.price}</span>
+      <span className="rds-tick-price">{tick.price}</span>
     </span>
   );
 }
 
+/** The rail that closes the hero: drops and restocks travelling past a still label, paused under the pointer. */
 export function PriceTicker() {
-  const row = [...TICKS, ...TICKS];
   return (
-    <section
-      className="marquee-track overflow-hidden border-y border-line bg-ink-1"
-      aria-label="Recent price drops and restocks"
-    >
-      <div className="marquee">
-        {row.map((tick, i) => (
-          <TickItem key={i} tick={tick} />
+    <div className="rds-rail">
+      <p className="rds-rail-label">Drops · restocks</p>
+      <Marquee label="Recent price drops and restocks" speed={28} className="rds-rail-window">
+        {TICKS.map((tick) => (
+          <TickItem key={tick.name} tick={tick} />
         ))}
-      </div>
-    </section>
+      </Marquee>
+    </div>
   );
 }

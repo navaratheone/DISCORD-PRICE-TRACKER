@@ -1,0 +1,1372 @@
+@layer components {
+  /* The fixed bar overlays the hero, so the hero's padding clears it and its ground runs to the top of the screen. */
+  .rds-hero {
+    position: relative;
+    overflow: hidden;
+    padding-top: calc(var(--rds-hero-pt) + var(--rds-header-h));
+    padding-bottom: var(--rds-hero-pb);
+  }
+
+  @media (width >= 769px) {
+    .rds-hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: calc(var(--rds-hero-fold) + var(--rds-header-h));
+    }
+  }
+
+  .rds-hero::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 240px;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to bottom, transparent, var(--rds-bg));
+  }
+
+  .rds-hero > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* The price terrain: the ground both the hero and the close stand on, fading in once it has drawn. */
+  .rds-terrain,
+  .rds-hero > .rds-terrain {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1400ms var(--rds-ease-out);
+  }
+
+  .rds-terrain[data-ready] {
+    opacity: 0.25;
+  }
+
+  /* Only the hero's panes have something moving behind them, so only they frost it. */
+  .rds-hero .rds-glass {
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+
+  .rds-hero-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--rds-hero-gap);
+    text-align: center;
+  }
+
+  .rds-hero-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Mona Sans at Black and expanded: the display voice, wide, heavy and clear. */
+  .rds-hero-title {
+    font-family: var(--rds-font-display);
+    font-size: var(--rds-hero-title);
+    font-stretch: 125%;
+    line-height: var(--rds-hero-lh);
+    letter-spacing: -0.01em;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: center;
+    text-wrap: balance;
+    color: var(--rds-fg);
+  }
+
+  @media (min-width: 769px) {
+    .rds-hero-title {
+      white-space: nowrap;
+    }
+  }
+
+  /* PLUMMET falls: each letter sits lower than the last on an accelerating curve, a price chart crashing, in the
+     wordmark's red. On load the letters drop into place one after another and land with a small rebound. */
+  .rds-plummet {
+    display: inline-flex;
+    padding-bottom: 0.33em;
+    color: var(--rds-hyper-05);
+  }
+
+  .rds-plummet > span[aria-hidden] {
+    --drop: calc(pow(var(--i), 1.6) * 0.0185em);
+    display: inline-block;
+    transform: translateY(var(--drop));
+  }
+
+  .js .rds-plummet > span[aria-hidden] {
+    animation: rds-plummet 900ms both;
+    animation-delay: calc(260ms + var(--i) * 70ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .js .rds-plummet > span[aria-hidden] {
+      animation: none;
+    }
+  }
+
+  .rds-hero-lede {
+    max-width: 600px;
+    margin-top: 0;
+    font-family: var(--rds-font-sans);
+    font-size: var(--rds-body-xl);
+    line-height: 1.3;
+    text-wrap: balance;
+    color: var(--rds-fg-body);
+  }
+
+  @media (max-width: 768px) {
+    .rds-hero-lede {
+      font-size: var(--rds-body-md);
+    }
+  }
+
+  @media (min-width: 769px) {
+    .rds-hero-lede {
+      font-size: clamp(15px, 2svh, 18px);
+    }
+  }
+
+
+  /* The tilted window is its own 3D layer; the actions sit above it so its shadow never falls across them. */
+  .rds-hero-actions {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--rds-s-4);
+    padding-top: var(--rds-s-2);
+  }
+
+  .rds-hero-actions .rds-btn {
+    padding: 12px 40px;
+  }
+
+  @media (max-width: 768px) {
+    .rds-hero-actions {
+      flex-direction: column;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .rds-hero-actions .rds-btn {
+      width: 100%;
+      padding: 12px 24px;
+    }
+  }
+
+  /* The rail closing the hero: a still mono label, a hairline, then the travelling window of drops and restocks. */
+  .rds-rail {
+    display: flex;
+    align-items: center;
+    gap: var(--rds-s-5);
+    width: min(100%, var(--rds-hero-pair-w));
+    height: var(--rds-rail-h);
+  }
+
+  .rds-rail-label {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--rds-s-5);
+    margin: 0;
+    font-family: var(--rds-font-mono);
+    font-size: var(--rds-label-xs);
+    line-height: 1.2;
+    letter-spacing: var(--rds-label-ls);
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--rds-dusk-50);
+  }
+
+  .rds-rail-label::after {
+    content: "";
+    width: 1px;
+    height: 20px;
+    background: var(--rds-dusk);
+  }
+
+  .rds-rail-window {
+    flex: 1 1 auto;
+    min-width: 0;
+    -webkit-mask-image: linear-gradient(90deg, #0000, #000 9%, #000 91%, #0000);
+    mask-image: linear-gradient(90deg, #0000, #000 9%, #000 91%, #0000);
+  }
+
+  .rds-rail-window .rds-marquee {
+    will-change: transform;
+  }
+
+  .rds-tick {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 10px;
+    padding-inline: var(--rds-rail-space);
+    white-space: nowrap;
+  }
+
+  .rds-tick > svg {
+    width: 14px;
+    height: 14px;
+    flex: none;
+  }
+
+  .rds-tick[data-kind="drop"] > svg {
+    color: var(--rds-yellow);
+  }
+
+  .rds-tick[data-kind="stock"] > svg {
+    color: var(--rds-sky-blue);
+  }
+
+  .rds-tick-name {
+    font-family: var(--rds-font-sans);
+    font-size: var(--rds-body-sm);
+    color: var(--rds-dusk-30);
+    transition: color var(--rds-dur-fast) var(--rds-ease-default);
+  }
+
+  .rds-tick-pct,
+  .rds-tick-price,
+  .rds-tick-flag {
+    font-family: var(--rds-font-mono);
+    font-size: var(--rds-label-sm);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rds-tick-pct {
+    color: var(--rds-yellow);
+  }
+
+  .rds-tick-flag {
+    font-size: var(--rds-label-xs);
+    letter-spacing: var(--rds-label-ls);
+    text-transform: uppercase;
+    color: var(--rds-sky-blue);
+  }
+
+  .rds-tick-price {
+    color: var(--rds-dusk-50);
+  }
+
+  @media (hover: hover) {
+    .rds-rail-window:hover .rds-marquee {
+      animation-play-state: paused;
+    }
+
+    .rds-tick:hover .rds-tick-name {
+      color: var(--rds-white);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .rds-rail,
+    .rds-rail-label {
+      gap: var(--rds-s-4);
+    }
+
+    .rds-rail {
+      margin-top: var(--rds-s-4);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rds-rail {
+      flex-direction: column;
+      gap: var(--rds-s-3);
+      height: auto;
+    }
+
+    .rds-rail-label::after {
+      content: none;
+    }
+
+    .rds-rail-window {
+      width: 100%;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .rds-rail-window :is(.rds-marquee, .rds-marquee-track) {
+      justify-content: center;
+    }
+  }
+
+  /* The scroll cue: a red arrow that drops, bounces, turns once and lights, then waits. */
+  .rds-cue {
+    display: none;
+  }
+
+  @media (width >= 769px) {
+    .rds-hero > .rds-cue {
+      --rds-cue-loop: 4.6s;
+      --rds-cue-size: 14px;
+      --rds-cue-gap: 8px;
+      --rds-cue-drop: 4px;
+      --rds-cue-glow: 0.6;
+      --rds-cue-depth: 56px;
+      position: absolute;
+      z-index: 3;
+      align-items: center;
+      gap: var(--rds-cue-gap);
+      padding: 4px 6px;
+      border-radius: var(--rds-r-sm);
+      color: var(--rds-hyper-05);
+      text-decoration: none;
+    }
+
+    .rds-hero > .rds-cue[data-placement="corner"] {
+      display: inline-flex;
+      flex-direction: row-reverse;
+      bottom: clamp(16px, 2.4svh, 28px);
+      left: calc(max(0px, (100% - var(--rds-container-max)) / 2) + var(--rds-container-pad) - 6px);
+    }
+  }
+
+  .rds-cue-label {
+    font-family: var(--rds-font-mono);
+    font-size: 10px;
+    line-height: 1.2;
+    letter-spacing: var(--rds-label-ls);
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--rds-dusk-50);
+    animation: rds-cue-legend var(--rds-cue-loop) linear infinite;
+  }
+
+  .rds-cue-mark,
+  .rds-cue-bob,
+  .rds-cue-flip {
+    position: relative;
+    display: block;
+    width: var(--rds-cue-size);
+    height: var(--rds-cue-size);
+  }
+
+  .rds-cue-bob {
+    animation: rds-cue-bob var(--rds-cue-loop) linear infinite;
+  }
+
+  .rds-cue-flip {
+    animation: rds-cue-flip var(--rds-cue-loop) linear infinite;
+  }
+
+  .rds-cue-flip svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    stroke-width: 2;
+  }
+
+  .rds-cue-light {
+    stroke-width: 4;
+    filter: blur(3px);
+    opacity: 0;
+    animation: rds-cue-light var(--rds-cue-loop) linear infinite;
+  }
+
+  .rds-cue-hot {
+    color: var(--rds-hyper-04);
+    opacity: 0;
+    animation: rds-cue-hot var(--rds-cue-loop) linear infinite;
+  }
+
+  .rds-cue[data-running="false"] :is(.rds-cue-label, .rds-cue-bob, .rds-cue-flip, .rds-cue-light, .rds-cue-hot) {
+    animation-play-state: paused;
+  }
+
+  @media (hover: hover) {
+    .rds-cue:hover {
+      text-decoration: none !important;
+    }
+
+    .rds-cue:hover .rds-cue-label {
+      animation: none;
+      color: var(--rds-fg);
+    }
+
+    .rds-cue:hover .rds-cue-hot {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  .rds-cue:focus-visible .rds-cue-label {
+    animation: none;
+    color: var(--rds-fg);
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .rds-hero > .rds-cue {
+      animation: rds-cue-leave linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 120px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rds-cue,
+    .rds-cue * {
+      animation: none !important;
+    }
+  }
+
+  /* Centred section heads: the heading with one yellow emphasis, and a balanced lede under it. */
+  .rds-jobs-title {
+    max-width: 960px;
+    margin-inline: auto;
+    font-family: var(--rds-font-sans);
+    font-size: var(--rds-h-lg);
+    line-height: 1.05;
+    font-weight: 400;
+    text-align: center;
+    text-wrap: balance;
+    color: var(--rds-fg);
+  }
+
+  .rds-jobs-lede {
+    max-width: 30em;
+    margin: var(--rds-s-4) auto 0;
+    font-family: var(--rds-font-sans);
+    font-size: var(--rds-body-md);
+    line-height: 1.5;
+    text-align: center;
+    text-wrap: balance;
+    color: var(--rds-fg-body);
+  }
+
+  .rds-jobs-card {
+    padding: var(--rds-s-5);
+  }
+
+  .rds-jobs-name {
+    font-family: var(--rds-font-sans);
+    font-size: var(--rds-body-xl);
+    line-height: 1.25;
+    font-weight: 500;
+    text-wrap: balance;
+    color: var(--rds-fg);
+  }
+
+  @media (width < 769px) {
+    .rds-jobs-card {
+      padding: 20px;
+    }
+  }
+
+  @media (width >= 1025px) {
+    .rds-jobs-title {
+      font-size: clamp(40px, min(3.5vw, 7.4svh), 56px);
+    }
+
+    .rds-jobs-lede {
+      font-size: clamp(16px, 1.25vw, 18px);
+    }
+  }
+
+  /* A figure's head names its scope as data, with a second reading opposite, over a hairline. */
+  .rds-fig-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--rds-s-3);
+    padding-bottom: var(--rds-s-3);
+    border-bottom: 1px solid var(--rds-dusk);
+    font-family: var(--rds-font-mono);
+    font-size: var(--rds-label-sm);
+    line-height: 1.2;
+    letter-spacing: var(--rds-label-ls);
+    text-transform: uppercase;
+    color: var(--rds-dusk-30);
+  }
+
+  /* How it works: the command stage. The intro and the active module on the left, the console in the middle, the
+     lamp column at the far right; below 900px the lamps become a row above the console. */
+  .rds-feat {
+    --feat-sq: 44px;
+    --feat-glyph: 20px;
+    padding-top: var(--rds-section-lg);
+    padding-bottom: var(--rds-section-xl);
+  }
+
+  .rds-feat-grid {
+    display: flex;
+    flex-direction: column;
+    max-width: 640px;
+    margin-inline: auto;
+  }
+
+  .rds-feat-intro {
+    container-type: inline-size;
+  }
+
+  .rds-feat-title {
+    font-family: var(--rds-font-sans);
+    font-size: min(var(--rds-h-2xl), 18cqi);
+    font-weight: 400;
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    color: var(--rds-fg);
+  }
+
+  .rds-feat-title > span {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .rds-feat-lede {
+    margin-top: var(--rds-s-4);
+    max-width: 38ch;
+    font-size: var(--rds-body-lg);
+    line-height: var(--rds-body-lh);
+    color: var(--rds-fg-muted);
+    text-wrap: pretty;
+  }
+
+  .rds-feat-nav {
+    margin-top: var(--rds-s-6);
+  }
+
+  .rds-feat-lamps {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .rds-feat-step {
+    display: flex;
+    flex: 1 1 0;
+    align-items: center;
+  }
+
+  .rds-feat-step:last-child {
+    flex: none;
+  }
+
+  .rds-feat-wire {
+    position: relative;
+    flex: 1;
+    height: 1px;
+    margin-inline: var(--rds-s-2);
+    background: var(--rds-dusk);
+  }
+
+  .rds-feat-wire > i {
+    position: absolute;
+    inset: 0;
+    background: var(--rds-hyper-05);
+    transform: scaleX(var(--t, 0));
+    transform-origin: left center;
+    transition: transform 420ms var(--rds-ease-standard);
+  }
+
+  .rds-feat-lamp {
+    position: relative;
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: var(--feat-sq);
+    height: var(--feat-sq);
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: var(--rds-r-sm);
+    background: var(--rds-dusk-09);
+    color: var(--rds-dusk-50);
+    cursor: pointer;
+    transition:
+      background-color 420ms var(--rds-ease-out),
+      border-color 420ms var(--rds-ease-out),
+      color 320ms var(--rds-ease-out);
+  }
+
+  .rds-feat-lamp svg {
+    width: var(--feat-glyph);
+    height: var(--feat-glyph);
+  }
+
+  .rds-feat-lamp[data-state="done"] {
+    color: var(--rds-dusk-30);
+  }
+
+  .rds-feat-lamp[data-state="active"] {
+    border-color: var(--rds-hyper-05);
+    background: var(--rds-hyper-05);
+    color: var(--rds-white);
+  }
+
+  @media (hover: hover) and (width >= 769px) {
+    .rds-feat-lamp:not([data-state="active"]):hover {
+      background: var(--rds-dusk);
+      color: var(--rds-dusk-10);
+    }
+  }
+
+  .rds-feat-copy {
+    margin-top: var(--rds-s-6);
+  }
+
+  .rds-feat-name {
+    display: flex;
+    align-items: center;
+    gap: var(--rds-s-3);
+    font-family: var(--rds-font-sans);
+    font-size: var(--rds-h-xs);
+    font-weight: 500;
+    line-height: var(--rds-h-xs-lh);
+    color: var(--rds-fg);
+  }
+
+  .rds-feat-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    color: var(--rds-icon-accent);
+  }
+
+  .rds-feat-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .rds-feat-desc {
+    margin-top: var(--rds-s-2);
+    max-width: 42ch;
+    font-size: var(--rds-body-md);
+    line-height: var(--rds-body-lh);
+    color: var(--rds-fg-muted);
+  }
+
+  /* The /watch subcommands, set as records: a mono key, a sans label, hairlines between. The open one is lit. */
+  .rds-subs {
+    margin-top: var(--rds-s-6);
+  }
+
+  .rds-subs-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rds-sub {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr) 7px;
+    column-gap: var(--rds-s-3);
+    align-items: center;
+    width: 100%;
+    padding: clamp(5px, 1.1svh, 9px) 8px;
+    border-bottom: 1px solid var(--rds-border);
+    text-align: left;
+    transition: background-color var(--rds-dur-fast) var(--rds-ease-default);
+  }
+
+  .rds-sub-key {
+    font-family: var(--rds-font-mono);
+    font-size: var(--rds-body-xs);
+    color: var(--rds-white);
+    transition: color var(--rds-dur-fast) var(--rds-ease-default);
+  }
+
+  .rds-sub-label {
+    overflow: hidden;
+    font-size: var(--rds-body-sm);
+    color: var(--rds-dusk-30);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color var(--rds-dur-fast) var(--rds-ease-default);
+  }
+
+  .rds-sub .rds-dot {
+    background: var(--rds-yellow);
+    opacity: 0;
+    transition: opacity var(--rds-dur-fast) var(--rds-ease-default);
+  }
+
+  @media (hover: hover) and (width >= 769px) {
+    .rds-sub:hover {
+      background: rgb(255 255 255 / 0.04);
+    }
+
+    .rds-sub:hover .rds-sub-label {
+      color: var(--rds-dusk-10);
+    }
+  }
+
+  .rds-sub[aria-selected="true"] .rds-sub-key {
+    color: var(--rds-yellow);
+  }
+
+  .rds-sub[aria-selected="true"] .rds-sub-label {
+    color: var(--rds-white);
+  }
+
+  .rds-sub[aria-selected="true"] .rds-dot {
+    opacity: 1;
+  }
+
+  .rds-feat-figure {
+    margin-top: var(--rds-s-6);
+    min-width: 0;
+  }
+
+  @media (min-width: 900px) {
+    .rds-feat {
+      --feat-sq: 52px;
+      --feat-glyph: 22px;
+    }
+
+    .rds-feat-grid {
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1fr)
+        clamp(40px, 4vw, 96px)
+        minmax(0, clamp(440px, 50%, 620px))
+        clamp(24px, 2vw, 40px)
+        var(--feat-sq);
+      grid-template-rows: auto 1fr;
+      align-items: start;
+      row-gap: clamp(28px, 4svh, 48px);
+      max-width: none;
+    }
+
+    .rds-feat-intro {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .rds-feat-title {
+      font-size: min(var(--rds-h-2xl), 17cqi, 10svh);
+    }
+
+    .rds-feat-copy {
+      grid-column: 1;
+      grid-row: 2;
+      margin-top: 0;
+    }
+
+    .rds-feat-figure {
+      grid-column: 3;
+      grid-row: 1 / 3;
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      margin-top: 0;
+    }
+
+    /* The console stands as tall as the words beside it, its exchange centred in the pane. */
+    .rds-feat-figure > .rds-con {
+      flex: 1 1 auto;
+      justify-content: center;
+      gap: 20px;
+      padding: 32px;
+    }
+
+    .rds-feat-figure .rds-con-body {
+      min-height: clamp(268px, 38svh, 340px);
+    }
+
+    .rds-feat-figure .rds-con-cmd {
+      font-size: 14px;
+    }
+
+    .rds-feat-figure .rds-con-from-name {
+      font-size: var(--rds-body-md);
+    }
+
+    .rds-feat-figure .rds-con-product {
+      font-size: var(--rds-body-lg);
+    }
+
+    .rds-feat-figure .rds-con-price > b {
+      font-size: clamp(30px, 4.6svh, 40px);
+    }
+
+    .rds-feat-figure .rds-cell {
+      padding-block: clamp(9px, 1.5svh, 14px);
+    }
+
+    .rds-feat-figure .rds-cell-value,
+    .rds-feat-figure .rds-record-label,
+    .rds-feat-figure .rds-con-text {
+      font-size: 15px;
+    }
+
+    .rds-feat-figure .rds-record {
+      padding-block: clamp(9px, 1.3svh, 12px);
+    }
+
+    .rds-feat-nav {
+      grid-column: 5;
+      grid-row: 1 / 3;
+      align-self: center;
+      margin-top: 0;
+    }
+
+    .rds-feat-lamps {
+      flex-direction: column;
+    }
+
+    .rds-feat-step {
+      flex: none;
+      flex-direction: column;
+    }
+
+    .rds-feat-wire {
+      flex: none;
+      width: 1px;
+      height: 24px;
+      margin: 0;
+    }
+
+    .rds-feat-wire > i {
+      transform: scaleY(var(--t, 0));
+      transform-origin: center top;
+    }
+  }
+
+  /* The console: one glass card set as the old prompt card, a typed command over a divider the reply lands under. */
+  .rds-con {
+    display: flex;
+    flex-direction: column;
+    gap: var(--rds-s-4);
+    padding: 24px;
+    border-radius: var(--rds-r-lg);
+    text-align: left;
+  }
+
+  @media (width < 769px) {
+    .rds-con {
+      padding: 16px;
+    }
+  }
+
+  .rds-con-cmd {
+    display: flex;
+    align-items: center;
+    gap: var(--rds-s-2);
+    min-width: 0;
+    font-family: var(--rds-font-mono);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--rds-dusk-30);
+  }
+
+  .rds-con-cmd > b {
+    font-weight: 400;
+    color: var(--rds-white);
+  }
+
+  .rds-con-arg {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .rds-caret {
+    display: inline-block;
+    flex: none;
+    width: 2px;
+    height: 1.05em;
+    background: var(--rds-yellow);
+    animation: rds-caret 1s steps(1, end) infinite;
+  }
+
+  /* On every new command a 1px yellow line crosses the divider, the command going out. */
+  .rds-con-rule {
+    position: relative;
+    height: 1px;
+    background: var(--rds-dusk);
+  }
+
+  .rds-con-rule > i {
+    position: absolute;
+    inset: 0;
+    background: var(--rds-yellow);
+    transform-origin: left center;
+    animation: rds-sweep 900ms var(--rds-ease-standard) both;
+  }
+
+  @keyframes rds-sweep {
+    0% {
+      transform: scaleX(0);
+      opacity: 1;
+    }
+    62% {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scaleX(1);
+      opacity: 0;
+    }
+  }
+
+  .rds-con-from {
+    display: flex;
+    align-items: center;
+    gap: var(--rds-s-2);
+    min-width: 0;
+  }
+
+  .rds-con-from-name {
+    font-family: var(--rds-font-sans);
+    font-size: var(--rds-body-sm);
+    font-weight: 500;
+    color: var(--rds-white);
+  }
+
+  .rds-con-from-note {
+    margin-left: auto;
+    font-family: var(--rds-font-mono);
+    font-size: var(--rds-body-xxs);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: right;
+    color: var(--rds-dusk-50);
+  }
+
+  .rds-con-body {
+    min-height: 236px;
+  }
+
+  .rds-con-status {
+    display: flex;
+    align-items: center;
+    gap: var(--rds-s-2);
+    font-family: var(--rds-font-mono);
+    font-size: var(--rds-label-sm);
+    line-height: 1.2;
+    letter-spacing: var(--rds-label-ls);
+    text-transform: uppercase;
+    color: var(--rds-yellow);
+  }
+
+  .rds-con-status svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .rds-con-product {
+    margin-top: var(--rds-s-3);
+    font-size: var(--rds-body-md);
+    font-weight: 500;
+    color: var(--rds-white);
+  }
+
+  .rds-con-price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--rds-s-3);
+    margin-top: var(--rds-s-1);
+  }
+
+  .rds-con-price > b {
+    font-family: var(--rds-font-sans);
+    font-size: 30px;
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--rds-white);
+  }
+
+  .rds-con-price > b[data-accent] {
+    color: var(--rds-yellow);
+  }
+
+  .rds-con-price > span {
+    font-family: var(--rds-font-mono);
+    font-size: var(--rds-label-xs);
+    letter-spacing: var(--rds-label-ls);
+    text-transform: uppercase;
+    color: var(--rds-dusk-30);
+  }
+
+  .rds-con-price > span[data-accent] {
+    color: var(--rds-yellow);
+  }
+
+  .rds-con-text {
+    margin-top: var(--rds-s-3);
+    font-size: var(--rds-body-sm);
+    color: var(--rds-dusk-30);
+  }
+
+  .rds-con-text > b {
+    font-weight: 500;
+    color: var(--rds-white);
+  }
+
+  .rds-cells {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--rds-s-5);
+    margin-top: var(--rds-s-4);
+    border-top: 1px solid var(--rds-border);
+  }
+
+  .rds-cell {
+    min-width: 0;
+    padding-block: 9px;
+    border-bottom: 1px solid var(--rds-border);
+  }
+
+  .rds-cell-label {
+    font-family: var(--rds-font-mono);
+    font-size: var(--rds-body-xxs);
+    line-height: 1.4;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--rds-dusk-30);
+  }
+
+  .rds-cell-value {
+    margin-top: 2px;
+    overflow: hidden;
+    font-family: var(--rds-font-mono);
+    font-size: var(--rds-body-sm);
+    font-variant-numeric: tabular-nums;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--rds-dusk-10);
+  }
+
+  .rds-cell-value[data-accent] {
+    color: var(--rds-yellow);
+  }
+
+  .rds-records {
+    margin: var(--rds-s-4) 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rds-border);
+  }
+
+  .rds-record {
+    display: grid;
+    grid-template-columns: minmax(0, 15em) minmax(0, 1fr);
+    column-gap: var(--rds-s-4);
+    align-items: baseline;
+    padding-block: 9px;
+    border-bottom: 1px solid var(--rds-border);
+  }
+
+  .rds-record-key {
+    font-family: var(--rds-font-mono);
+    font-size: var(--rds-body-xs);
+    color: var(--rds-white);
+  }
+
+  .rds-record-label {
+    font-size: var(--rds-body-sm);
+    color: var(--rds-dusk-30);
+  }
+
+  @media (width < 500px) {
+    .rds-record {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 2px;
+    }
+  }
+
+  /* The closing section: the hero's lattice behind, faded in and out over 200px, the statement a fifth larger. */
+  .rds-close {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .rds-close::before,
+  .rds-close::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    height: 200px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .rds-close::before {
+    top: 0;
+    background: linear-gradient(to bottom, var(--rds-bg), transparent);
+  }
+
+  .rds-close::after {
+    bottom: 0;
+    background: linear-gradient(to top, var(--rds-bg), transparent);
+  }
+
+  .rds-close-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .rds-close-title {
+    max-width: 22em;
+    font-family: var(--rds-font-display);
+    font-size: calc(var(--rds-hero-size) * 1.2);
+    font-stretch: 125%;
+    line-height: var(--rds-hero-lh);
+    letter-spacing: -0.01em;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--rds-fg);
+  }
+
+  .rds-close-name {
+    color: var(--rds-hyper-05);
+  }
+
+  .rds-close-lede {
+    max-width: 600px;
+    margin-top: var(--rds-s-5);
+    font-family: var(--rds-font-sans);
+    font-size: var(--rds-body-lg);
+    line-height: 1.5;
+    text-wrap: balance;
+    color: var(--rds-fg-body);
+  }
+
+  .rds-close-actions {
+    margin-top: var(--rds-s-6);
+  }
+
+  @media (width < 769px) {
+    .rds-close-title {
+      font-size: calc(var(--rds-hero-size) * 1.05);
+    }
+
+    .rds-close-actions {
+      align-self: center;
+    }
+  }
+
+  /* On a laptop screen the toolkit tightens so the whole bento sits in one screen: each card's glyph moves beside its
+     name instead of above it. */
+  @media (min-width: 1025px) and (max-height: 900px) {
+    .rds-toolkit {
+      gap: var(--rds-s-3);
+    }
+
+    .rds-toolkit .rds-jobs-card {
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr);
+      align-content: start;
+      align-items: center;
+      gap: var(--rds-s-3);
+      padding: 20px;
+    }
+
+    .rds-toolkit .rds-jobs-card > :not(svg, h3) {
+      grid-column: 1 / -1;
+    }
+
+    .rds-toolkit .rds-jobs-name {
+      font-size: var(--rds-body-lg);
+    }
+
+    .rds-toolkit .rds-jobs-card > h3.text-rds-h-xs {
+      font-size: var(--rds-body-xl);
+    }
+
+    .rds-toolkit .rds-jobs-card > p.text-rds-body-md {
+      font-size: var(--rds-body-sm);
+    }
+  }
+
+  @media (min-width: 1025px) and (max-height: 760px) {
+    #features {
+      padding-block: 20px;
+    }
+
+    #features .rds-jobs-lede {
+      margin-top: var(--rds-s-2);
+    }
+
+    #features .rds-toolkit {
+      margin-top: var(--rds-s-4);
+      gap: 10px;
+    }
+
+    #features .rds-jobs-card {
+      gap: 10px;
+      padding: 16px 20px;
+    }
+
+    #features .rds-jobs-card > p.text-rds-body-md {
+      max-width: none;
+    }
+
+    #features .rds-jobs-card > .mt-auto {
+      padding-top: var(--rds-s-3);
+    }
+  }
+
+  /* On a short screen the command stage tightens: a smaller title, a two-line lede, closer records. */
+  @media (min-width: 900px) and (max-height: 760px) {
+    .rds-feat-title {
+      font-size: min(var(--rds-h-2xl), 17cqi, 9svh);
+    }
+
+    .rds-feat-lede {
+      max-width: 46ch;
+      margin-top: var(--rds-s-3);
+      font-size: var(--rds-body-md);
+    }
+
+    .rds-feat-grid {
+      row-gap: 20px;
+    }
+
+    .rds-subs {
+      margin-top: var(--rds-s-4);
+    }
+  }
+
+  /* From a laptop up every section is one screen tall under the bar, its content centred in it. */
+  @media (min-width: 769px) {
+    .rds-screen {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: var(--rds-screen);
+      padding-top: clamp(20px, 5svh, 72px);
+      padding-bottom: clamp(20px, 5svh, 72px);
+    }
+  }
+}
+
+@keyframes rds-cue-light {
+  0%,
+  2% {
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  7% {
+    opacity: var(--rds-cue-glow);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+  }
+  20% {
+    opacity: calc(var(--rds-cue-glow) * 0.25);
+    animation-timing-function: ease-out;
+  }
+  32%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes rds-cue-hot {
+  0%,
+  2% {
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  6% {
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+  17%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes rds-cue-flip {
+  0%,
+  9% {
+    transform: perspective(var(--rds-cue-depth)) rotateY(0deg);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  31%,
+  100% {
+    transform: perspective(var(--rds-cue-depth)) rotateY(360deg);
+  }
+}
+
+@keyframes rds-cue-legend {
+  0%,
+  26% {
+    color: var(--rds-dusk-50);
+    animation-timing-function: ease-out;
+  }
+  33%,
+  56% {
+    color: var(--rds-dusk-10);
+    animation-timing-function: ease-in-out;
+  }
+  66%,
+  100% {
+    color: var(--rds-dusk-50);
+  }
+}
+
+@keyframes rds-cue-bob {
+  0%,
+  34% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  41% {
+    transform: translateY(var(--rds-cue-drop));
+    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+  }
+  48% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  53% {
+    transform: translateY(calc(var(--rds-cue-drop) * 0.4));
+    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+  }
+  58%,
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes rds-cue-leave {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes rds-plummet {
+  0% {
+    opacity: 0;
+    transform: translateY(calc(var(--drop) - 0.9em));
+    animation-timing-function: cubic-bezier(0.55, 0, 0.9, 0.4);
+  }
+  58% {
+    opacity: 1;
+    transform: translateY(calc(var(--drop) + 0.07em));
+    animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1);
+  }
+  78% {
+    transform: translateY(calc(var(--drop) - 0.025em));
+  }
+  100% {
+    transform: translateY(var(--drop));
+  }
+}
