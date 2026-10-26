@@ -15,7 +15,7 @@
   --rds-label-md:14px; --rds-label-sm:12px; --rds-label-xs:11px; --rds-label-lh:1.2; --rds-label-ls:1.5px;
   --rds-s-1:4px; --rds-s-2:8px; --rds-s-3:12px; --rds-s-4:16px; --rds-s-5:24px; --rds-s-6:32px; --rds-s-7:48px; --rds-s-8:64px;
   --rds-section-xs:32px; --rds-section-sm:48px; --rds-section-md:56px; --rds-section-lg:72px; --rds-section-xl:96px;
-  --rds-container-max:1390px; --rds-container-pad:24px; --rds-header-h:60px;
+  --rds-container-max:1390px; --rds-container-pad:24px; --rds-header-h:68px;
   --rds-r-xs:4px; --rds-r-sm:5px; --rds-r-md:8px; --rds-r-lg:10px; --rds-r-xl:12px; --rds-r-2xl:20px; --rds-r-full:200px;
   --rds-shadow-card-drop:0 4px 16px 0 rgba(0,0,0,.10); --rds-shadow-sm:0 1px 2px 0 rgba(0,0,0,.05);
   --rds-shadow-lg:0 4px 52px 0 rgba(0,0,0,.10); --rds-shadow-glow:0 0 15px 0 rgba(220,255,30,.8);
@@ -30,6 +30,7 @@
   --rds-display-lg:100px; --rds-display-md:80px; --rds-display-sm:64px;
   --rds-h-2xl:64px; --rds-h-xl:48px; --rds-h-lg:40px; --rds-h-md:32px; --rds-h-sm:24px; --rds-h-xs:20px;
   --rds-section-xs:12px; --rds-section-sm:16px; --rds-section-md:24px; --rds-section-lg:48px; --rds-section-xl:64px;
+  --rds-header-h:64px;
 }}
 [data-rds-theme="midnight"]{ color-scheme:dark;
   --rds-bg:#091a23; --rds-bg-hover:#000; --rds-bg-subtle:#163341; --rds-bg-muted:#0d212c; --rds-bg-card:#0d212c;

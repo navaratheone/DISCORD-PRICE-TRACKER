@@ -594,15 +594,63 @@
   }
 }
 
-/* The site bar: a plain full-width bar fixed at the top on the hero's midnight, its row held to the page's centred
-   container: the wordmark on the left, the links in the centre, the actions on the right, all at a compact size. */
+/* The site bar: a full-width bar fixed at the top, its row held to the page's centred container: the lockup on the
+   left, the links in the centre, the actions on the right. */
 @layer utilities {
   .rds-nav {
     position: fixed;
     inset: 0 0 auto;
     z-index: 100;
     height: var(--rds-header-h);
-    background: var(--rds-midnight);
+  }
+
+  /* The bar's ground sits on a layer of its own, so the header never becomes the containing block of the fixed menu
+     panel. On the hero it is plain midnight with no rule; once the page moves under it, it turns to frosted glass
+     over a Dusk hairline and a soft drop, and what scrolls beneath reads through. With the menu open it goes solid
+     again and joins the panel. */
+  .rds-nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-bottom: 1px solid transparent;
+    background-color: var(--rds-midnight);
+    transition:
+      background-color var(--rds-dur-base) var(--rds-ease-out),
+      border-color var(--rds-dur-base) var(--rds-ease-out),
+      box-shadow var(--rds-dur-base) var(--rds-ease-out),
+      backdrop-filter var(--rds-dur-base) var(--rds-ease-out),
+      -webkit-backdrop-filter var(--rds-dur-base) var(--rds-ease-out);
+  }
+
+  .rds-nav[data-scrolled]::before {
+    border-bottom-color: var(--rds-dusk);
+    background-color: rgb(9 26 35 / 0.7);
+    box-shadow: 0 12px 32px -18px rgb(0 0 0 / 0.65);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    backdrop-filter: blur(18px) saturate(140%);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .rds-nav[data-scrolled]::before {
+      background-color: rgb(9 26 35 / 0.96);
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .rds-nav[data-scrolled]::before {
+      background-color: var(--rds-midnight);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+
+  .rds-nav[data-open]::before {
+    border-bottom-color: transparent;
+    background-color: var(--rds-midnight);
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 
   .rds-nav-inner {
@@ -646,9 +694,12 @@
     height: 14px;
   }
 
+  /* The invite keeps its full size; its label steps down a size so there is air between the words and the ring. */
   .rds-nav .rds-nav-cta {
-    padding: 7px 14px;
-    font-size: 13px;
+    height: 36px;
+    padding: 0 16px;
+    font-size: 12px;
+    letter-spacing: 0.01em;
   }
 
   .rds-nav .rds-nav-menu {
@@ -674,8 +725,9 @@
     }
 
     .rds-nav .rds-nav-cta {
-      padding: 8px 18px;
-      font-size: 14px;
+      height: 40px;
+      padding: 0 22px;
+      font-size: 13px;
     }
   }
 

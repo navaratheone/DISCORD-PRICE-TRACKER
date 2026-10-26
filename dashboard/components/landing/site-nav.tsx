@@ -20,8 +20,17 @@ const ROW =
 
 export function SiteNav() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [menuTop, setMenuTop] = useState<number | undefined>(undefined);
   const headerRef = useRef<HTMLElement>(null);
+
+  // The bar turns to glass as soon as the page moves under it.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 4);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -48,6 +57,8 @@ export function SiteNav() {
       <header
         ref={headerRef}
         className="rds-nav"
+        data-scrolled={scrolled || undefined}
+        data-open={open || undefined}
       >
         <div className="rds-nav-inner">
           <a href="#top" aria-label="Plummet home" className="rds-nav-logo shrink-0 justify-self-start hover:no-underline">
