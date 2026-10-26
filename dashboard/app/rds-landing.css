@@ -69,11 +69,11 @@
     align-items: center;
   }
 
-  /* Mona Sans at Black and expanded: the display voice, wide, heavy and clear. */
+  /* The statement in the Ginto manner, pushed to Black: a wide geometric face at its heaviest, uppercase, a hair under
+     its own tracking. Unbounded's wide counters stay open at 900 where the condensed Mona Sans clotted. */
   .rds-hero-title {
     font-family: var(--rds-font-display);
     font-size: var(--rds-hero-title);
-    font-stretch: 125%;
     line-height: var(--rds-hero-lh);
     letter-spacing: -0.01em;
     font-weight: 900;
@@ -114,25 +114,33 @@
     }
   }
 
+  /* The lede stands clear of the last falling letter, never tucked under it, at Medium with its emphasis at Bold so
+     it carries beside a Black statement. */
   .rds-hero-lede {
     max-width: 600px;
-    margin-top: 0;
+    margin-top: 12px;
     font-family: var(--rds-font-sans);
     font-size: var(--rds-body-xl);
+    font-weight: 500;
     line-height: 1.3;
     text-wrap: balance;
     color: var(--rds-fg-body);
   }
 
+  .rds-hero-lede [data-emphasis] {
+    font-weight: 700;
+  }
+
   @media (max-width: 768px) {
     .rds-hero-lede {
+      margin-top: 10px;
       font-size: var(--rds-body-md);
     }
   }
 
   @media (min-width: 769px) {
     .rds-hero-lede {
-      font-size: clamp(15px, 2svh, 18px);
+      font-size: clamp(16px, 2.2svh, 20px);
     }
   }
 
@@ -1124,10 +1132,9 @@
     max-width: 22em;
     font-family: var(--rds-font-display);
     font-size: calc(var(--rds-hero-size) * 1.2);
-    font-stretch: 125%;
     line-height: var(--rds-hero-lh);
     letter-spacing: -0.01em;
-    font-weight: 900;
+    font-weight: 700;
     text-transform: uppercase;
     text-wrap: balance;
     color: var(--rds-fg);

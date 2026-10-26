@@ -34,8 +34,8 @@ Discord-first: every watch is created and tuned from slash commands inside the s
 ## Brand Commitments
 
 - Name: Plummet (renamed from "Price Tracker" on 2026-10-24 at the user's request; the name comes from the package, `plummet-dashboard`). The wordmark shows it in the navbar and footer; the hero leads with the statement "Watch prices plummet" instead, its last word falling letter by letter.
-- No logo mark or favicon: the user had the TrackerMark removed everywhere on 2026-10-24. The bot mascot (`public/bot.png`) is no longer shown on the site.
-- Visual world: the Redis-era Property Agent landing (PropertyAgent commit `4d23a12^`), adopted by the user on 2026-10-24. Display face and wordmark: Mona Sans (SIL OFL) at Black and expanded, chosen by the user on 2026-10-25 from a side-by-side, in place of Public Stunt.
+- Mark: the old TrackerMark was removed on 2026-10-24; on 2026-10-26 the user asked for a new app icon. It is a hyper-red tile crossed by one heavy white price line that comes in level and falls out through the floor (`PlummetMark` in `components/landing/logo.tsx`). It is locked up with the red wordmark in the navbar, footer and dashboard bar. Still no favicon (the user's choice). The bot mascot (`public/bot.png`) is no longer shown on the site.
+- Visual world: the Redis-era Property Agent landing (PropertyAgent commit `4d23a12^`), adopted by the user on 2026-10-24. Display face and wordmark: Unbounded (SIL OFL), the wordmark and closing statement at Bold, the hero statement at Black (pushed heavier at the user's request the same day), adopted on 2026-10-26 when the user asked for discord.com's Ginto-style headline type. ABC Ginto is licensed to Discord, so Unbounded was picked as the closest open match from a side-by-side against it. It replaces Mona Sans Black expanded (the user's 2026-10-25 pick over Public Stunt).
 
 ## Evidence on Hand
 

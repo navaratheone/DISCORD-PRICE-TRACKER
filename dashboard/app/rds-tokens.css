@@ -4,10 +4,10 @@
   --rds-light-gray:#f8f8f8; --rds-grey-10:#fcfcfc; --rds-grey-20:#e9e9e9;
   --rds-hyper-04:#fd736a; --rds-hyper-05:#ff4438; --rds-hyper-06:#eb352a; --rds-hyper-07:#e4291e; --rds-hyper-08:#d1281e; --rds-hyper-09:#8a221c; --rds-hyper-10:#351d22;
   --rds-yellow:#dcff1e; --rds-yellow-06:#d0f41d; --rds-yellow-09:#8caa00; --rds-yellow-10:#fbffe8; --rds-sky-blue:#80dbff; --rds-violet:#c795e3;
-  --rds-font-display: var(--font-display-loaded), Impact, sans-serif;
+  --rds-font-display: var(--font-display-loaded), Arial, sans-serif;
   --rds-font-sans: var(--font-sans-loaded), ui-sans-serif, system-ui, sans-serif;
   --rds-font-mono: var(--font-mono-loaded), ui-monospace, "SF Mono", Menlo, monospace;
-  --rds-font-logo: var(--font-display-loaded), Impact, sans-serif;
+  --rds-font-logo: var(--font-display-loaded), Arial, sans-serif;
   --rds-display-lg:180px; --rds-display-md:120px; --rds-display-sm:100px; --rds-display-lh:.9; --rds-display-ls:-0.01em;
   --rds-h-2xl:80px; --rds-h-xl:64px; --rds-h-lg:48px; --rds-h-md:40px; --rds-h-sm:32px; --rds-h-xs:24px;
   --rds-h-2xl-lh:1; --rds-h-xl-lh:1; --rds-h-lg-lh:1.1; --rds-h-md-lh:1.1; --rds-h-sm-lh:1.2; --rds-h-xs-lh:1.2;
@@ -92,8 +92,9 @@
   --rds-hero-pt:110px; --rds-hero-pb:118px; --rds-hero-gap:48px;
   --rds-rail-h:48px; --rds-rail-space:28px;
   --rds-prompt-pad:20px; --rds-prompt-gap:12px;
-  /* Four fifths of the reference's statement scale: 32px at 1440, 38px from 1600, two lines on a phone. */
-  --rds-hero-title:min(calc(var(--rds-hero-size) * 0.8), 6.4vw);
+  /* A touch over four fifths of the reference's statement scale: 34px at 1440, 41px from 1600, two lines of 28px on a
+     phone (Discord's own hero runs 27px there). */
+  --rds-hero-title:min(calc(var(--rds-hero-size) * 0.94), 7.2vw);
   --rds-hero-pair-w:max(700px, calc(var(--rds-hero-size) * 18.02));
 }
 @media (min-width:1260px){:root{--rds-hero-size:40px}}
@@ -110,8 +111,8 @@
 @media (min-width:769px){:root{
   --rds-screen:calc(100svh - var(--rds-header-h));
   --rds-hero-fold:var(--rds-screen);
-  --rds-hero-title:min(calc(var(--rds-hero-size) * 0.8), 4.6svh);
-  --rds-hero-free:calc(var(--rds-hero-fold) - var(--rds-hero-title) * 1.32 - 134px);
+  --rds-hero-title:min(calc(var(--rds-hero-size) * 0.85), 4.9svh);
+  --rds-hero-free:calc(var(--rds-hero-fold) - var(--rds-hero-title) * 1.32 - 150px);
   --rds-demo-h:clamp(240px, calc(var(--rds-hero-free) * 0.8), 620px);
   --rds-demo-w:calc(var(--rds-demo-h) * 1040 / 540);
   --rds-hero-gap:clamp(9px, calc((var(--rds-hero-free) - var(--rds-demo-h)) / 7.75), 48px);

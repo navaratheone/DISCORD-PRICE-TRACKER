@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDown, LogOut, Plus } from "lucide-react";
-import { Wordmark } from "@/components/landing/logo";
+import { Logo } from "@/components/landing/logo";
 import { Container } from "@/components/landing/section";
 import { useMe } from "./me-context";
 import { avatarUrl, inviteUrl, logout } from "@/lib/api";
@@ -45,10 +45,10 @@ export function AppBar() {
       <Container className="flex h-full items-center justify-between gap-rds-6">
         <Link
           href="/dashboard"
-          className="shrink-0 text-[17px] hover:no-underline xs:text-[20px]"
+          className="flex shrink-0 rounded-rds-sm text-[16px] hover:no-underline xs:text-[17px]"
           aria-label="Plummet dashboard"
         >
-          <Wordmark />
+          <Logo />
         </Link>
 
         <div className="relative" ref={ref}>

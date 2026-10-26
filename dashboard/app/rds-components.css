@@ -617,19 +617,22 @@
   }
 
   .rds-nav .rds-nav-links {
-    gap: 28px;
+    gap: 32px;
   }
 
   .rds-nav .rds-nav-right {
-    gap: 10px;
+    gap: 12px;
   }
 
+  /* The lockup's size: the mark is 1.5em of it, so 16px gives a 24px tile. */
   .rds-nav .rds-nav-logo {
-    font-size: 15px;
+    display: flex;
+    border-radius: var(--rds-r-sm);
+    font-size: 16px;
   }
 
   .rds-nav .rds-nav-link {
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.5;
   }
 
@@ -644,7 +647,7 @@
   }
 
   .rds-nav .rds-nav-cta {
-    padding: 7px 16px;
+    padding: 7px 14px;
     font-size: 13px;
   }
 
@@ -658,9 +661,21 @@
     height: 18px;
   }
 
+  /* Under 360px the bar holds the lockup and the menu; the menu panel and the hero just below both carry the invite. */
+  @media (width < 360px) {
+    .rds-nav .rds-nav-cta {
+      display: none;
+    }
+  }
+
   @media (width >= 500px) {
     .rds-nav .rds-nav-logo {
-      font-size: 16px;
+      font-size: 17px;
+    }
+
+    .rds-nav .rds-nav-cta {
+      padding: 8px 18px;
+      font-size: 14px;
     }
   }
 

@@ -1,16 +1,15 @@
-import { Mona_Sans } from "next/font/google";
+import { Unbounded } from "next/font/google";
 import localFont from "next/font/local";
 
-// The display voice and the wordmark: Mona Sans (SIL OFL, by GitHub), variable in weight and width, set at Black
-// and expanded. next/font serves it from the site itself.
-export const display = Mona_Sans({
+// The display voice and the wordmark: Unbounded (SIL OFL), the closest open match to the ABC Ginto Nord headlines on
+// discord.com (wide, near-circular rounds, a straight-legged R), set at Bold as theirs is. Ginto is licensed to
+// Discord, so it is never loaded here. next/font serves Unbounded from the site itself, over a metric-matched Arial.
+export const display = Unbounded({
   subsets: ["latin"],
-  axes: ["wdth"],
   variable: "--font-display-loaded",
   display: "swap",
   preload: true,
-  // No "Arial Black" here: the production minifier reads the unquoted name as a colour and drops the stack.
-  fallback: ["Impact", "sans-serif"],
+  fallback: ["Arial", "sans-serif"],
 });
 
 export const spaceGrotesk = localFont({

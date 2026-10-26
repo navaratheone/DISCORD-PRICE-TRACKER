@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Menu, UserRound, X } from "lucide-react";
-import { Wordmark } from "./logo";
+import { Logo } from "./logo";
 import { Button } from "./buttons";
 import { inviteUrl, loginUrl } from "@/lib/api";
 
@@ -51,7 +51,7 @@ export function SiteNav() {
       >
         <div className="rds-nav-inner">
           <a href="#top" aria-label="Plummet home" className="rds-nav-logo shrink-0 justify-self-start hover:no-underline">
-            <Wordmark />
+            <Logo />
           </a>
 
           <nav aria-label="Primary" className="rds-nav-links hidden items-center xl:flex">
