@@ -7,7 +7,7 @@ const SITE = "https://pricetracker.bot";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: {
-    default: "Plummet — price-drop alerts for your Discord",
+    default: "Plummet - price-drop alerts for your Discord",
     template: "%s · Plummet",
   },
   description:
@@ -22,14 +22,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: SITE,
-    title: "Plummet — price-drop alerts for your Discord",
+    title: "Plummet - price-drop alerts for your Discord",
     description:
       "Track any product. Get pinged the second it drops. A Discord-first price watchdog with a read-only analytics dashboard.",
     siteName: "Plummet",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Plummet — price-drop alerts for your Discord",
+    title: "Plummet - price-drop alerts for your Discord",
     description: "Track any product. Get pinged the second it drops.",
   },
   robots: { index: true, follow: true },
