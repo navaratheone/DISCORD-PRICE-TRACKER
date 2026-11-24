@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { Github } from "lucide-react";
 import { Button } from "./buttons";
 import { DiscordDemo } from "./discord-demo";
 import { TerrainField } from "./terrain";
@@ -39,8 +40,13 @@ export function Hero() {
             <Button href={inviteUrl} theme="primary">
               Add to Discord
             </Button>
-            <Button href="#how" theme="secondary">
-              How it works
+            <Button
+              href="https://github.com/navaratheone/DISCORD-PRICE-TRACKER"
+              theme="secondary"
+              external
+              icon={<Github strokeWidth={1.75} />}
+            >
+              View on GitHub
             </Button>
           </div>
 

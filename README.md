@@ -46,11 +46,12 @@ Modular monolith deployed as three Python processes (FastAPI API, discord.py bot
 ├── dashboard/            # Next.js 15 App Router (read-only)
 ├── docker/               # Dockerfiles per service (api, bot, worker, beat, dashboard)
 ├── tests/                # Pytest (unit, integration, e2e, fixtures)
-├── planning/             # Architecture docs, PRD, ADRs, implementation plans
 ├── docker-compose.yml    # Production deployment
 ├── docker-compose.dev.yml # Local infra (Postgres :5433, Redis :6380)
 └── pyproject.toml        # Dependencies, ruff, mypy, pytest config
 ```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for branch, code review, and validation guidelines.
 
 ## Local Development
 
@@ -98,6 +99,7 @@ pytest --cov=app --cov-report=term-missing
 
 ```bash
 docker compose up -d
+```
 
 ## Required Environment Variables
 

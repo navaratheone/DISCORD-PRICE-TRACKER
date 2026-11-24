@@ -6,13 +6,17 @@ from discord.ext import commands
 from app.db.session import SessionFactory
 from app.services.server_service import ServerService
 from app.services.user_service import UserService
+from app.utils import embed_builder
 
 
 class BaseCog(commands.Cog):
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.guild is None:
             await interaction.response.send_message(
-                "I only work in servers.", ephemeral=True
+                embed=discord.Embed.from_dict(
+                    embed_builder.error_embed("This command is only available in a server.")
+                ),
+                ephemeral=True,
             )
             return False
         async with SessionFactory() as session:
@@ -25,8 +29,7 @@ class BaseCog(commands.Cog):
             await ServerService(session).upsert_from_discord(
                 guild_id=interaction.guild.id,
                 name=interaction.guild.name,
-                icon_hash=getattr(interaction.guild, "icon", None)
-                and str(interaction.guild.icon),
+                icon_hash=getattr(interaction.guild, "icon", None) and str(interaction.guild.icon),
             )
             await session.commit()
         return True
