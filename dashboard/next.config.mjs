@@ -3,7 +3,10 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   output: "standalone",
   async rewrites() {
-    const apiProxyTarget = (process.env.API_PROXY_TARGET ?? "http://localhost:8000").replace(
+    const defaultApiProxyTarget = process.env.VERCEL
+      ? "https://m28736.contaboserver.net"
+      : "http://localhost:8000";
+    const apiProxyTarget = (process.env.API_PROXY_TARGET ?? defaultApiProxyTarget).replace(
       /\/$/,
       "",
     );
