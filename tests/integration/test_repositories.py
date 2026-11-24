@@ -153,5 +153,4 @@ async def test_alert_event_cas_delivered(session: AsyncSession) -> None:
     assert await alerts.mark_delivered(event.id) is True
     await session.commit()
 
-    # second attempt is a no-op (CAS)
     assert await alerts.mark_delivered(event.id) is False

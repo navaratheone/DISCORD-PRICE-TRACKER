@@ -111,7 +111,7 @@ def _first_text(tree: lxml_html.HtmlElement, xpath: str) -> str | None:
     nodes = tree.xpath(xpath)
     if not nodes:
         return None
-    text = nodes[0].text_content().strip()
+    text = str(nodes[0].text_content()).strip()
     return text or None
 
 
@@ -119,7 +119,7 @@ def _meta(tree: lxml_html.HtmlElement, prop: str) -> str | None:
     for el in tree.xpath(f'//meta[@property="{prop}" or @name="{prop}"]'):
         v = el.get("content")
         if v:
-            return v.strip()
+            return str(v).strip()
     return None
 
 

@@ -135,4 +135,4 @@ def dispatch_task(alert_event_id: int) -> None:
     if outcome.status == "rate_limited" and outcome.retry_after is not None:
         from celery import current_task
 
-        raise current_task.retry(countdown=outcome.retry_after)  # type: ignore[union-attr]
+        raise current_task.retry(countdown=outcome.retry_after)

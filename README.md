@@ -45,7 +45,7 @@ Modular monolith deployed as three Python processes (FastAPI API, discord.py bot
 │   └── workers/          # Celery app, beat schedule, task definitions
 ├── dashboard/            # Next.js 15 App Router (read-only)
 ├── docker/               # Dockerfiles per service (api, bot, worker, beat, dashboard)
-├── tests/                # Pytest (unit, integration, e2e, fixtures)
+├── tests/                # Pytest (unit, integration, fixtures)
 ├── docker-compose.yml    # Production deployment
 ├── docker-compose.dev.yml # Local infra (Postgres :5433, Redis :6380)
 └── pyproject.toml        # Dependencies, ruff, mypy, pytest config
@@ -90,7 +90,7 @@ celery -A app.workers.celery_app beat -l info
 ### Tests
 
 ```powershell
-pytest                         # unit only (no DB required)
+pytest                         # all tests; DB-backed tests skip if DATABASE_URL is unset
 pytest -m integration          # requires DATABASE_URL
 pytest --cov=app --cov-report=term-missing
 ```

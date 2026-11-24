@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Awaitable, Callable
 from decimal import Decimal, InvalidOperation
 from typing import Literal
 
@@ -11,6 +12,7 @@ from app.bot.base import BaseCog
 from app.bot.permissions import is_admin, require_admin, require_tracker_role
 from app.bot.responses import format_error
 from app.db.session import SessionFactory
+from app.models.watch import Watch
 from app.repositories.watch_repo import WatchRepository
 from app.services.errors import ServiceError
 from app.services.watch_service import WatchService
@@ -155,7 +157,7 @@ class WatchAdminCog(BaseCog):
 async def _call_service(
     interaction: discord.Interaction,
     short_id: str,
-    op,
+    op: Callable[[WatchService, Watch], Awaitable[object]],
     *,
     ok: str,
 ) -> None:

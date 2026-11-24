@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 from typing import Any
 
-from scrapling.fetchers import AsyncStealthySession  # type: ignore[import-not-found]
+from scrapling.fetchers import AsyncStealthySession
 
 from app.config.limits import BROWSER_MAX_PAGES, BROWSER_NAV_TIMEOUT_SECONDS
 from app.utils.url_utils import resolve_url_safely
