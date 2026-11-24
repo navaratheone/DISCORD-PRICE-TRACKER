@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Plus } from "lucide-react";
 import { getServers, serverIconUrl, inviteUrl } from "@/lib/api";
 import { useAsync } from "@/lib/use-async";
 import { useMe } from "@/components/dashboard/me-context";
@@ -23,7 +23,16 @@ export default function DashboardPage() {
       <PageHeader
         meta={`Signed in as ${me.username ?? "Discord user"}`}
         title="Your servers"
-      />
+      >
+        <Button
+          href={inviteUrl}
+          theme="secondary"
+          size="sm"
+          icon={<Plus strokeWidth={1.75} />}
+        >
+          Add a server
+        </Button>
+      </PageHeader>
 
       {loading ? (
         <div className="grid grid-cols-1 gap-rds-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -47,25 +56,25 @@ export default function DashboardPage() {
               <Link
                 key={s.guildId}
                 href={`/dashboard/servers/${s.guildId}`}
-                className="group rds-glass rds-stroke flex items-center gap-rds-4 rounded-rds-lg p-rds-5 hover:no-underline"
+                className="group rds-glass rds-stroke flex min-h-28 items-center gap-rds-4 rounded-rds-lg p-rds-5 transition-transform duration-rds-fast hover:-translate-y-0.5 hover:no-underline motion-reduce:transform-none"
               >
                 {icon ? (
                   <Image
                     src={icon}
                     alt=""
-                    width={48}
-                    height={48}
-                    className="h-12 w-12 shrink-0 rounded-rds-md border border-rds-dusk"
+                    width={52}
+                    height={52}
+                    className="h-[52px] w-[52px] shrink-0 rounded-rds-md border border-rds-dusk"
                     unoptimized
                   />
                 ) : (
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-rds-md border border-rds-dusk-90 bg-rds-dusk-09 font-rds-sans text-rds-body-sm font-medium uppercase text-rds-fg">
+                  <span className="grid h-[52px] w-[52px] shrink-0 place-items-center rounded-rds-md border border-rds-dusk-90 bg-rds-dusk-09 font-rds-sans text-rds-body-sm font-medium uppercase text-rds-fg">
                     {(s.name ?? "?").slice(0, 2)}
                   </span>
                 )}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-rds-2">
-                    <p className="truncate font-rds-sans text-rds-body-md font-medium text-rds-fg">
+                    <p className="truncate font-rds-sans text-rds-body-md font-semibold text-rds-fg">
                       {s.name ?? "Unknown server"}
                     </p>
                     <AdminBadge isAdmin={s.isAdmin} />
@@ -76,7 +85,7 @@ export default function DashboardPage() {
                   </p>
                 </div>
                 <ChevronRight
-                  className="h-4 w-4 shrink-0 text-rds-dusk-50 transition-colors duration-rds-fast group-hover:text-rds-red"
+                  className="h-4 w-4 shrink-0 text-rds-dusk-50 transition-[color,transform] duration-rds-fast group-hover:translate-x-0.5 group-hover:text-rds-red"
                   strokeWidth={1.5}
                   aria-hidden
                 />
