@@ -14,9 +14,11 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY dashboard/ ./
 
-# Build-time env vars (public, baked into the JS bundle)
-ARG NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+# Build-time browser API path and server-side proxy target
+ARG NEXT_PUBLIC_API_BASE_URL=/api
+ARG API_PROXY_TARGET=http://localhost:8000
 ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
+ENV API_PROXY_TARGET=$API_PROXY_TARGET
 
 RUN npm run build
 

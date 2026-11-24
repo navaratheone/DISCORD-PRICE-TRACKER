@@ -112,3 +112,14 @@ docker compose up -d
 | `DISCORD_CLIENT_SECRET` | Discord OAuth2 client secret |
 | `SESSION_COOKIE_SECRET` | Session encryption key (min 32 chars) |
 | `OAUTH_TOKEN_ENC_KEY` | OAuth token encryption key (min 32 chars) |
+| `API_PUBLIC_URL` | Public dashboard origin and `/api` prefix used for Discord OAuth callbacks |
+| `DASHBOARD_URL` | Public dashboard origin |
+| `API_PROXY_TARGET` | Backend API URL proxied by the dashboard server |
+| `NEXT_PUBLIC_API_BASE_URL` | Browser API path; use `/api` to keep auth requests same-origin |
+
+For production, set `NEXT_PUBLIC_API_BASE_URL=/api`, `API_PROXY_TARGET` to the API URL reachable by the dashboard server, `API_PUBLIC_URL` to `https://<dashboard-host>/api`, and `DASHBOARD_URL` to `https://<dashboard-host>`. Register these callback URLs in the Discord application's OAuth2 settings:
+
+- `https://<dashboard-host>/api/auth/discord/callback`
+- `https://<dashboard-host>/api/auth/discord/bot/callback`
+
+The dashboard rewrite is configured at build time, so rebuild it after changing `API_PROXY_TARGET`.
