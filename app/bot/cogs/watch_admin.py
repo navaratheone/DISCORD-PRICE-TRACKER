@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Awaitable, Callable
 from decimal import Decimal, InvalidOperation
 from typing import Literal
 
@@ -11,6 +12,7 @@ from app.bot.base import BaseCog
 from app.bot.permissions import is_admin, require_admin, require_tracker_role
 from app.bot.responses import format_error
 from app.db.session import SessionFactory
+from app.models.watch import Watch
 from app.repositories.watch_repo import WatchRepository
 from app.services.errors import ServiceError
 from app.services.watch_service import WatchService
@@ -18,15 +20,11 @@ from app.utils import embed_builder
 
 
 class WatchAdminCog(BaseCog):
-    watch = app_commands.Group(
-        name="watch", description="Manage a single watch", guild_only=True
-    )
+    watch = app_commands.Group(name="watch", description="Manage a single watch", guild_only=True)
 
     @watch.command(name="threshold", description="Set or clear the price threshold")
     @require_tracker_role()
-    async def threshold(
-        self, interaction: discord.Interaction, id: str, amount: str
-    ) -> None:
+    async def threshold(self, interaction: discord.Interaction, id: str, amount: str) -> None:
         cleared = amount.lower() in ("off", "none", "clear")
         if not cleared:
             try:
@@ -83,7 +81,11 @@ class WatchAdminCog(BaseCog):
                 discord_user_id=interaction.user.id,
                 channel_id=channel.id if channel else None,
             ),
-            ok=(f"Alerts for `{id}` will go to {channel.mention}." if channel else "Channel override cleared."),
+            ok=(
+                f"Alerts for `{id}` will go to {channel.mention}."
+                if channel
+                else "Channel override cleared."
+            ),
         )
 
     @watch.command(name="role", description="Override the mention role for one watch")
@@ -102,7 +104,11 @@ class WatchAdminCog(BaseCog):
                 discord_user_id=interaction.user.id,
                 role_id=role.id if role else None,
             ),
-            ok=(f"Mention role for `{id}` set to {role.mention}." if role else "Mention role cleared."),
+            ok=(
+                f"Mention role for `{id}` set to {role.mention}."
+                if role
+                else "Mention role cleared."
+            ),
         )
 
     @watch.command(name="pause", description="Pause scraping for one watch")
@@ -151,7 +157,7 @@ class WatchAdminCog(BaseCog):
 async def _call_service(
     interaction: discord.Interaction,
     short_id: str,
-    op,
+    op: Callable[[WatchService, Watch], Awaitable[object]],
     *,
     ok: str,
 ) -> None:
@@ -166,7 +172,16 @@ async def _call_service(
         except ServiceError as exc:
             await _reply_error(interaction, format_error(exc))
             return
-    await interaction.response.send_message(ok, ephemeral=True)
+    await interaction.response.send_message(
+        embed=discord.Embed.from_dict(
+            embed_builder.success_embed(
+                "Watch updated",
+                ok,
+                footer=f"/info {short_id.strip()} · Price Tracker",
+            )
+        ),
+        ephemeral=True,
+    )
 
 
 async def _reply_error(interaction: discord.Interaction, message: str) -> None:

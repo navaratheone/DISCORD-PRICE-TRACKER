@@ -9,7 +9,6 @@ const SPACING: Record<Spacing, string> = {
   xl: "var(--rds-section-xl)",
 };
 
-/** One midnight ground under every section; rhythm comes from the section spacing scale, never a band. */
 export function Section({
   as: As = "section",
   spacingTop = "xl",
@@ -39,7 +38,6 @@ export function Section({
   );
 }
 
-/** 1390px max with 24px gutters, narrowing to 1280px with 80px between 1260 and 1599px. */
 export function Container({
   as: As = "div",
   className,

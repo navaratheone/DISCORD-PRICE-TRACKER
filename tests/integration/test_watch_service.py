@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 import pytest
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.config.limits import WATCHES_PER_SERVER, WATCHES_PER_USER_PER_SERVER
 from app.repositories.product_repo import ProductRepository
 from app.services import queue
@@ -10,6 +8,7 @@ from app.services.errors import AlreadyExists, LimitExceeded, PermissionDenied
 from app.services.server_service import ServerService
 from app.services.user_service import UserService
 from app.services.watch_service import WatchService
+from sqlalchemy.ext.asyncio import AsyncSession
 
 pytestmark = pytest.mark.integration
 
@@ -49,9 +48,7 @@ async def test_add_watch_happy_path(session: AsyncSession) -> None:
 async def test_duplicate_url_in_server_rejected(session: AsyncSession) -> None:
     await _make_actors(session, guild_id=3002, discord_id=4002)
     svc = WatchService(session)
-    await svc.add_watch(
-        guild_id=3002, discord_user_id=4002, raw_url="https://example.com/p/dup"
-    )
+    await svc.add_watch(guild_id=3002, discord_user_id=4002, raw_url="https://example.com/p/dup")
     await session.commit()
 
     with pytest.raises(AlreadyExists):
@@ -98,9 +95,7 @@ async def test_remove_requires_owner_or_admin(session: AsyncSession) -> None:
     await session.commit()
 
     svc = WatchService(session)
-    watch = await svc.add_watch(
-        guild_id=3005, discord_user_id=4005, raw_url="https://e.com/p/own"
-    )
+    watch = await svc.add_watch(guild_id=3005, discord_user_id=4005, raw_url="https://e.com/p/own")
     await session.commit()
 
     with pytest.raises(PermissionDenied):
@@ -116,9 +111,7 @@ async def test_manual_refresh_enqueues_high_priority(
 ) -> None:
     await _make_actors(session, guild_id=3006, discord_id=4007)
     svc = WatchService(session)
-    watch = await svc.add_watch(
-        guild_id=3006, discord_user_id=4007, raw_url="https://e.com/p/ref"
-    )
+    watch = await svc.add_watch(guild_id=3006, discord_user_id=4007, raw_url="https://e.com/p/ref")
     await session.commit()
 
     await svc.request_refresh(watch_id=watch.id, discord_user_id=4007, is_admin=False)
@@ -131,9 +124,7 @@ async def test_remove_keeps_product_row(session: AsyncSession) -> None:
     """Soft-delete preserves the products row so other servers share it."""
     await _make_actors(session, guild_id=3007, discord_id=4008)
     svc = WatchService(session)
-    watch = await svc.add_watch(
-        guild_id=3007, discord_user_id=4008, raw_url="https://e.com/p/keep"
-    )
+    watch = await svc.add_watch(guild_id=3007, discord_user_id=4008, raw_url="https://e.com/p/keep")
     await session.commit()
 
     await svc.remove(watch_id=watch.id, discord_user_id=4008, is_admin=False)

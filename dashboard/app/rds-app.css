@@ -1,5 +1,5 @@
 @layer components {
-  /* The signed-in bar is the site bar settled: the full-width 70px midnight bar, with one hairline under it. */
+  
   .rds-app-bar {
     position: sticky;
     top: 0;
@@ -9,7 +9,6 @@
     background: var(--rds-midnight);
   }
 
-  /* The back link: the tertiary red link reversed, its arrow nudging 3px back on hover. */
   .rds-back {
     display: inline-flex;
     align-items: center;
@@ -61,7 +60,6 @@
     font-size: var(--rds-label-xs);
   }
 
-  /* Tables are ledgers: mono column heads, hairline rows, tabular figures. */
   .rds-ledger {
     width: 100%;
     border-collapse: collapse;

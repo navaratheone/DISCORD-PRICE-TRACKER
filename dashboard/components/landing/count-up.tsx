@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 type CountUpProps = {
   to: number;
-  /** Suffix like "K", "M", "+". */
+  
   suffix?: string;
   prefix?: string;
   decimals?: number;
@@ -14,7 +14,6 @@ type CountUpProps = {
 const easeOutExpo = (t: number): number =>
   t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
 
-/** Counts from 0 to `to` once it scrolls into view. */
 export function CountUp({
   to,
   suffix = "",

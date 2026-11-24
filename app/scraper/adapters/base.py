@@ -49,7 +49,7 @@ def _reset_registry_for_tests() -> None:
 
 
 def _import_all() -> None:
-    from app.scraper.adapters import (  # noqa: F401  (import side-effect = registration)
+    from app.scraper.adapters import (
         aliexpress,
         amazon,
         bestbuy,

@@ -3,9 +3,11 @@ from __future__ import annotations
 import asyncio
 from typing import Any
 
+from scrapling.fetchers import AsyncStealthySession
+
 from app.config.limits import BROWSER_MAX_PAGES, BROWSER_NAV_TIMEOUT_SECONDS
 from app.utils.url_utils import resolve_url_safely
-from scrapling.fetchers import AsyncStealthySession # type: ignore[import-not-found]
+
 
 class BrowserSession:
     def __init__(self) -> None:
@@ -39,7 +41,6 @@ class BrowserSession:
         async with self._lock:
             if self._session is not None:
                 return self._session
-            
 
             self._session = AsyncStealthySession(
                 headless=True,

@@ -93,8 +93,7 @@
   --rds-hero-pt:110px; --rds-hero-pb:118px; --rds-hero-gap:48px;
   --rds-rail-h:48px; --rds-rail-space:28px;
   --rds-prompt-pad:20px; --rds-prompt-gap:12px;
-  /* A touch over four fifths of the reference's statement scale: 34px at 1440, 41px from 1600, two lines of 28px on a
-     phone (Discord's own hero runs 27px there). */
+  
   --rds-hero-title:min(calc(var(--rds-hero-size) * 0.94), 7.2vw);
   --rds-hero-pair-w:max(700px, calc(var(--rds-hero-size) * 18.02));
 }
@@ -107,8 +106,6 @@
 }}
 @media (max-width:359px){:root{--rds-hero-size:28px}}
 
-/* From a laptop up the hero is the first screen. 150px never flexes (the lede, the actions, the rail); the recording
-   takes four fifths of what is left, scaled like a video, and the gaps share the rest as 2.29 / 1 / 1 / 1 / 2.46. */
 @media (min-width:769px){:root{
   --rds-screen:calc(100svh - var(--rds-header-h));
   --rds-hero-fold:var(--rds-screen);

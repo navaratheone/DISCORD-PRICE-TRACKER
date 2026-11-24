@@ -4,7 +4,6 @@ from decimal import Decimal
 from pathlib import Path
 
 import pytest
-
 from app.scraper.adapters import find_adapter
 from app.scraper.adapters.aliexpress import AliExpressAdapter
 from app.scraper.adapters.amazon import AmazonAdapter

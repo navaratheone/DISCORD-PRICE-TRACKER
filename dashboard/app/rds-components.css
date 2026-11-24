@@ -131,7 +131,6 @@
     background: var(--rds-focus);
   }
 
-  /* Two identical arrows in a 24px aperture: on hover the first leaves right as the second lands in its place. */
   .rds-arrows {
     position: relative;
     display: block;
@@ -173,10 +172,6 @@
     }
   }
 
-  /* Every card is clear glass: no solid fill, only a white tint that catches light at its upper edge, a hairline edge
-     lit from the top left, and a soft drop beneath. Inside it, hairlines, chips and controls turn to the same clear
-     tints. The frosted blur is added only where something moves behind the pane (the hero), since blurring flat
-     midnight costs a repaint on every scroll and changes nothing. */
   .rds-glass {
     --rds-dusk: rgb(255 255 255 / 0.08);
     --rds-border: rgb(255 255 255 / 0.08);
@@ -224,7 +219,6 @@
     pointer-events: none;
   }
 
-  /* Hovered, a 1px stroke half hyper red and half electric yellow travels the perimeter; the card itself never moves. */
   .rds-stroke {
     position: relative;
     isolation: isolate;
@@ -328,7 +322,6 @@
     white-space: nowrap;
   }
 
-  /* The dot vocabulary: a 7px circle beside a word, never in place of one. */
   .rds-dot {
     display: block;
     flex: none;
@@ -413,7 +406,6 @@
     font-weight: inherit;
   }
 
-  /* A track rendered twice and moved by half its width, so the loop is seamless at a constant rate. */
   .rds-marquee-viewport {
     overflow: hidden;
   }
@@ -451,7 +443,6 @@
     }
   }
 
-  /* The round controls in the bar: the sign-in glyph and the signed-in avatar. */
   .rds-nav-icon {
     display: flex;
     flex: none;
@@ -561,7 +552,6 @@
     text-decoration: none !important;
   }
 
-  /* A form-level message: says what happened, then what to do. */
   .rds-message {
     display: grid;
     grid-template-columns: 20px minmax(0, 1fr) auto;
@@ -594,8 +584,6 @@
   }
 }
 
-/* The site bar: a full-width bar fixed at the top, its row held to the page's centred container: the lockup on the
-   left, the links in the centre, the actions on the right. */
 @layer utilities {
   .rds-nav {
     position: fixed;
@@ -604,10 +592,6 @@
     height: var(--rds-header-h);
   }
 
-  /* The bar's ground sits on a layer of its own, so the header never becomes the containing block of the fixed menu
-     panel. On the hero it is plain midnight with no rule; once the page moves under it, it turns to frosted glass
-     over a Dusk hairline and a soft drop, and what scrolls beneath reads through. With the menu open it goes solid
-     again and joins the panel. */
   .rds-nav::before {
     content: "";
     position: absolute;
@@ -672,7 +656,6 @@
     gap: 12px;
   }
 
-  /* The lockup's size: the mark is 1.5em of it, so 16px gives a 24px tile. */
   .rds-nav .rds-nav-logo {
     display: flex;
     border-radius: var(--rds-r-sm);
@@ -694,7 +677,6 @@
     height: 14px;
   }
 
-  /* The invite keeps its full size; its label steps down a size so there is air between the words and the ring. */
   .rds-nav .rds-nav-cta {
     height: 36px;
     padding: 0 16px;
@@ -712,7 +694,6 @@
     height: 18px;
   }
 
-  /* Under 360px the bar holds the lockup and the menu; the menu panel and the hero just below both carry the invite. */
   @media (width < 360px) {
     .rds-nav .rds-nav-cta {
       display: none;
@@ -731,7 +712,6 @@
     }
   }
 
-  /* The links take the bar's true centre, whatever the wordmark and the actions measure. */
   @media (width >= 1025px) {
     .rds-nav-inner {
       display: grid;

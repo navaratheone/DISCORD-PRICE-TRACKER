@@ -50,6 +50,7 @@ dev = [
   "pytest>=8,<9",
   "pytest-asyncio>=0.23,<1",
   "pytest-cov>=5,<6",
+  "lxml-stubs>=0.5",
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -98,6 +99,10 @@ exclude = ["app/db/migrations/"]
 module = ["scrapling.*", "celery.*", "firecrawl.*"]
 ignore_missing_imports = true
 
+[[tool.mypy.overrides]]
+module = ["app.bot.cogs.*", "app.workers.*"]
+disable_error_code = ["untyped-decorator"]
+
 # ---------- pytest ----------
 [tool.pytest.ini_options]
 minversion = "8.0"
@@ -110,4 +115,3 @@ filterwarnings = [
   "error",
   "ignore::DeprecationWarning:celery.*",
 ]
-

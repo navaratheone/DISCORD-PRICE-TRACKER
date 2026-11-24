@@ -91,13 +91,13 @@ def set_session_cookie(response: Response, value: str) -> None:
         max_age=_SESSION_TTL,
         httponly=True,
         secure=_secure(),
-        samesite="lax",
+        samesite="none",
         path="/",
     )
 
 
 def clear_session_cookie(response: Response) -> None:
-    response.delete_cookie(SESSION_COOKIE, path="/", samesite="lax", secure=_secure())
+    response.delete_cookie(SESSION_COOKIE, path="/", samesite="none", secure=_secure())
 
 
 def set_state_cookie(response: Response, value: str) -> None:

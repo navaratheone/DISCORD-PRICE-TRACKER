@@ -4,10 +4,6 @@ import { Button } from "./buttons";
 import { Container, Section } from "./section";
 import { loginUrl } from "@/lib/api";
 
-/**
- * Price-history chart: one yellow line, out-of-stock spans as dusk bands, a
- * lowest-in-range marker. No fills and no glow.
- */
 function PriceHistoryChart() {
   return (
     <svg
@@ -20,7 +16,6 @@ function PriceHistoryChart() {
         <line key={y} x1="0" x2="600" y1={y} y2={y} stroke="var(--rds-dusk)" strokeWidth="1" />
       ))}
 
-      {/* out-of-stock bands */}
       <rect x="150" y="0" width="70" height="210" fill="var(--rds-dusk)" fillOpacity="0.7" />
       <rect x="430" y="0" width="40" height="210" fill="var(--rds-dusk)" fillOpacity="0.7" />
 
@@ -33,7 +28,6 @@ function PriceHistoryChart() {
         strokeLinecap="round"
       />
 
-      {/* lowest-in-range marker */}
       <rect x="534" y="178" width="12" height="12" fill="var(--rds-midnight)" stroke="var(--rds-yellow)" strokeWidth="2.5" />
       <g transform="translate(426,136)">
         <rect width="118" height="30" rx="4" fill="var(--rds-midnight)" stroke="var(--rds-dusk-90)" />
@@ -79,7 +73,7 @@ export function DashboardPreview() {
 
           <Reveal variant="lift" delay={120} className="mx-auto w-full max-w-[720px] min-w-0">
             <div className="rds-glass rds-stroke overflow-hidden rounded-rds-lg">
-              {/* window bar */}
+              
               <div className="flex items-center gap-rds-3 border-b border-rds-dusk px-rds-4 py-[10px]">
                 <span aria-hidden className="flex gap-1.5">
                   <span className="size-2 rounded-full bg-rds-dusk-90" />
@@ -92,7 +86,6 @@ export function DashboardPreview() {
                 <span aria-hidden className="w-[34px] max-sm:hidden" />
               </div>
 
-              {/* app chrome */}
               <div className="flex flex-wrap items-center gap-x-rds-4 gap-y-rds-2 border-b border-rds-dusk px-rds-4 py-[10px]">
                 <span className="font-rds-sans text-rds-body-xs font-medium text-rds-fg">deal-hunters HQ</span>
                 <div className="flex flex-wrap items-center gap-1.5">
@@ -108,9 +101,8 @@ export function DashboardPreview() {
                 </div>
               </div>
 
-              {/* body */}
               <div className="grid sm:grid-cols-3">
-                {/* chart */}
+                
                 <div className="border-b border-rds-dusk p-rds-4 sm:col-span-2 sm:border-r">
                   <div className="flex items-start justify-between gap-rds-3">
                     <div className="min-w-0">
@@ -141,7 +133,6 @@ export function DashboardPreview() {
                   </div>
                 </div>
 
-                {/* stats */}
                 <div className="grid grid-cols-2 border-b border-rds-dusk sm:grid-cols-1 sm:grid-rows-2">
                   <div className="border-r border-rds-dusk p-rds-4 sm:border-r-0 sm:border-b">
                     <p className={COL}>Active watches</p>
@@ -157,7 +148,6 @@ export function DashboardPreview() {
                   </div>
                 </div>
 
-                {/* watch table */}
                 <div className="sm:col-span-3">
                   <div className={`hidden grid-cols-[2fr_1fr_1fr_0.7fr] gap-rds-4 border-b border-rds-dusk px-rds-4 py-[10px] sm:grid ${COL}`}>
                     <span>Product</span>

@@ -14,7 +14,7 @@ from app.utils.chart_builder import sparkline
 COLOR_DROP = 0xE33D3D
 COLOR_RESTOCK = 0x3B82F6
 COLOR_THRESHOLD = 0x22C55E
-COLOR_NEUTRAL = 0x6B7280
+COLOR_NEUTRAL = 0x5865F2
 COLOR_ERROR = 0xE33D3D
 COLOR_SUCCESS = 0x22C55E
 COLOR_IN_STOCK = 0x22C55E
@@ -47,40 +47,72 @@ def alert_embed(event: AlertEvent, watch: Watch, product: Product) -> dict[str, 
         "url": product.source_url,
         "description": _format_change(event),
         "color": _RULE_COLOR.get(rule, COLOR_NEUTRAL),
-        "footer": {"text": f"id: {watch.short_id}"},
+        "footer": {"text": f"Price Tracker · id: {watch.short_id}"},
     }
     if product.image_url:
         embed["thumbnail"] = {"url": product.image_url}
     return embed
 
 
-def watch_added(watch: Watch, product: Product) -> dict[str, Any]:
+def watch_added(
+    watch: Watch,
+    product: Product,
+    *,
+    checking: bool = False,
+    timed_out: bool = False,
+) -> dict[str, Any]:
     scraped = product.last_scraped_at is not None
+    if checking:
+        description = "The watch is active. A price and availability check is in progress."
+    elif timed_out:
+        description = (
+            "The latest check is taking longer than expected. Showing available details; "
+            "use `/watch refresh` to try again."
+        )
+    elif product.last_scrape_status == "failed":
+        description = (
+            "The retailer couldn't provide product details just yet. "
+            "Use `/watch refresh` to request another check."
+        )
+    elif product.last_scrape_status == "partial":
+        description = "The first check finished, but some product details were unavailable."
+    elif scraped:
+        description = "Your first price check is complete."
+    else:
+        description = (
+            "The first check hasn't completed yet. Use `/watch refresh` to request another check."
+        )
     fields: list[dict[str, Any]] = [
         {"name": "🆔 ID", "value": f"`{watch.short_id}`", "inline": True},
+        {"name": "💵 Price", "value": _price(product), "inline": True},
+        {
+            "name": "📦 Availability",
+            "value": f"{_stock_emoji(product.last_known_in_stock)} "
+            f"{_stock_text(product.last_known_in_stock)}",
+            "inline": True,
+        },
+        {"name": "🏷️ Brand", "value": _short(product.brand or "Not available"), "inline": True},
+        {"name": "🕒 Last check", "value": _relative_time(product.last_scraped_at), "inline": True},
+        {"name": "🔔 Alerts", "value": _format_rules(watch.alert_rules), "inline": False},
     ]
-    if scraped:
-        fields.append({"name": "💵 Price", "value": _price(product), "inline": True})
-        fields.append(
-            {
-                "name": "📦 Stock",
-                "value": f"{_stock_emoji(product.last_known_in_stock)} "
-                f"{_stock_text(product.last_known_in_stock)}",
-                "inline": True,
-            }
-        )
-    fields.append({"name": "🔔 Alerts", "value": _format_rules(watch.alert_rules), "inline": False})
+    identifiers = _identifiers(product)
+    if identifiers:
+        fields.append({"name": "🔎 Product identifiers", "value": identifiers, "inline": False})
+    footer = (
+        f"id: {watch.short_id} · check in progress"
+        if checking
+        else f"/info {watch.short_id} · /watch refresh to check again"
+        if scraped
+        else f"id: {watch.short_id} · /watch refresh to retry"
+    )
     embed: dict[str, Any] = {
-        "author": {"name": "✅ Now tracking"},
+        "author": {"name": _title(f"Price Tracker · ✅ Now tracking · {product.domain}")},
         "title": _title(product.title or product.source_url),
+        "description": description,
         "url": product.source_url,
         "color": COLOR_SUCCESS,
         "fields": fields,
-        "footer": {
-            "text": f"id: {watch.short_id} · /watch refresh to update"
-            if scraped
-            else "Fetching product details…"
-        },
+        "footer": {"text": footer},
     }
     if product.image_url:
         embed["thumbnail"] = {"url": product.image_url}
@@ -94,22 +126,54 @@ def watch_list(
     pages: int,
     total: int,
     cap: int,
-) -> dict[str, Any]:
-    lines: list[str] = []
+) -> list[dict[str, Any]]:
+    embeds: list[dict[str, Any]] = []
     for watch, product in rows:
-        title = (product.title or product.source_url)[:64]
-        paused = " · ⏸️ paused" if watch.paused_at is not None else ""
-        lines.append(
-            f"{_stock_emoji(product.last_known_in_stock)} `{watch.short_id}` · "
-            f"{_price(product)}{paused}\n┗ [{title}]({product.source_url})"
-        )
-    return {
-        "title": f"📋 Tracked products · {total}/{cap}",
-        "description": "\n\n".join(lines)
-        or "_No active watches yet._\nUse `/track <url>` to start tracking a product.",
-        "color": COLOR_NEUTRAL,
-        "footer": {"text": f"page {page}/{pages} · /info <id> for details"},
-    }
+        active = watch.is_active and watch.paused_at is None
+        status = "Active" if active else ("Paused" if watch.paused_at else "Inactive")
+        details = [
+            f"Retailer: {_short(product.domain, 64)}",
+            f"Brand: {_short(product.brand or 'Not available', 48)}",
+            f"Alerts: {_short(_format_rules(watch.alert_rules), 48)}",
+            f"Status: {status} · checked {_relative_time(product.last_scraped_at)}",
+        ]
+        identifiers = _identifiers(product)
+        if identifiers:
+            details.append(f"IDs: {_short(identifiers, 48)}")
+        fields = [
+            {"name": "🆔 ID", "value": f"`{watch.short_id}`", "inline": True},
+            {"name": "💵 Price", "value": _price(product), "inline": True},
+            {
+                "name": "📦 Availability",
+                "value": f"{_stock_emoji(product.last_known_in_stock)} "
+                f"{_stock_text(product.last_known_in_stock)}",
+                "inline": True,
+            },
+        ]
+        embed: dict[str, Any] = {
+            "author": {"name": f"Tracked products · {total}/{cap} · page {page}/{pages}"},
+            "title": _short(product.title or product.source_url, 80),
+            "description": _short("\n".join(details), 280),
+            "url": product.source_url,
+            "color": _stock_color(product.last_known_in_stock) if active else COLOR_NEUTRAL,
+            "fields": fields,
+            "footer": {"text": f"/info {watch.short_id} · use /untrack to remove"},
+        }
+        if product.image_url:
+            embed["thumbnail"] = {"url": product.image_url}
+        embeds.append(embed)
+
+    if embeds:
+        return embeds
+    return [
+        {
+            "author": {"name": "Price Tracker"},
+            "title": "No products tracked yet",
+            "description": "Start with `/track <url>` and your watches will appear here.",
+            "color": COLOR_NEUTRAL,
+            "footer": {"text": f"0/{cap} watches · page {page}/{pages}"},
+        }
+    ]
 
 
 def watch_info(
@@ -128,7 +192,7 @@ def watch_info(
         history_value = "_no price history yet_"
 
     embed: dict[str, Any] = {
-        "author": {"name": product.domain},
+        "author": {"name": _title(f"Price Tracker · {product.domain}")},
         "title": _title(product.title or product.source_url),
         "url": product.source_url,
         "color": _stock_color(product.last_known_in_stock),
@@ -144,6 +208,7 @@ def watch_info(
                 f"{_stock_text(product.last_known_in_stock)}",
                 "inline": True,
             },
+            {"name": "🏷️ Brand", "value": product.brand or "Not available", "inline": True},
             {
                 "name": "🕒 Last check",
                 "value": _relative_time(product.last_scraped_at),
@@ -152,8 +217,13 @@ def watch_info(
             {"name": "🔔 Alerts", "value": _format_rules(watch.alert_rules), "inline": False},
             {"name": "📈 History", "value": history_value, "inline": False},
         ],
-        "footer": {"text": f"id: {watch.short_id}"},
+        "footer": {"text": f"Price Tracker · id: {watch.short_id}"},
     }
+    identifiers = _identifiers(product)
+    if identifiers:
+        embed["fields"].append(
+            {"name": "🔎 Product identifiers", "value": identifiers, "inline": False}
+        )
     if product.image_url:
         embed["thumbnail"] = {"url": product.image_url}
     return embed
@@ -161,6 +231,7 @@ def watch_info(
 
 def config_show(server: Server, watch_count: int, watch_cap: int) -> dict[str, Any]:
     return {
+        "author": {"name": "Price Tracker · Server settings"},
         "title": "Server configuration",
         "color": COLOR_NEUTRAL,
         "fields": [
@@ -173,24 +244,60 @@ def config_show(server: Server, watch_count: int, watch_cap: int) -> dict[str, A
             {"name": "Region", "value": server.region_default or "—"},
             {"name": "Usage", "value": f"{watch_count}/{watch_cap} watches"},
         ],
+        "footer": {"text": f"{server.plan.title()} plan"},
     }
 
 
 def setup_hint() -> dict[str, Any]:
     return {
-        "title": "Thanks for adding the price tracker!",
+        "author": {"name": "Price Tracker · Quick start"},
+        "title": "Your server is ready to track prices",
         "description": (
-            "Quick setup (requires **Manage Server**):\n"
-            "1. `/config role @role` — pick who can use the bot\n"
-            "2. `/config channel #channel` — where alerts will appear\n"
-            "3. `/help` to see everything"
+            "Complete these steps to get your first alert:\n\n"
+            "**1 · Choose who can manage watches**\n"
+            "`/config role @role`\n\n"
+            "**2 · Choose where alerts are delivered**\n"
+            "`/config channel #channel`\n\n"
+            "Run `/help` for all commands. Server setup requires **Manage Server**."
         ),
-        "color": COLOR_NEUTRAL,
+        "color": COLOR_SUCCESS,
+        "footer": {"text": "Price Tracker · Product changes, clearly tracked"},
     }
 
 
 def error_embed(message: str) -> dict[str, Any]:
-    return {"title": "Can't do that", "description": message, "color": COLOR_ERROR}
+    return {
+        "author": {"name": "Price Tracker · Action needed"},
+        "title": "That didn't work",
+        "description": message,
+        "color": COLOR_ERROR,
+        "footer": {"text": "Check the details above, then try again"},
+    }
+
+
+def success_embed(
+    title: str,
+    description: str,
+    *,
+    footer: str = "Price Tracker · Done",
+) -> dict[str, Any]:
+    return {
+        "author": {"name": "Price Tracker · Updated"},
+        "title": title,
+        "description": description,
+        "color": COLOR_SUCCESS,
+        "footer": {"text": footer},
+    }
+
+
+def help_embed(lines: list[str]) -> dict[str, Any]:
+    return {
+        "author": {"name": "Price Tracker · Command guide"},
+        "title": "Price Tracker commands",
+        "description": "\n".join(lines),
+        "color": COLOR_NEUTRAL,
+        "footer": {"text": "Use commands in a server where the tracker is installed"},
+    }
 
 
 def info_embed(message: str) -> dict[str, Any]:
@@ -209,7 +316,7 @@ def _format_change(event: AlertEvent) -> str:
 
 def _format_rules(rules: dict[str, Any] | None) -> str:
     if not rules:
-        return "none"
+        return "No alerts configured"
     parts: list[str] = []
     for key in ("drop", "restock"):
         if rules.get(key):
@@ -217,7 +324,7 @@ def _format_rules(rules: dict[str, Any] | None) -> str:
     threshold = rules.get("threshold")
     if threshold not in (None, False):
         parts.append(f"≤ {threshold}")
-    return ", ".join(parts) or "none"
+    return _short(", ".join(parts) or "No alerts configured")
 
 
 def _money(value: Any) -> str:
@@ -249,8 +356,21 @@ def _stock_color(in_stock: bool | None) -> int:
 
 def _relative_time(value: datetime | None) -> str:
     if value is None:
-        return "never"
+        return "Not checked yet"
     return f"<t:{int(value.timestamp())}:R>"
+
+
+def _identifiers(product: Product) -> str:
+    identifiers = [
+        f"{label} `{value}`"
+        for label, value in (("ASIN", product.asin), ("GTIN", product.gtin), ("MPN", product.mpn))
+        if value
+    ]
+    return _short(" · ".join(identifiers), 900)
+
+
+def _short(text: str, limit: int = 1024) -> str:
+    return text if len(text) <= limit else text[: limit - 1] + "…"
 
 
 def _trend(history: list[Decimal | None]) -> str:

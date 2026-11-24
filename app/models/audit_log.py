@@ -18,9 +18,7 @@ class AuditLog(Base):
     actor_type: Mapped[str] = mapped_column(String(16), nullable=False)
     actor_id: Mapped[str | None] = mapped_column(Text)
 
-    server_id: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("servers.id"), index=True
-    )
+    server_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("servers.id"), index=True)
     action: Mapped[str] = mapped_column(Text, nullable=False)
     target_type: Mapped[str | None] = mapped_column(Text)
     target_id: Mapped[str | None] = mapped_column(Text)

@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { fontVariables } from "./fonts";
-// @ts-ignore: allow side-effect import of CSS in Next.js app directory
 import "./globals.css";
 
 const SITE = "https://pricetracker.bot";
@@ -41,7 +40,7 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-// Entrances arm only once script has marked the document, so nothing is hidden from a visitor without it.
+// Only arm entrances after the client marks the document.
 const MARK_JS = 'document.documentElement.classList.add("js")';
 
 export default function RootLayout({

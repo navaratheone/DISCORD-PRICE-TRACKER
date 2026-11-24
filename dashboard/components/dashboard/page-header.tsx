@@ -2,7 +2,6 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Chip } from "@/components/landing/chip";
 
-/** The page's name, then what it is as data (who is signed in, the store), never a label above the heading. */
 export function PageHeader({
   meta,
   title,

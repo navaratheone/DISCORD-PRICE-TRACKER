@@ -31,7 +31,7 @@ class WalmartAdapter:
         if tree is None:
             return ScrapeResult(status="failed", tier_used=3, region_hint="US")
 
-        title = _first_text(tree, '//h1[@itemprop="name"]') or _first_text(tree, '//h1')
+        title = _first_text(tree, '//h1[@itemprop="name"]') or _first_text(tree, "//h1")
         price_text = _first_text(tree, '//*[@itemprop="price"]') or _first_text(
             tree, '//*[@data-automation-id="product-price"]'
         )

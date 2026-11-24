@@ -16,9 +16,7 @@ class ServerMembership(Base, UUIDPrimaryKeyMixin):
     server_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("servers.id"), index=True, nullable=False
     )
-    user_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("users.id"), index=True, nullable=False
-    )
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), index=True, nullable=False)
     is_admin: Mapped[bool] = mapped_column(default=False, server_default="false")
     has_tracker_role: Mapped[bool] = mapped_column(default=False, server_default="false")
     last_seen_at: Mapped[datetime | None]

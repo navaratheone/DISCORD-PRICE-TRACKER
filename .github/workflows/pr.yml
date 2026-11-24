@@ -2,9 +2,9 @@ name: PR
 
 on:
   pull_request:
-    branches: [main]
+    branches: [dev, main]
   push:
-    branches: [main]
+    branches: [dev, main]
 
 jobs:
   python:
@@ -53,3 +53,24 @@ jobs:
         run: alembic upgrade head && alembic downgrade base && alembic upgrade head
       - name: Unit + integration tests
         run: pytest --cov=app --cov-report=term-missing
+
+  dashboard:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: dashboard/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Type check
+        run: npm run typecheck
+      - name: Build
+        run: npm run build

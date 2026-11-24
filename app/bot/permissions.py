@@ -1,10 +1,15 @@
 from __future__ import annotations
 
+from collections.abc import Callable
+from typing import TypeVar
+
 import discord
 from discord import app_commands
 
 from app.db.session import SessionFactory
 from app.repositories.server_repo import ServerRepository
+
+CommandT = TypeVar("CommandT")
 
 
 def is_admin(interaction: discord.Interaction) -> bool:
@@ -25,14 +30,14 @@ async def has_tracker_role(interaction: discord.Interaction) -> bool:
     return any(role.id == server.tracker_role_id for role in interaction.user.roles)
 
 
-def require_admin() -> "app_commands.Check":
+def require_admin() -> Callable[[CommandT], CommandT]:
     async def predicate(interaction: discord.Interaction) -> bool:
         return is_admin(interaction)
 
     return app_commands.check(predicate)
 
 
-def require_tracker_role() -> "app_commands.Check":
+def require_tracker_role() -> Callable[[CommandT], CommandT]:
     async def predicate(interaction: discord.Interaction) -> bool:
         return await has_tracker_role(interaction)
 

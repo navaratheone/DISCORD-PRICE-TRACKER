@@ -52,13 +52,13 @@ async def _dispatch(
             return DispatchOutcome(status="channel_gone", detail="no channel configured")
 
         embed = alert_embed(event, watch, product)
-        content = f"<@&{watch.alert_role_id or server.default_alert_role_id}>" if (
-            watch.alert_role_id or server.default_alert_role_id
-        ) else None
-
-        outcome = await dispatcher.send_message(
-            channel_id=channel_id, embed=embed, content=content
+        content = (
+            f"<@&{watch.alert_role_id or server.default_alert_role_id}>"
+            if (watch.alert_role_id or server.default_alert_role_id)
+            else None
         )
+
+        outcome = await dispatcher.send_message(channel_id=channel_id, embed=embed, content=content)
 
         if outcome.status == "delivered":
             await alerts.mark_delivered(event.id)
@@ -135,4 +135,4 @@ def dispatch_task(alert_event_id: int) -> None:
     if outcome.status == "rate_limited" and outcome.retry_after is not None:
         from celery import current_task
 
-        raise current_task.retry(countdown=outcome.retry_after)  # type: ignore[union-attr]
+        raise current_task.retry(countdown=outcome.retry_after)

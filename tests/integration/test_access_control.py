@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 import pytest
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.services.access_control import AccessControl, MembershipSnapshot
 from app.services.errors import NotFound, PermissionDenied
 from app.services.server_service import ServerService
 from app.services.user_service import UserService
+from sqlalchemy.ext.asyncio import AsyncSession
 
 pytestmark = pytest.mark.integration
 
@@ -50,9 +49,7 @@ async def test_no_membership_denied(session: AsyncSession) -> None:
 
 async def test_refresher_grants_member(session: AsyncSession) -> None:
     user_id, _ = await _seed_user_and_server(session, discord_id=7003, guild_id=6003)
-    refresher = StubRefresher(
-        MembershipSnapshot(is_admin=False, has_tracker_role=True)
-    )
+    refresher = StubRefresher(MembershipSnapshot(is_admin=False, has_tracker_role=True))
     ac = AccessControl(session, refresher=refresher)
     membership = await ac.assert_server_access(
         user_id=user_id, discord_id=7003, guild_id=6003, level="member"
@@ -64,9 +61,7 @@ async def test_refresher_grants_member(session: AsyncSession) -> None:
 
 async def test_admin_required_denied_for_tracker_only(session: AsyncSession) -> None:
     user_id, _ = await _seed_user_and_server(session, discord_id=7004, guild_id=6004)
-    refresher = StubRefresher(
-        MembershipSnapshot(is_admin=False, has_tracker_role=True)
-    )
+    refresher = StubRefresher(MembershipSnapshot(is_admin=False, has_tracker_role=True))
     ac = AccessControl(session, refresher=refresher)
     with pytest.raises(PermissionDenied):
         await ac.assert_server_access(

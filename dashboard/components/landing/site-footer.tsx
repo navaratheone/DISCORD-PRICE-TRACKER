@@ -3,7 +3,6 @@ import { Button } from "./buttons";
 import { Container } from "./section";
 import { inviteUrl, loginUrl } from "@/lib/api";
 
-// Only links that resolve today: the page's own sections and the Discord sign-in.
 const LINKS = [
   { label: "Features", href: "#features" },
   { label: "How it works", href: "#how" },

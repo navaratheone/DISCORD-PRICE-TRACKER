@@ -9,9 +9,7 @@ class FakeRedis:
     def __init__(self) -> None:
         self._store: dict[str, str] = {}
 
-    async def set(
-        self, key: str, value: str, *, nx: bool = False, ex: int | None = None
-    ) -> bool:
+    async def set(self, key: str, value: str, *, nx: bool = False, ex: int | None = None) -> bool:
         if nx and key in self._store:
             return False
         self._store[key] = value

@@ -11,7 +11,6 @@ function subscribeToVisibility(onChange: () => void) {
   return () => document.removeEventListener("visibilitychange", onChange);
 }
 
-/** Bottom-left on a laptop, centred at the foot on a tall screen; it loops only while on screen. */
 export function ScrollCue({ placement }: { placement: "corner" | "foot" }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const [onScreen, setOnScreen] = useState(false);

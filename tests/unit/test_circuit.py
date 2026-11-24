@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from app.config.limits import (
     CIRCUIT_FAIL_THRESHOLD,
     CIRCUIT_OPEN_INITIAL_SECONDS,

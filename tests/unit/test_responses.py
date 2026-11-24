@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from app.bot.responses import format_error
 from app.services.errors import (
     AlreadyExists,

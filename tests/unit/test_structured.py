@@ -4,7 +4,6 @@ from decimal import Decimal
 from pathlib import Path
 
 import pytest
-
 from app.scraper.structured import extract_structured
 
 FIXTURES = Path(__file__).parent.parent / "fixtures" / "structured"

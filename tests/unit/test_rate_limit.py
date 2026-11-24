@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from app.workers.rate_limit import DomainRateLimiter
 
 

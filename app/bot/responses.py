@@ -20,9 +20,7 @@ _LIMIT_MESSAGES = {
 
 def format_error(exc: ServiceError) -> str:
     if isinstance(exc, LimitExceeded):
-        template = _LIMIT_MESSAGES.get(
-            exc.limit_name, "Limit reached: {limit_name} ({value})."
-        )
+        template = _LIMIT_MESSAGES.get(exc.limit_name, "Limit reached: {limit_name} ({value}).")
         return template.format(limit_name=exc.limit_name, value=exc.value)
     if isinstance(exc, AlreadyExists):
         return str(exc) or "Already tracked here."

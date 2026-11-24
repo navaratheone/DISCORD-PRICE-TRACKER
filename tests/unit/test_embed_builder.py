@@ -7,7 +7,9 @@ from types import SimpleNamespace
 from app.utils.embed_builder import alert_embed
 
 
-def _event(rule: str, *, prev: Decimal | None = Decimal("100"), new: Decimal | None = Decimal("80")) -> SimpleNamespace:
+def _event(
+    rule: str, *, prev: Decimal | None = Decimal("100"), new: Decimal | None = Decimal("80")
+) -> SimpleNamespace:
     return SimpleNamespace(
         rule_type=rule,
         previous_price=prev,
@@ -34,7 +36,7 @@ def test_drop_uses_red_strike_format() -> None:
     assert embed["title"].startswith("Price drop")
     assert "~~100.00~~" in embed["description"]
     assert "**80.00**" in embed["description"]
-    assert embed["footer"]["text"] == "id: ABCD1234"
+    assert embed["footer"]["text"] == "Price Tracker · id: ABCD1234"
 
 
 def test_threshold_uses_green() -> None:

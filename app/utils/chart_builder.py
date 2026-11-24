@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from decimal import Decimal
 
 _BLOCKS = "▁▂▃▄▅▆▇█"
 
 
-def sparkline(values: list[Decimal | float | int | None]) -> str:
+def sparkline(values: Sequence[Decimal | float | int | None]) -> str:
     real = [float(v) for v in values if v is not None]
     if not real:
         return "—"

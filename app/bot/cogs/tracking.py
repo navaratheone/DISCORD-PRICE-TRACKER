@@ -48,32 +48,44 @@ class TrackingCog(BaseCog):
                 assert product is not None
                 await session.commit()
             except ServiceError as exc:
-                await interaction.followup.send(
+                await interaction.edit_original_response(
                     embed=discord.Embed.from_dict(embed_builder.error_embed(format_error(exc))),
-                    ephemeral=True,
                 )
                 return
 
-       
         queue.enqueue_scrape(product.id, priority="high")
 
-   
-        product = await self._await_first_scrape(watch.product_id, since=product.last_scraped_at)
+        embed = discord.Embed.from_dict(embed_builder.watch_added(watch, product, checking=True))
+        await interaction.edit_original_response(embed=embed)
 
-        embed = discord.Embed.from_dict(embed_builder.watch_added(watch, product))
-        await interaction.followup.send(embed=embed, ephemeral=True)
+        product, scrape_completed = await self._await_first_scrape(
+            watch.product_id, since=product.last_scraped_at
+        )
+
+        embed = discord.Embed.from_dict(
+            embed_builder.watch_added(
+                watch,
+                product,
+                checking=False,
+                timed_out=not scrape_completed,
+            )
+        )
+        await interaction.edit_original_response(embed=embed)
 
     @staticmethod
-    async def _await_first_scrape(product_id: uuid.UUID, *, since: datetime | None) -> Product:
-
+    async def _await_first_scrape(
+        product_id: uuid.UUID, *, since: datetime | None
+    ) -> tuple[Product, bool]:
         loop = asyncio.get_event_loop()
         deadline = loop.time() + _TRACK_SCRAPE_TIMEOUT_SECONDS
         while True:
             async with SessionFactory() as session:
                 product = await ProductRepository(session).get(product_id)
                 assert product is not None
-            if product.last_scraped_at != since or loop.time() >= deadline:
-                return product
+            if product.last_scraped_at != since:
+                return product, True
+            if loop.time() >= deadline:
+                return product, False
             await asyncio.sleep(_TRACK_SCRAPE_POLL_SECONDS)
 
     @app_commands.command(name="untrack", description="Stop tracking a product")
@@ -104,7 +116,15 @@ class TrackingCog(BaseCog):
                     ephemeral=True,
                 )
                 return
-        await interaction.response.send_message(f"Stopped tracking `{id}`.", ephemeral=True)
+        await interaction.response.send_message(
+            embed=discord.Embed.from_dict(
+                embed_builder.success_embed(
+                    "Watch removed",
+                    f"Stopped tracking `{id}`. You can add it again any time with `/track`.",
+                )
+            ),
+            ephemeral=True,
+        )
 
     @app_commands.command(name="list", description="List tracked products in this server")
     @app_commands.describe(page="Page number (10 per page)")
@@ -116,23 +136,20 @@ class TrackingCog(BaseCog):
         async with SessionFactory() as session:
             server = await ServerRepository(session).get_by_guild_id(interaction.guild.id)
             assert server is not None
-            watches = await WatchRepository(session).list_for_server(server.id)
-            products = ProductRepository(session)
-            rows = []
-            for w in watches:
-                p = await products.get(w.product_id)
-                if p is not None:
-                    rows.append((w, p))
+            rows = await WatchRepository(session).list_for_server_with_product(server.id)
             cap = WATCHES_PER_SERVER[server.plan]
 
         total = len(rows)
         pages = max(1, (total + _PAGE_SIZE - 1) // _PAGE_SIZE)
         page = min(page, pages)
         slice_ = rows[(page - 1) * _PAGE_SIZE : page * _PAGE_SIZE]
-        embed = discord.Embed.from_dict(
-            embed_builder.watch_list(slice_, page=page, pages=pages, total=total, cap=cap)
-        )
-        await interaction.response.send_message(embed=embed, ephemeral=True)
+        embeds = [
+            discord.Embed.from_dict(embed)
+            for embed in embed_builder.watch_list(
+                slice_, page=page, pages=pages, total=total, cap=cap
+            )
+        ]
+        await interaction.response.send_message(embeds=embeds, ephemeral=True)
 
     @app_commands.command(name="info", description="Show detail for one watch")
     @app_commands.describe(id="The watch short ID")

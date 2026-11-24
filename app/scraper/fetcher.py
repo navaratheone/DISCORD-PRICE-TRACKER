@@ -12,9 +12,9 @@ class FetchError(RuntimeError):
 
 async def fetch_html(url: str) -> str:
     resolve_url_safely(url)
-    from scrapling.fetchers import AsyncFetcher  # type: ignore[import-not-found]
+    from scrapling.fetchers import AsyncFetcher
 
-    fetcher = AsyncFetcher()
+    fetcher = AsyncFetcher()  # type: ignore[no-untyped-call]
     response: Any = await fetcher.get(url, stealthy_headers=True, timeout=15)
     status = int(getattr(response, "status", 0) or 0)
     if status >= 400:

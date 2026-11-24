@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -70,10 +70,10 @@ class ServerService:
         server_id: uuid.UUID,
         *,
         actor_id: str,
-        tracker_role_id: int | None | _Unset = _UNSET,
-        default_alert_channel_id: int | None | _Unset = _UNSET,
-        default_alert_role_id: int | None | _Unset = _UNSET,
-        region_default: str | None | _Unset = _UNSET,
+        tracker_role_id: int | _Unset | None = _UNSET,
+        default_alert_channel_id: int | _Unset | None = _UNSET,
+        default_alert_role_id: int | _Unset | None = _UNSET,
+        region_default: str | _Unset | None = _UNSET,
     ) -> Server:
         server = await self._require_active(server_id)
         changes: dict[str, Any] = {}
@@ -106,7 +106,7 @@ class ServerService:
         if server is None or not server.is_active:
             return server
         server.is_active = False
-        server.removed_at = datetime.now(timezone.utc)
+        server.removed_at = datetime.now(UTC)
         await self.audit.record(
             action="server.removed",
             actor_type="system",

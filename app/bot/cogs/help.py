@@ -28,13 +28,7 @@ _LINES = [
 class HelpCog(commands.Cog):
     @app_commands.command(name="help", description="Show the most common commands")
     async def help(self, interaction: discord.Interaction) -> None:
-        embed = discord.Embed.from_dict(
-            {
-                "title": "Price Tracker",
-                "description": "\n".join(_LINES),
-                "color": embed_builder.COLOR_NEUTRAL,
-            }
-        )
+        embed = discord.Embed.from_dict(embed_builder.help_embed(_LINES))
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
 

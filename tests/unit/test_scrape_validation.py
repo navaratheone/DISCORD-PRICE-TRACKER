@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 from typing import Any
 
@@ -44,7 +44,7 @@ def _snapshots(
     prices: list[Decimal | None], stocks: list[bool | None] | None = None
 ) -> list[PriceSnapshot]:
     pid = uuid.uuid4()
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     rows: list[PriceSnapshot] = []
     for i, price in enumerate(prices):
         stock = stocks[i] if stocks is not None else True

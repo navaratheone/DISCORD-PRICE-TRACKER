@@ -33,14 +33,10 @@ import {
   Volume2,
 } from "lucide-react";
 
-/* A screen recording of Plummet at work, built as a choreographed Discord client rather than a video, so it stays
-   sharp at every size. Every state is a pure function of one clock: the cursor, the typing, the slash-command menu,
-   the bot's reply, the alert and the reactions. It plays only while on screen, pauses on request, and renders the
-   finished conversation for first paint, no-JS visitors and reduced motion. All of it is illustrative. */
+/* Illustrative conversation; every frame is derived from one clock. */
 
 const DESIGN_W = 1040;
 const DESIGN_H = 540;
-// Phones get Discord's single pane; a short laptop keeps the desktop client, scaled down like a video.
 const PHONE = "(max-width: 768px)";
 
 const URL_TEXT = "amazon.com/dp/B0C33XXL";
@@ -91,7 +87,6 @@ type Frame = {
 
 function frameAt(t: number): Frame {
   const between = (a: number, b: number) => t >= a && t < b;
-  // The hand clicks into the box, then moves up out of the way while typing, as people do.
   const cursor: Cursor =
     t < T.move
       ? "rest"
@@ -119,7 +114,6 @@ function frameAt(t: number): Frame {
     fire: t >= T.clickFire + 90 ? 2 : t >= T.react1 ? 1 : 0,
     mine: t >= T.clickFire + 90,
     eyes: t >= T.eyes ? 1 : 0,
-    // The loop fades out the finished conversation and fades the fresh one in, as a recording restarts.
     fading: t >= T.fade || t < 320,
   };
 }
@@ -140,7 +134,6 @@ function subscribeToVisibility(onChange: () => void) {
   return () => document.removeEventListener("visibilitychange", onChange);
 }
 
-/* People in the server. Avatars are monograms on each member's colour; role colours tint their names. */
 const PEOPLE = {
   jules: { name: "jules", initials: "J", avatar: "#2f6f5b", role: "#7be0b4" },
   mara: { name: "mara", initials: "M", avatar: "#5b4a8a", role: "#c7a6ff" },
@@ -233,7 +226,6 @@ const CHANNELS: { group: string; items: { name: string; voice?: boolean; unread?
   { group: "Voice", items: [{ name: "Lounge", voice: true }] },
 ];
 
-/* The parts of the client that never change while the recording plays, kept out of its re-renders. */
 const ServerChrome = memo(function ServerChrome() {
   return (
     <>
@@ -331,7 +323,6 @@ const ChannelHead = memo(function ChannelHead() {
   );
 });
 
-/* The member list, as Discord shows it beside a channel: who is online, by role colour, then who is not. */
 const MEMBERS: { title: string; people: { who: Person; note?: string; away?: boolean }[] }[] = [
   {
     title: "Online — 4",
@@ -412,7 +403,6 @@ export function DiscordDemo() {
   const playing = onScreen && pageShown && !paused && !reduced;
   const clock = useRef(T.fade - 1);
 
-  // Scale the recording to its window like a video; on a phone switch to Discord's single-pane layout.
   useLayoutEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
@@ -439,7 +429,6 @@ export function DiscordDemo() {
     return () => observer.disconnect();
   }, []);
 
-  // The window stands tilted back and straightens as the visitor scrolls into the page.
   useEffect(() => {
     const node = wrapRef.current;
     if (!node || reduced) return;
@@ -460,13 +449,11 @@ export function DiscordDemo() {
     };
   }, [reduced, compact]);
 
-  // One clock drives the recording; React hears about it only when something visible changes.
   useEffect(() => {
     if (!playing) return;
     let raf = 0;
     let last = performance.now();
     let key = "";
-    // The first play starts by fading out the finished conversation the page was served with.
     if (clock.current === T.fade - 1) clock.current = T.fade;
     const tick = (now: number) => {
       clock.current += now - last;
@@ -484,7 +471,6 @@ export function DiscordDemo() {
     return () => cancelAnimationFrame(raf);
   }, [playing]);
 
-  // The cursor travels to whatever it is about to touch, measured from the live layout.
   useLayoutEffect(() => {
     const stage = stageRef.current;
     if (!stage) return;
@@ -510,7 +496,6 @@ export function DiscordDemo() {
     if (spot) setCursorAt(spot);
   }, [frame.cursor, frame.live, frame.fire, scale, compact]);
 
-  // New messages land at the foot and the conversation rises to make room, as Discord scrolls.
   useLayoutEffect(() => {
     const list = listRef.current;
     if (!list) return;

@@ -37,7 +37,6 @@ function TickItem({ tick }: { tick: Tick }) {
   );
 }
 
-/** The rail that closes the hero: drops and restocks travelling past a still label, paused under the pointer. */
 export function PriceTicker() {
   return (
     <div className="rds-rail">

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
+from typing import ClassVar
 
 from sqlalchemy import MetaData, func
 from sqlalchemy.dialects.postgresql import TIMESTAMP, UUID
@@ -19,7 +20,7 @@ NAMING_CONVENTION = {
 class Base(DeclarativeBase):
     metadata = MetaData(naming_convention=NAMING_CONVENTION)
 
-    type_annotation_map = {
+    type_annotation_map: ClassVar[dict[type, object]] = {
         datetime: TIMESTAMP(timezone=True),
         uuid.UUID: UUID(as_uuid=True),
     }
@@ -30,9 +31,7 @@ class UUIDPrimaryKeyMixin:
 
 
 class TimestampMixin:
-    created_at: Mapped[datetime] = mapped_column(
-        server_default=func.now(), nullable=False
-    )
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(
         server_default=func.now(), onupdate=func.now(), nullable=False
     )

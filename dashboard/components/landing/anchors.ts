@@ -9,7 +9,6 @@ let cancelGlide: (() => void) | null = null;
 
 export const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/** Where the browser's own anchor jump would land: scroll padding plus the target's scroll margin. */
 export function anchorY(target: HTMLElement) {
   const root = document.documentElement;
   const padding = parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
@@ -17,7 +16,6 @@ export function anchorY(target: HTMLElement) {
   return target.getBoundingClientRect().top + window.scrollY - padding - margin;
 }
 
-/** Glides on ease-in-out quint; a wheel, touch or key press hands the page back at once. */
 export function glideToY(y: number, duration: number, onDone?: () => void) {
   cancelGlide?.();
 
@@ -55,7 +53,6 @@ function focusWithoutScroll(target: HTMLElement) {
   target.focus({ preventScroll: true });
 }
 
-/** Glides to an in-page anchor in 700–1500ms by distance; the target's entrances play as it lands. */
 export function goToHash(hash: string) {
   const id = decodeURIComponent(hash.replace(/^#/, ""));
   const target = id ? document.getElementById(id) : null;
@@ -71,7 +68,7 @@ export function goToHash(hash: string) {
     focusWithoutScroll(target);
   };
 
-  // Two frames: let a menu closed by this click release its scroll lock first.
+  // Wait two frames for a closed menu to release its scroll lock.
   requestAnimationFrame(() =>
     requestAnimationFrame(() => {
       const y = anchorY(target);

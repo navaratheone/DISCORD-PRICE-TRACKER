@@ -31,14 +31,18 @@ class ConfigCog(BaseCog):
             )
             await session.commit()
         await interaction.response.send_message(
-            f"Tracker role set to {role.mention}.", ephemeral=True
+            embed=discord.Embed.from_dict(
+                embed_builder.success_embed(
+                    "Tracker role updated",
+                    f"Tracker access is now limited to {role.mention}.",
+                )
+            ),
+            ephemeral=True,
         )
 
     @config.command(name="channel", description="Set the default alert channel")
     @require_admin()
-    async def channel(
-        self, interaction: discord.Interaction, channel: discord.TextChannel
-    ) -> None:
+    async def channel(self, interaction: discord.Interaction, channel: discord.TextChannel) -> None:
         assert interaction.guild is not None
         async with SessionFactory() as session:
             server = await ServerRepository(session).get_by_guild_id(interaction.guild.id)
@@ -50,7 +54,13 @@ class ConfigCog(BaseCog):
             )
             await session.commit()
         await interaction.response.send_message(
-            f"Alerts will be sent to {channel.mention}.", ephemeral=True
+            embed=discord.Embed.from_dict(
+                embed_builder.success_embed(
+                    "Alert channel updated",
+                    f"Price alerts will be sent to {channel.mention}.",
+                )
+            ),
+            ephemeral=True,
         )
 
     @config.command(name="role-mention", description="Set the default mention role")
@@ -69,17 +79,32 @@ class ConfigCog(BaseCog):
             )
             await session.commit()
         await interaction.response.send_message(
-            "Mention role updated." if role else "Mention role cleared.", ephemeral=True
+            embed=discord.Embed.from_dict(
+                embed_builder.success_embed(
+                    "Mention role updated",
+                    f"Price alerts will mention {role.mention}."
+                    if role
+                    else "The default alert mention has been cleared.",
+                )
+            ),
+            ephemeral=True,
         )
 
-    @config.command(name="region", description="Default region for new watches (ISO 3166-1 alpha-2)")
+    @config.command(
+        name="region", description="Default region for new watches (ISO 3166-1 alpha-2)"
+    )
     @require_admin()
     async def region(self, interaction: discord.Interaction, code: str) -> None:
         assert interaction.guild is not None
         normalized = code.strip().upper()
         if len(normalized) != 2 or not normalized.isalpha():
             await interaction.response.send_message(
-                "Region must be a 2-letter country code (e.g. US, GB).", ephemeral=True
+                embed=discord.Embed.from_dict(
+                    embed_builder.error_embed(
+                        "Region must be a 2-letter country code (for example, US or GB)."
+                    )
+                ),
+                ephemeral=True,
             )
             return
         async with SessionFactory() as session:
@@ -90,7 +115,13 @@ class ConfigCog(BaseCog):
             )
             await session.commit()
         await interaction.response.send_message(
-            f"Region set to {normalized}.", ephemeral=True
+            embed=discord.Embed.from_dict(
+                embed_builder.success_embed(
+                    "Default region updated",
+                    f"New watches will use **{normalized}** as their default region.",
+                )
+            ),
+            ephemeral=True,
         )
 
     @config.command(name="show", description="Show current configuration")
@@ -121,7 +152,15 @@ class ConfigCog(BaseCog):
                 region_default=None,
             )
             await session.commit()
-        await interaction.response.send_message("Configuration reset.", ephemeral=True)
+        await interaction.response.send_message(
+            embed=discord.Embed.from_dict(
+                embed_builder.success_embed(
+                    "Configuration reset",
+                    "Server settings were cleared. Existing watches were not changed.",
+                )
+            ),
+            ephemeral=True,
+        )
 
 
 async def setup(bot: commands.Bot) -> None:

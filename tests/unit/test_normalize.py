@@ -3,7 +3,6 @@ from __future__ import annotations
 from decimal import Decimal
 
 import pytest
-
 from app.scraper.normalize import parse_currency, parse_price, parse_stock
 
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import time
-from typing import Literal, Protocol
+from typing import Literal, Protocol, cast
 
 from app.config.limits import (
     CIRCUIT_FAIL_THRESHOLD,
@@ -19,7 +19,7 @@ class CircuitBreaker(Protocol):
 
 
 class InMemoryCircuitBreaker:
-    def __init__(self, *, clock: "Clock | None" = None) -> None:
+    def __init__(self, *, clock: Clock | None = None) -> None:
         self._clock = clock or _real_clock
         self._fail_counts: dict[str, int] = {}
         self._opened_at: dict[str, float] = {}
@@ -61,8 +61,6 @@ def _real_clock() -> float:
 
 
 class RedisCircuitBreaker:
-
-
     def __init__(self, redis: object) -> None:
         self._redis = redis
 
@@ -70,7 +68,9 @@ class RedisCircuitBreaker:
         opened_raw = await self._get(f"circuit:{domain}:opened_at")
         if opened_raw is None:
             return "closed"
-        timeout = float(await self._get(f"circuit:{domain}:timeout") or CIRCUIT_OPEN_INITIAL_SECONDS)
+        timeout = float(
+            await self._get(f"circuit:{domain}:timeout") or CIRCUIT_OPEN_INITIAL_SECONDS
+        )
         if time.time() - float(opened_raw) >= timeout:
             return "half_open"
         return "open"
@@ -98,7 +98,7 @@ class RedisCircuitBreaker:
             await self._set(f"circuit:{domain}:timeout", float(CIRCUIT_OPEN_INITIAL_SECONDS))
 
     async def _get(self, key: str) -> bytes | str | None:
-        return await self._redis.get(key)  # type: ignore[attr-defined]
+        return cast(bytes | str | None, await self._redis.get(key))  # type: ignore[attr-defined]
 
     async def _set(self, key: str, value: float | int | str) -> None:
         await self._redis.set(key, value)  # type: ignore[attr-defined]
