@@ -3,7 +3,6 @@ from __future__ import annotations
 from unittest.mock import patch
 
 import pytest
-
 from app.utils.url_utils import (
     UnsafeURLError,
     canonicalize_url,
@@ -78,12 +77,14 @@ class TestSSRFGuard:
         ],
     )
     def test_rejects_private_or_link_local_ips(self, ip: str) -> None:
-        with patch(
-            "app.utils.url_utils.socket.getaddrinfo",
-            return_value=[(2, 1, 6, "", (ip, 0))],
+        with (
+            patch(
+                "app.utils.url_utils.socket.getaddrinfo",
+                return_value=[(2, 1, 6, "", (ip, 0))],
+            ),
+            pytest.raises(UnsafeURLError),
         ):
-            with pytest.raises(UnsafeURLError):
-                resolve_url_safely("https://attacker.example/")
+            resolve_url_safely("https://attacker.example/")
 
     def test_accepts_public_ip(self) -> None:
         with patch(
@@ -97,12 +98,14 @@ class TestSSRFGuard:
     def test_rejects_dns_failure(self) -> None:
         import socket as _socket
 
-        with patch(
-            "app.utils.url_utils.socket.getaddrinfo",
-            side_effect=_socket.gaierror("name not known"),
+        with (
+            patch(
+                "app.utils.url_utils.socket.getaddrinfo",
+                side_effect=_socket.gaierror("name not known"),
+            ),
+            pytest.raises(UnsafeURLError),
         ):
-            with pytest.raises(UnsafeURLError):
-                resolve_url_safely("https://nx.example/")
+            resolve_url_safely("https://nx.example/")
 
 
 def test_domain_of() -> None:

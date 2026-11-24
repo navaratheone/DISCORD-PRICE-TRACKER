@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from contextlib import suppress
+
 import discord
 from discord.ext import commands
 
@@ -79,7 +81,5 @@ async def _dm_inviter(guild: discord.Guild) -> None:
         pass
     if inviter is None:
         return
-    try:
+    with suppress(discord.Forbidden, discord.HTTPException):
         await inviter.send(embed=discord.Embed.from_dict(embed_builder.setup_hint()))
-    except (discord.Forbidden, discord.HTTPException):
-        pass

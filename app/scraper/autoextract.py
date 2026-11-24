@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+from typing import Literal
 
 from lxml import html as lxml_html
 
@@ -43,7 +44,9 @@ def auto_extract(html: str, *, region_hint: str | None = None) -> ScrapeResult:
     parsed = [parse_price(c[1]) for c in candidates]
     price_candidates = sorted({float(p) for p in parsed if p is not None})
 
-    status = "ok" if best_score >= 3 and currency is not None else "partial"
+    status: Literal["ok", "partial"] = (
+        "ok" if best_score >= 3 and currency is not None else "partial"
+    )
     return ScrapeResult(
         status=status,
         tier_used=2,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -54,7 +54,7 @@ class UserService:
         user = await self.users.get(user_id)
         if user is None or user.deleted_at is not None:
             raise NotFound("user not found")
-        user.deleted_at = datetime.now(timezone.utc)
+        user.deleted_at = datetime.now(UTC)
         await self.audit.record(
             action="account.deleted",
             actor_type="user",

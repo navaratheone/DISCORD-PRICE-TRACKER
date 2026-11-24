@@ -93,9 +93,7 @@ def upgrade() -> None:
         sa.Column("server_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("user_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("is_admin", sa.Boolean(), nullable=False, server_default=sa.false()),
-        sa.Column(
-            "has_tracker_role", sa.Boolean(), nullable=False, server_default=sa.false()
-        ),
+        sa.Column("has_tracker_role", sa.Boolean(), nullable=False, server_default=sa.false()),
         sa.Column("last_seen_at", postgresql.TIMESTAMP(timezone=True)),
         sa.PrimaryKeyConstraint("id", name="pk_server_memberships"),
         sa.ForeignKeyConstraint(
@@ -104,13 +102,9 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(
             ["user_id"], ["users.id"], name="fk_server_memberships_user_id_users"
         ),
-        sa.UniqueConstraint(
-            "server_id", "user_id", name="uq_server_memberships_server_id_user_id"
-        ),
+        sa.UniqueConstraint("server_id", "user_id", name="uq_server_memberships_server_id_user_id"),
     )
-    op.create_index(
-        "ix_server_memberships_server_id", "server_memberships", ["server_id"]
-    )
+    op.create_index("ix_server_memberships_server_id", "server_memberships", ["server_id"])
     op.create_index("ix_server_memberships_user_id", "server_memberships", ["user_id"])
 
     op.create_table(
@@ -131,9 +125,7 @@ def upgrade() -> None:
         sa.Column("last_scraped_at", postgresql.TIMESTAMP(timezone=True)),
         sa.Column("last_scrape_status", sa.String(16)),
         sa.Column("scrape_tier", sa.SmallInteger()),
-        sa.Column(
-            "circuit_state", sa.String(16), nullable=False, server_default="closed"
-        ),
+        sa.Column("circuit_state", sa.String(16), nullable=False, server_default="closed"),
         sa.Column(
             "created_at",
             postgresql.TIMESTAMP(timezone=True),
@@ -168,9 +160,7 @@ def upgrade() -> None:
         sa.Column("server_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("added_by_user_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("product_id", postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column(
-            "alert_rules", postgresql.JSONB(astext_type=sa.Text()), nullable=False
-        ),
+        sa.Column("alert_rules", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
         sa.Column("alert_channel_id", sa.BigInteger()),
         sa.Column("alert_role_id", sa.BigInteger()),
         sa.Column("region_override", sa.CHAR(2)),
@@ -192,12 +182,8 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint("id", name="pk_watches"),
         sa.UniqueConstraint("short_id", name="uq_watches_short_id"),
-        sa.UniqueConstraint(
-            "server_id", "product_id", name="uq_watches_server_id_product_id"
-        ),
-        sa.ForeignKeyConstraint(
-            ["server_id"], ["servers.id"], name="fk_watches_server_id_servers"
-        ),
+        sa.UniqueConstraint("server_id", "product_id", name="uq_watches_server_id_product_id"),
+        sa.ForeignKeyConstraint(["server_id"], ["servers.id"], name="fk_watches_server_id_servers"),
         sa.ForeignKeyConstraint(
             ["added_by_user_id"], ["users.id"], name="fk_watches_added_by_user_id_users"
         ),
@@ -220,9 +206,7 @@ def upgrade() -> None:
         "price_snapshots",
         sa.Column("id", sa.BigInteger(), autoincrement=True, nullable=False),
         sa.Column("product_id", postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column(
-            "observed_at", postgresql.TIMESTAMP(timezone=True), nullable=False
-        ),
+        sa.Column("observed_at", postgresql.TIMESTAMP(timezone=True), nullable=False),
         sa.Column("price", sa.Numeric(12, 2)),
         sa.Column("currency", sa.CHAR(3)),
         sa.Column("in_stock", sa.Boolean()),
@@ -235,9 +219,7 @@ def upgrade() -> None:
             name="fk_price_snapshots_product_id_products",
         ),
     )
-    op.create_index(
-        "ix_price_snapshots_observed_at", "price_snapshots", ["observed_at"]
-    )
+    op.create_index("ix_price_snapshots_observed_at", "price_snapshots", ["observed_at"])
     op.create_index(
         "ix_price_snapshots_product_time",
         "price_snapshots",
@@ -259,9 +241,7 @@ def upgrade() -> None:
         sa.Column("new_price", sa.Numeric(12, 2)),
         sa.Column("previous_in_stock", sa.Boolean()),
         sa.Column("new_in_stock", sa.Boolean()),
-        sa.Column(
-            "payload", postgresql.JSONB(astext_type=sa.Text()), nullable=False
-        ),
+        sa.Column("payload", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
         sa.Column(
             "delivery_status",
             sa.String(32),
@@ -293,9 +273,7 @@ def upgrade() -> None:
         sa.Column("id", sa.BigInteger(), autoincrement=True, nullable=False),
         sa.Column("date", sa.Date(), nullable=False),
         sa.Column("base", sa.CHAR(3), nullable=False, server_default="USD"),
-        sa.Column(
-            "rates", postgresql.JSONB(astext_type=sa.Text()), nullable=False
-        ),
+        sa.Column("rates", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
         sa.Column(
             "fetched_at",
             postgresql.TIMESTAMP(timezone=True),

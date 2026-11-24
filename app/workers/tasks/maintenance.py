@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import time
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 from typing import Any
 
 import httpx
@@ -55,26 +55,24 @@ async def _refresh_fx(*, client: httpx.AsyncClient | None = None) -> bool:
                     date=today,
                     base=body.get("base", "USD"),
                     rates=rates,
-                    fetched_at=datetime.now(timezone.utc),
+                    fetched_at=datetime.now(UTC),
                 )
             )
         else:
             existing.rates = rates
-            existing.fetched_at = datetime.now(timezone.utc)
+            existing.fetched_at = datetime.now(UTC)
         await session.commit()
     log.info("fx.refreshed", count=len(rates))
     return True
 
 
 async def _prune_snapshots() -> int:
-    cutoff = datetime.now(timezone.utc) - timedelta(days=PRICE_HISTORY_DAYS)
+    cutoff = datetime.now(UTC) - timedelta(days=PRICE_HISTORY_DAYS)
     total = 0
     async with worker_runtime() as runtime, runtime.session_factory() as session:
         while True:
             ids_stmt = (
-                select(PriceSnapshot.id)
-                .where(PriceSnapshot.observed_at < cutoff)
-                .limit(10_000)
+                select(PriceSnapshot.id).where(PriceSnapshot.observed_at < cutoff).limit(10_000)
             )
             ids = [row for row in (await session.execute(ids_stmt)).scalars().all()]
             if not ids:
@@ -93,9 +91,7 @@ async def _circuit_probe() -> int:
         redis = runtime.redis
         cursor: Any = 0
         while True:
-            cursor, keys = await redis.scan(
-                cursor=cursor, match="circuit:*:opened_at", count=200
-            )
+            cursor, keys = await redis.scan(cursor=cursor, match="circuit:*:opened_at", count=200)
             for key in keys:
                 opened_raw = await redis.get(key)
                 if opened_raw is None:

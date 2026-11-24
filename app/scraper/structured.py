@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Iterator, Sequence
-from typing import Any
+from typing import Any, Literal
 
 from lxml import html as lxml_html
 
@@ -105,7 +105,7 @@ def _from_jsonld(node: dict[str, Any], *, region_hint: str | None) -> ScrapeResu
     if price is None and currency is None:
         return None
 
-    status = (
+    status: Literal["ok", "partial"] = (
         "ok" if price is not None and (in_stock is not None or currency is not None) else "partial"
     )
     return ScrapeResult(
@@ -258,7 +258,9 @@ def _from_opengraph(tree: lxml_html.HtmlElement, *, region_hint: str | None) -> 
     if price is None and currency is None and not title:
         return None
     in_stock = parse_stock(avail)
-    status = "ok" if price is not None and currency is not None else "partial"
+    status: Literal["ok", "partial"] = (
+        "ok" if price is not None and currency is not None else "partial"
+    )
     return ScrapeResult(
         status=status,
         tier_used=1,

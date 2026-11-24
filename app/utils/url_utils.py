@@ -25,7 +25,17 @@ _TRACKING_PARAMS = frozenset(
 
 _PER_DOMAIN_DROP = {
     "amazon": frozenset(
-        {"psc", "pf_rd_p", "pf_rd_r", "pf_rd_s", "pf_rd_t", "pf_rd_i", "tag", "linkCode", "creative"}
+        {
+            "psc",
+            "pf_rd_p",
+            "pf_rd_r",
+            "pf_rd_s",
+            "pf_rd_t",
+            "pf_rd_i",
+            "tag",
+            "linkCode",
+            "creative",
+        }
     ),
     "ebay": frozenset({"_trkparms", "_trksid", "hash", "epid"}),
 }
@@ -104,7 +114,7 @@ def resolve_url_safely(url: str) -> tuple[str, str]:
 
     pinned: str | None = None
     for _family, _type, _proto, _canon, sockaddr in infos:
-        ip_str = sockaddr[0]
+        ip_str = str(sockaddr[0])
         try:
             ip = ipaddress.ip_address(ip_str)
         except ValueError as exc:

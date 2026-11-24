@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from celery import shared_task
 from sqlalchemy import delete, select
@@ -21,31 +21,31 @@ log = get_logger(__name__)
 
 
 async def _cleanup_servers() -> int:
-    cutoff = datetime.now(timezone.utc) - timedelta(days=SOFT_DELETE_GRACE_DAYS)
+    cutoff = datetime.now(UTC) - timedelta(days=SOFT_DELETE_GRACE_DAYS)
     removed = 0
     async with worker_runtime() as runtime, runtime.session_factory() as session:
         stale = (
-            await session.execute(
-                select(Server).where(
-                    Server.is_active.is_(False),
-                    Server.removed_at.isnot(None),
-                    Server.removed_at < cutoff,
+            (
+                await session.execute(
+                    select(Server).where(
+                        Server.is_active.is_(False),
+                        Server.removed_at.isnot(None),
+                        Server.removed_at < cutoff,
+                    )
                 )
             )
-        ).scalars().all()
+            .scalars()
+            .all()
+        )
 
         for server in stale:
             watch_ids = list(
                 (
-                    await session.execute(
-                        select(Watch.id).where(Watch.server_id == server.id)
-                    )
+                    await session.execute(select(Watch.id).where(Watch.server_id == server.id))
                 ).scalars()
             )
             if watch_ids:
-                await session.execute(
-                    delete(AlertEvent).where(AlertEvent.watch_id.in_(watch_ids))
-                )
+                await session.execute(delete(AlertEvent).where(AlertEvent.watch_id.in_(watch_ids)))
                 await session.execute(delete(Watch).where(Watch.id.in_(watch_ids)))
             await session.execute(
                 delete(ServerMembership).where(ServerMembership.server_id == server.id)
@@ -64,17 +64,21 @@ async def _cleanup_servers() -> int:
 
 
 async def _cleanup_accounts() -> int:
-    cutoff = datetime.now(timezone.utc) - timedelta(days=SOFT_DELETE_GRACE_DAYS)
+    cutoff = datetime.now(UTC) - timedelta(days=SOFT_DELETE_GRACE_DAYS)
     removed = 0
     async with worker_runtime() as runtime, runtime.session_factory() as session:
         stale = (
-            await session.execute(
-                select(User).where(
-                    User.deleted_at.isnot(None),
-                    User.deleted_at < cutoff,
+            (
+                await session.execute(
+                    select(User).where(
+                        User.deleted_at.isnot(None),
+                        User.deleted_at < cutoff,
+                    )
                 )
             )
-        ).scalars().all()
+            .scalars()
+            .all()
+        )
 
         for user in stale:
             await session.execute(
@@ -91,15 +95,12 @@ async def _cleanup_accounts() -> int:
 
         orphan_snapshots = await session.execute(
             select(PriceSnapshot.id).where(
-                PriceSnapshot.observed_at
-                < datetime.now(timezone.utc) - timedelta(days=365)
+                PriceSnapshot.observed_at < datetime.now(UTC) - timedelta(days=365)
             )
         )
         orphan_ids = list(orphan_snapshots.scalars())
         if orphan_ids:
-            await session.execute(
-                delete(PriceSnapshot).where(PriceSnapshot.id.in_(orphan_ids))
-            )
+            await session.execute(delete(PriceSnapshot).where(PriceSnapshot.id.in_(orphan_ids)))
 
         await session.commit()
     log.info("housekeeping.accounts_purged", count=removed)

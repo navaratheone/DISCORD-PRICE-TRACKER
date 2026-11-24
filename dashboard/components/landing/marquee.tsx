@@ -3,18 +3,13 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-/**
- * Renders the track twice and moves it by half its width, so the loop is
- * seamless at a constant rate whatever the content measures. Under reduced
- * motion the copy is dropped and the track wraps.
- */
 export function Marquee({
   speed = 50,
   label,
   className,
   children,
 }: {
-  /** Pixels per second. */
+  
   speed?: number;
   label: string;
   className?: string;

@@ -7,7 +7,9 @@ from types import SimpleNamespace
 from app.utils.embed_builder import alert_embed
 
 
-def _event(rule: str, *, prev: Decimal | None = Decimal("100"), new: Decimal | None = Decimal("80")) -> SimpleNamespace:
+def _event(
+    rule: str, *, prev: Decimal | None = Decimal("100"), new: Decimal | None = Decimal("80")
+) -> SimpleNamespace:
     return SimpleNamespace(
         rule_type=rule,
         previous_price=prev,

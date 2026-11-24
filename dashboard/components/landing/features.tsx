@@ -43,7 +43,6 @@ const SMALL = [
 
 const GLYPH = "size-6 shrink-0 text-rds-icon-accent";
 
-/** A link going in and a price coming out, drawn as the old figures were: hairline boxes on the glass. */
 function ExtractionFlow() {
   return (
     <figure className="m-0">

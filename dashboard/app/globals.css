@@ -203,7 +203,7 @@
     outline-style: solid;
     outline-color: var(--rds-focus);
     outline-offset: var(--rds-focus-offset);
-    /* Omits outline-* so focus rings skip the components' all-property fade; !important beats later layers. */
+    /* Keep focus-ring overrides above component fades. */
     transition-property: color, background-color, border-color, box-shadow, opacity,
       transform !important;
   }
@@ -254,7 +254,7 @@
   }
 }
 
-/* Registered so the mask's edge can travel; a gradient on its own does not animate. */
+/* Register the mask gradient so its edge can animate. */
 @property --rds-wipe {
   syntax: "<percentage>";
   inherits: false;

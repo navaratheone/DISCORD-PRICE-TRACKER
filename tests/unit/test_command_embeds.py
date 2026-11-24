@@ -42,7 +42,7 @@ def _product(**kw):
 
 
 def test_watch_added_includes_short_id_and_rules() -> None:
-    embed = embed_builder.watch_added(_watch(), _product())
+    embed = embed_builder.watch_added(_watch(), _product(), checking=True)
     assert embed["color"] == embed_builder.COLOR_SUCCESS
     fields = {f["name"]: f["value"] for f in embed["fields"]}
     assert "`ABCD1234`" in fields["🆔 ID"]
@@ -50,7 +50,7 @@ def test_watch_added_includes_short_id_and_rules() -> None:
     assert fields["📦 Availability"] == "🟢 In stock"
     assert "drop" in fields["🔔 Alerts"]
     assert "≤ 75.00" in fields["🔔 Alerts"]
-    assert "underway" in embed["description"]
+    assert "in progress" in embed["description"]
 
 
 def test_watch_added_shows_all_scraped_product_details() -> None:
@@ -78,6 +78,13 @@ def test_watch_added_reports_scrape_failures_with_a_recovery_action() -> None:
     embed = embed_builder.watch_added(_watch(), product)
     assert "couldn't provide product details" in embed["description"]
     assert "/watch refresh" in embed["description"]
+
+
+def test_watch_added_reports_a_slow_check_without_claiming_success() -> None:
+    product = _product(last_scraped_at=datetime.datetime(2026, 1, 1))
+    embed = embed_builder.watch_added(_watch(), product, timed_out=True)
+    assert "taking longer than expected" in embed["description"]
+    assert "Showing available details" in embed["description"]
 
 
 def test_watch_list_empty_state() -> None:

@@ -114,8 +114,6 @@ def watch_added(
         "fields": fields,
         "footer": {"text": footer},
     }
-    if product.domain:
-        embed["author"]["name"] += f" · {product.domain}"
     if product.image_url:
         embed["thumbnail"] = {"url": product.image_url}
     return embed

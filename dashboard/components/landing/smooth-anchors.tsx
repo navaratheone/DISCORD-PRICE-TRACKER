@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { goToHash } from "./anchors";
 
-/** Every in-page link glides instead of jumping. */
 export function SmoothAnchors() {
   useEffect(() => {
     const onClick = (event: MouseEvent) => {

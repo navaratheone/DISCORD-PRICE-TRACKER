@@ -8,18 +8,15 @@ returns scripted ``ScrapeResult`` instances.
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 
 import httpx
 import pytest
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.config.limits import PRICE_HISTORY_DAYS
 from app.models.price_snapshot import PriceSnapshot
 from app.repositories.alert_repo import AlertEventRepository
 from app.repositories.product_repo import ProductRepository
-from app.repositories.watch_repo import WatchRepository
 from app.scraper.schemas import ScrapeResult
 from app.services import queue
 from app.services.alert_service import AlertService
@@ -31,6 +28,7 @@ from app.services.watch_service import WatchService
 from app.workers.discord_dispatcher import DiscordDispatcher
 from app.workers.tasks.alert import _dispatch
 from app.workers.tasks.maintenance import _prune_snapshots
+from sqlalchemy.ext.asyncio import AsyncSession
 
 pytestmark = pytest.mark.integration
 
@@ -67,23 +65,17 @@ async def test_scrape_to_dispatch_full_chain(session: AsyncSession) -> None:
 
     await PriceService(session).record_snapshot(
         pid,
-        ScrapeResult(
-            status="ok", tier_used=1, price=Decimal("100"), currency="USD", in_stock=True
-        ),
+        ScrapeResult(status="ok", tier_used=1, price=Decimal("100"), currency="USD", in_stock=True),
     )
     await session.commit()
 
     second = await PriceService(session).record_snapshot(
         pid,
-        ScrapeResult(
-            status="ok", tier_used=1, price=Decimal("70"), currency="USD", in_stock=True
-        ),
+        ScrapeResult(status="ok", tier_used=1, price=Decimal("70"), currency="USD", in_stock=True),
     )
     await session.commit()
 
-    events = await AlertService(session, cooldowns=InMemoryCooldownStore()).evaluate(
-        pid, second
-    )
+    events = await AlertService(session, cooldowns=InMemoryCooldownStore()).evaluate(pid, second)
     await session.commit()
     assert [e.rule_type for e in events] == ["drop"]
     event_id = events[0].id
@@ -146,8 +138,8 @@ async def test_prune_snapshots_removes_old_rows(session: AsyncSession) -> None:
     )
     await session.commit()
 
-    cutoff = datetime.now(timezone.utc) - timedelta(days=PRICE_HISTORY_DAYS + 5)
-    fresh = datetime.now(timezone.utc) - timedelta(days=1)
+    cutoff = datetime.now(UTC) - timedelta(days=PRICE_HISTORY_DAYS + 5)
+    fresh = datetime.now(UTC) - timedelta(days=1)
 
     for observed_at in (cutoff, cutoff, fresh):
         session.add(

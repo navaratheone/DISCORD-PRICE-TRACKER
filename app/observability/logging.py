@@ -29,7 +29,7 @@ def _truncate(_: Any, __: str, event_dict: EventDict) -> EventDict:
         if isinstance(v, str) and len(v) > _MAX_STR:
             event_dict[k] = v[:_MAX_STR] + "…"
         elif isinstance(v, list) and len(v) > _MAX_LIST:
-            event_dict[k] = v[:_MAX_LIST] + ["…(truncated)"]
+            event_dict[k] = [*v[:_MAX_LIST], "…(truncated)"]
     return event_dict
 
 

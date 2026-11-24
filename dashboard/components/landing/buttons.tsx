@@ -9,7 +9,7 @@ type Props = {
   children: ReactNode;
   theme?: ButtonTheme;
   size?: ButtonSize;
-  /** Tertiary links carry the two-arrow aperture. */
+  
   arrow?: boolean;
   icon?: ReactNode;
   href?: string;
@@ -18,10 +18,6 @@ type Props = {
   className?: string;
 } & Omit<HTMLAttributes<HTMLElement>, "children" | "className">;
 
-/**
- * Primary is a maroon fill inside a 1px hyper-red ring that floods red when
- * pressed; secondary is a dusk control; tertiary is a red link with an arrow.
- */
 export function Button({
   children,
   theme = "primary",

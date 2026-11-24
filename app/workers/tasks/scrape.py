@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import random
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from celery import shared_task
 from sqlalchemy import select
@@ -35,7 +35,7 @@ log = get_logger(__name__)
 
 
 async def _tick() -> int:
-    cutoff = datetime.now(timezone.utc) - timedelta(seconds=CHECK_CADENCE_SECONDS)
+    cutoff = datetime.now(UTC) - timedelta(seconds=CHECK_CADENCE_SECONDS)
     async with worker_runtime() as runtime, runtime.session_factory() as session:
         stmt = (
             select(Product.id)
@@ -51,7 +51,7 @@ async def _tick() -> int:
         rows = list((await session.execute(stmt)).scalars().all())
 
     for product_id in rows:
-        await asyncio.sleep(random.uniform(0, 0.05))  # noqa: S311 — jitter only
+        await asyncio.sleep(random.uniform(0, 0.05))
         queue.enqueue_scrape(product_id)
     log.info("scrape.tick", enqueued=len(rows))
     return len(rows)

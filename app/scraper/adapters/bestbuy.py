@@ -31,7 +31,7 @@ class BestBuyAdapter:
         if tree is None:
             return ScrapeResult(status="failed", tier_used=3, region_hint="US")
 
-        title = _first_text(tree, '//h1.heading-5') or _first_text(tree, '//h1')
+        title = _first_text(tree, "//h1.heading-5") or _first_text(tree, "//h1")
         price_text = _first_text(tree, '//*[@data-testid="customer-price"]') or _first_text(
             tree, '//*[contains(@class, "priceView-hero-price")]'
         )

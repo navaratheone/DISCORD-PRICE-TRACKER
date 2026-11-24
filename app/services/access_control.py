@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Literal, Protocol
 
 from sqlalchemy import select
@@ -86,7 +86,7 @@ class AccessControl:
         snapshot: MembershipSnapshot,
     ) -> ServerMembership:
         existing = await self._get_membership(server_id, user_id)
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         if existing is None:
             existing = ServerMembership(
                 server_id=server_id,
@@ -108,4 +108,4 @@ class AccessControl:
         if membership.last_seen_at is None:
             return True
         ttl = timedelta(seconds=MEMBERSHIP_CACHE_TTL_SECONDS)
-        return datetime.now(timezone.utc) - membership.last_seen_at > ttl
+        return datetime.now(UTC) - membership.last_seen_at > ttl

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -151,28 +151,22 @@ class WatchService:
         )
         return watch
 
-    async def pause(
-        self, *, watch_id: uuid.UUID, discord_user_id: int, is_admin: bool
-    ) -> Watch:
+    async def pause(self, *, watch_id: uuid.UUID, discord_user_id: int, is_admin: bool) -> Watch:
         watch = await self._require_watch(watch_id)
         await self._require_owner_or_admin(watch, discord_user_id, is_admin)
-        watch.paused_at = datetime.now(timezone.utc)
+        watch.paused_at = datetime.now(UTC)
         return watch
 
-    async def resume(
-        self, *, watch_id: uuid.UUID, discord_user_id: int, is_admin: bool
-    ) -> Watch:
+    async def resume(self, *, watch_id: uuid.UUID, discord_user_id: int, is_admin: bool) -> Watch:
         watch = await self._require_watch(watch_id)
         await self._require_owner_or_admin(watch, discord_user_id, is_admin)
         watch.paused_at = None
         return watch
 
-    async def remove(
-        self, *, watch_id: uuid.UUID, discord_user_id: int, is_admin: bool
-    ) -> None:
+    async def remove(self, *, watch_id: uuid.UUID, discord_user_id: int, is_admin: bool) -> None:
         watch = await self._require_watch(watch_id)
         await self._require_owner_or_admin(watch, discord_user_id, is_admin)
-        watch.removed_at = datetime.now(timezone.utc)
+        watch.removed_at = datetime.now(UTC)
         await self.audit.record(
             action="watch.deleted",
             actor_type="user",
@@ -190,9 +184,7 @@ class WatchService:
         queue.enqueue_scrape(watch.product_id, priority="high")
         return watch
 
-    async def _resolve_actors(
-        self, guild_id: int, discord_user_id: int
-    ) -> tuple[Server, User]:
+    async def _resolve_actors(self, guild_id: int, discord_user_id: int) -> tuple[Server, User]:
         server = await self.servers.get_by_guild_id(guild_id)
         if server is None or not server.is_active:
             raise NotFound("server not registered")

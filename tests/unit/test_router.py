@@ -3,8 +3,6 @@ from __future__ import annotations
 from decimal import Decimal
 from pathlib import Path
 
-import pytest
-
 from app.scraper.circuit import InMemoryCircuitBreaker
 from app.scraper.router import RouterDeps, TierRouter
 

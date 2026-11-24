@@ -3,8 +3,6 @@ from __future__ import annotations
 from decimal import Decimal
 
 import pytest
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.repositories.price_repo import PriceSnapshotRepository
 from app.scraper.schemas import ScrapeResult
 from app.services import queue
@@ -14,6 +12,7 @@ from app.services.price_service import PriceService
 from app.services.server_service import ServerService
 from app.services.user_service import UserService
 from app.services.watch_service import WatchService
+from sqlalchemy.ext.asyncio import AsyncSession
 
 pytestmark = pytest.mark.integration
 
@@ -33,9 +32,7 @@ def _wire_queue() -> _RecordingQueue:
     return fake
 
 
-async def _seed(
-    session: AsyncSession, *, url: str, rules: dict
-) -> tuple[int, int, str]:
+async def _seed(session: AsyncSession, *, url: str, rules: dict) -> tuple[int, int, str]:
     guild_id = 9001 + abs(hash(url)) % 1000
     discord_id = 8001 + abs(hash(url)) % 1000
     await UserService(session).upsert_from_discord(discord_id=discord_id)
@@ -76,9 +73,7 @@ async def test_drop_fires_on_price_decrease(
 ) -> None:
     import uuid
 
-    _, _, pid = await _seed(
-        session, url="https://example.com/p/drop", rules={"drop": True}
-    )
+    _, _, pid = await _seed(session, url="https://example.com/p/drop", rules={"drop": True})
     await _append(session, pid, price=Decimal("100"), in_stock=True)
     new_id = await _append(session, pid, price=Decimal("80"), in_stock=True)
 
@@ -97,9 +92,7 @@ async def test_drop_fires_on_price_decrease(
 async def test_drop_skipped_when_price_equal_or_higher(session: AsyncSession) -> None:
     import uuid
 
-    _, _, pid = await _seed(
-        session, url="https://example.com/p/nodrop", rules={"drop": True}
-    )
+    _, _, pid = await _seed(session, url="https://example.com/p/nodrop", rules={"drop": True})
     await _append(session, pid, price=Decimal("50"), in_stock=True)
     new_id = await _append(session, pid, price=Decimal("60"), in_stock=True)
 
@@ -132,9 +125,7 @@ async def test_threshold_fires_when_below(session: AsyncSession) -> None:
 async def test_restock_fires(session: AsyncSession) -> None:
     import uuid
 
-    _, _, pid = await _seed(
-        session, url="https://example.com/p/restock", rules={"restock": True}
-    )
+    _, _, pid = await _seed(session, url="https://example.com/p/restock", rules={"restock": True})
     await _append(session, pid, price=Decimal("10"), in_stock=False)
     new = await _append(session, pid, price=Decimal("10"), in_stock=True)
     snap = (await PriceSnapshotRepository(session).latest_for_product(uuid.UUID(pid), limit=1))[0]
@@ -150,9 +141,7 @@ async def test_restock_fires(session: AsyncSession) -> None:
 async def test_cooldown_suppresses_repeat_alert(session: AsyncSession) -> None:
     import uuid
 
-    _, _, pid = await _seed(
-        session, url="https://example.com/p/cool", rules={"drop": True}
-    )
+    _, _, pid = await _seed(session, url="https://example.com/p/cool", rules={"drop": True})
     await _append(session, pid, price=Decimal("100"), in_stock=True)
     new = await _append(session, pid, price=Decimal("80"), in_stock=True)
     snap = (await PriceSnapshotRepository(session).latest_for_product(uuid.UUID(pid), limit=1))[0]

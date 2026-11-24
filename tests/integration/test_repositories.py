@@ -2,12 +2,10 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 
 import pytest
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.repositories import (
     AlertEventRepository,
     PriceSnapshotRepository,
@@ -16,6 +14,7 @@ from app.repositories import (
     UserRepository,
     WatchRepository,
 )
+from sqlalchemy.ext.asyncio import AsyncSession
 
 pytestmark = pytest.mark.integration
 
@@ -50,7 +49,7 @@ async def test_product_create_and_update_last_scrape(session: AsyncSession) -> N
     )
     await session.commit()
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     await repo.update_last_scrape(
         product,
         observed_at=now,
@@ -104,7 +103,7 @@ async def test_price_snapshot_append_and_latest(session: AsyncSession) -> None:
     product = await products.create(source_url="https://example.com/p/3", domain="example.com")
     await session.commit()
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     await snapshots.append(
         product_id=product.id,
         observed_at=now,

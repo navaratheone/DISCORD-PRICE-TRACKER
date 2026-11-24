@@ -52,13 +52,13 @@ async def _dispatch(
             return DispatchOutcome(status="channel_gone", detail="no channel configured")
 
         embed = alert_embed(event, watch, product)
-        content = f"<@&{watch.alert_role_id or server.default_alert_role_id}>" if (
-            watch.alert_role_id or server.default_alert_role_id
-        ) else None
-
-        outcome = await dispatcher.send_message(
-            channel_id=channel_id, embed=embed, content=content
+        content = (
+            f"<@&{watch.alert_role_id or server.default_alert_role_id}>"
+            if (watch.alert_role_id or server.default_alert_role_id)
+            else None
         )
+
+        outcome = await dispatcher.send_message(channel_id=channel_id, embed=embed, content=content)
 
         if outcome.status == "delivered":
             await alerts.mark_delivered(event.id)

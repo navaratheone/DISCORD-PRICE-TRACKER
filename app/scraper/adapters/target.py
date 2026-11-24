@@ -31,9 +31,7 @@ class TargetAdapter:
         if tree is None:
             return ScrapeResult(status="failed", tier_used=3, region_hint="US")
 
-        title = _first_text(tree, '//h1[@data-test="product-title"]') or _first_text(
-            tree, '//h1'
-        )
+        title = _first_text(tree, '//h1[@data-test="product-title"]') or _first_text(tree, "//h1")
         price_text = _first_text(tree, '//*[@data-test="product-price"]')
         price = parse_price(price_text)
         currency = parse_currency(price_text, region_hint="US") or "USD"

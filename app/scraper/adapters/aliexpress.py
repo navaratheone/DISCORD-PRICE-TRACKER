@@ -31,7 +31,7 @@ class AliExpressAdapter:
         if tree is None:
             return ScrapeResult(status="failed", tier_used=3)
 
-        title = _first_text(tree, '//h1') or _first_text(tree, '//*[@class="product-title"]')
+        title = _first_text(tree, "//h1") or _first_text(tree, '//*[@class="product-title"]')
         price_text = _first_text(tree, '//*[contains(@class, "product-price-value")]')
         price = parse_price(price_text)
         currency = parse_currency(price_text)

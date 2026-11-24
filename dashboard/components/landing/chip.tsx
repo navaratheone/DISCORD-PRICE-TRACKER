@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils";
 
 export type DotTone = "yellow" | "sky" | "red" | "grey";
 
-/** The one chip style. A chip never changes colour to encode a state: the state is its words, plus an optional dot. */
 export function Chip({
   dot,
   icon,

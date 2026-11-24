@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -38,7 +38,7 @@ class PriceService:
         if product is None:
             raise NotFound("product not found")
 
-        observed_at = datetime.now(timezone.utc)
+        observed_at = datetime.now(UTC)
         status = result.status
         tier = result.tier_used or 0
 

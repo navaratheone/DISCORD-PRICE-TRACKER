@@ -21,9 +21,7 @@ class WorkerRuntime:
 async def worker_runtime() -> AsyncIterator[WorkerRuntime]:
     settings = get_settings()
     engine = create_async_engine(settings.database_url, poolclass=NullPool, future=True)
-    session_factory = async_sessionmaker(
-        bind=engine, expire_on_commit=False, autoflush=False
-    )
+    session_factory = async_sessionmaker(bind=engine, expire_on_commit=False, autoflush=False)
     redis_client: aredis.Redis = aredis.from_url(  # type: ignore[no-untyped-call]
         settings.redis_url, encoding="utf-8", decode_responses=True
     )

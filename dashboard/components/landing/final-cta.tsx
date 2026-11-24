@@ -4,7 +4,6 @@ import { TerrainField } from "./terrain";
 import { Container, Section } from "./section";
 import { inviteUrl } from "@/lib/api";
 
-/** The close answers the opening: a full screen over the price terrain, the statement a fifth larger than the hero's. */
 export function FinalCta() {
   return (
     <Section id="add" labelledBy="add-heading" className="rds-close rds-screen">

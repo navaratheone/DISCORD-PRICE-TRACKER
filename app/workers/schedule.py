@@ -1,8 +1,10 @@
 from __future__ import annotations
-from app.config.limits import CHECK_CADENCE_SECONDS
+
 from typing import Any
 
 from celery.schedules import crontab
+
+from app.config.limits import CHECK_CADENCE_SECONDS
 
 BEAT_SCHEDULE: dict[str, dict[str, Any]] = {
     "scrape-tick": {

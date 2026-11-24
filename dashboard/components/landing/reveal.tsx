@@ -9,7 +9,6 @@ let shower: IntersectionObserver | null = null;
 
 const shown = (node: HTMLElement) => node.dataset.rdsShown === "true";
 
-// An entrance plays once. Once shown, a node is let go, so scrolling back over it never replays it.
 function show(node: HTMLElement) {
   node.dataset.rdsShown = "true";
   forget(node);
@@ -37,7 +36,6 @@ function forget(node: HTMLElement) {
   shower?.unobserve(node);
 }
 
-/** An anchor glide holds the entrances it will fly past, so they play as it lands; ones already played stay put. */
 export function holdEntrances(root: Element) {
   for (const node of nodes) {
     if (root.contains(node)) held.add(node);
@@ -55,10 +53,6 @@ export function releaseEntrances() {
 
 export type RevealVariant = "wipe" | "settle" | "lift";
 
-/**
- * Wipe for headings and statements, settle for words and actions, lift for
- * cards. Armed only once script has marked the document.
- */
 export function Reveal({
   as: As = "div",
   variant = "settle",
@@ -68,7 +62,7 @@ export function Reveal({
 }: {
   as?: ElementType;
   variant?: RevealVariant;
-  /** Stagger delay in milliseconds. */
+  
   delay?: number;
   className?: string;
   children: ReactNode;

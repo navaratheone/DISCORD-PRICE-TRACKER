@@ -24,7 +24,6 @@ export function SiteNav() {
   const [menuTop, setMenuTop] = useState<number | undefined>(undefined);
   const headerRef = useRef<HTMLElement>(null);
 
-  // The bar turns to glass as soon as the page moves under it.
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 4);
     onScroll();
@@ -47,7 +46,6 @@ export function SiteNav() {
   }, [open]);
 
   const toggleMenu = () => {
-    // The panel hangs from the bar.
     if (!open) setMenuTop(headerRef.current?.getBoundingClientRect().bottom);
     setOpen((v) => !v);
   };

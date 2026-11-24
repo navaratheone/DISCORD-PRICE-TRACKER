@@ -33,7 +33,7 @@ def build_bot() -> commands.Bot:
     intents.members = True
     intents.guilds = True
     bot = PriceTrackerBot(command_prefix="!unused", intents=intents)
-    bot.tree.on_error = on_app_command_error  # type: ignore[assignment]
+    bot.tree.on_error = on_app_command_error
     return bot
 
 

@@ -2,10 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-/* A landscape made of price lines, seen in perspective: every ridge is a curve flowing toward the viewer, nearer
-   ridges hide farther ones, a red trench winds through it where prices plummet, and one yellow crest travels in
-   from the horizon. Drawn on a 2D canvas with its own projection at 30 frames a second and one device pixel per CSS
-   pixel; it runs only while on screen and holds one still frame under reduced motion. */
+/* Draw the canvas only while visible; keep it static for reduced motion. */
 
 type Variant = "hero" | "close";
 
@@ -18,14 +15,12 @@ const Z_NEAR = 1.2;
 const Z_FAR = 15;
 const GROUND = "#091a23";
 const FRAME_MS = 1000 / 30;
-// The lowest the ground can reach (the trench floor under the deepest swell), so each ridge's fill stops just below it.
 const lowest = (amp: number) => -amp - 1.1;
 
 function trenchX(zw: number) {
   return 1.5 * Math.sin(0.16 * zw) + 0.45 * Math.sin(0.41 * zw + 1.1);
 }
 
-/** Ground height at world x and world depth zw: layered swells, sharper crests to the sides, and the trench. */
 function height(x: number, zw: number, amp: number) {
   const swell =
     0.5 * Math.sin(0.9 * x + 0.55 * zw) +
@@ -61,7 +56,6 @@ export function TerrainField({ variant = "hero" }: { variant?: Variant }) {
 
     const resize = () => {
       const box = canvas.getBoundingClientRect();
-      // A soft background needs no retina pixels: one per CSS pixel keeps the fill cost down.
       const dpr = 1;
       w = box.width;
       h = box.height;
@@ -81,7 +75,6 @@ export function TerrainField({ variant = "hero" }: { variant?: Variant }) {
       const f = ((h * 1.03 - horizonY) * Z_NEAR) / set.camH;
       const travel = t * set.speed;
       const span = Z_FAR - Z_NEAR;
-      // The yellow crest rides the ground in from the horizon, once every span of travel.
       const crestZ = Z_FAR - (travel % span);
       const xs: number[] = new Array(cols + 1);
       const ys: number[] = new Array(cols + 1);
@@ -101,8 +94,6 @@ export function TerrainField({ variant = "hero" }: { variant?: Variant }) {
           ys[c] = horizonY + ((set.camH - height(x, zw, set.amp)) * f) / z;
         }
 
-        // Nearer ground hides what lies behind it. Every farther ridge sits above this one's lowest possible point,
-        // so the fill only needs to reach there rather than the foot of the canvas.
         const base = Math.min(h + 2, horizonY + (floor * f) / z);
         ctx.beginPath();
         ctx.moveTo(xs[0], ys[0]);
@@ -120,7 +111,6 @@ export function TerrainField({ variant = "hero" }: { variant?: Variant }) {
         ctx.strokeStyle = `rgba(138, 153, 160, ${(0.07 + 0.5 * near).toFixed(3)})`;
         ctx.stroke();
 
-        // The trench floor, in red: where every line falls away.
         const tx = trenchX(zw);
         const lo = ((tx - 0.42) * f) / z + w / 2;
         const hi = ((tx + 0.42) * f) / z + w / 2;
@@ -139,7 +129,6 @@ export function TerrainField({ variant = "hero" }: { variant?: Variant }) {
         ctx.lineWidth = 1 + near;
         ctx.stroke();
 
-        // One yellow crest, brightest mid-way and gone before it reaches the viewer.
         const pass = Math.abs(z - crestZ) / (span / rows) / (1 + 3 * k);
         if (pass < 1) {
           const life = Math.sin(Math.PI * Math.min(1, Math.max(0, 1 - (crestZ - Z_NEAR) / span)));

@@ -16,9 +16,7 @@ pytestmark = pytest.mark.integration
 async def test_record_snapshot_updates_product_last_fields(
     session: AsyncSession,
 ) -> None:
-    product, _ = await ProductService(session).find_or_create_by_url(
-        "https://example.com/p/snap"
-    )
+    product, _ = await ProductService(session).find_or_create_by_url("https://example.com/p/snap")
     await session.commit()
 
     svc = PriceService(session)
@@ -55,9 +53,7 @@ async def test_record_snapshot_updates_product_last_fields(
 async def test_record_snapshot_failed_writes_history_row_with_nulls(
     session: AsyncSession,
 ) -> None:
-    product, _ = await ProductService(session).find_or_create_by_url(
-        "https://example.com/p/fail"
-    )
+    product, _ = await ProductService(session).find_or_create_by_url("https://example.com/p/fail")
     await session.commit()
 
     svc = PriceService(session)

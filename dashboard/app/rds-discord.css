@@ -1,6 +1,4 @@
-/* The hero's recording: a Discord client in a macOS window. The client wears a translucent midnight theme in the
-   manner of the frosted community themes (panes that let the window's glass through, the site's yellow as accent,
-   Discord's own conventions kept: role colours, the APP tag, embed colour bars, the mention highlight). */
+
 
 @layer components {
   .dc-wrap {
@@ -25,8 +23,6 @@
     perspective-origin: 50% 0%;
   }
 
-  /* The window: frosted glass over the terrain, a dark outer edge and a light inner one as macOS draws them, a long
-     soft shadow, and a faint glare across its upper left. It stands tilted back and settles flat on scroll. */
   .dc-window {
     position: relative;
     aspect-ratio: 1040 / 540;
@@ -129,7 +125,6 @@
     min-height: 0;
   }
 
-  /* Servers */
   .dc-rail {
     display: flex;
     flex-direction: column;
@@ -220,7 +215,6 @@
     color: #fff;
   }
 
-  /* Channels */
   .dc-side {
     display: flex;
     flex-direction: column;
@@ -380,7 +374,6 @@
     height: 17px;
   }
 
-  /* The channel */
   .dc-chat {
     display: flex;
     flex-direction: column;
@@ -729,7 +722,6 @@
     animation: dc-in 340ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
   }
 
-  /* The composer, its slash-command menu and the typing line under it */
   .dc-compose {
     position: relative;
     flex: none;
@@ -911,7 +903,6 @@
     animation-delay: 0.3s;
   }
 
-  /* Members */
   .dc-members {
     min-width: 0;
     padding: 4px 8px 8px;
@@ -986,7 +977,6 @@
     white-space: nowrap;
   }
 
-  /* The pointer, travelling to what it is about to touch */
   .dc-cursor {
     position: absolute;
     top: 0;
@@ -1040,7 +1030,6 @@
     color: var(--dc-accent);
   }
 
-  /* Phones: Discord's single pane, the channel alone under the window's bar. */
   .dc-wrap[data-compact] .dc-window {
     aspect-ratio: auto;
     height: 480px;
