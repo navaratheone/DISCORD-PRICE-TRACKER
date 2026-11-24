@@ -88,7 +88,7 @@ services:
       dockerfile: docker/Dockerfile.api
     environment:
       <<: *python-env
-      API_PUBLIC_URL: ${API_PUBLIC_URL:-http://localhost:8000}
+      API_PUBLIC_URL: ${API_PUBLIC_URL:-http://localhost:3000/api}
       DASHBOARD_URL: ${DASHBOARD_URL:-http://localhost:3000}
     ports:
       - "${API_HOST_PORT:-8000}:8000"
@@ -160,7 +160,8 @@ services:
       context: .
       dockerfile: docker/Dockerfile.dashboard
       args:
-        NEXT_PUBLIC_API_BASE_URL: ${API_PUBLIC_URL:-http://localhost:8000}
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-/api}
+        API_PROXY_TARGET: ${API_PROXY_TARGET:-http://api:8000}
     restart: unless-stopped
     environment:
       NEXTAUTH_URL: ${DASHBOARD_URL:-http://localhost:3000}
