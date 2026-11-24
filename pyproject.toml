@@ -38,7 +38,7 @@ bot = [
 ]
 workers = [
   "celery>=5.3,<6",
-  "redis>=5.0,<6",
+  "redis>=6.1,<7",
   "scrapling[fetchers]>=0.3.13",
   "firecrawl>=2.0,<5",
   "opentelemetry-instrumentation-celery>=0.46b0",
@@ -70,7 +70,7 @@ select = [
   "SIM",                # simplify
   "TID",                # tidy imports
   "RUF",                # ruff-specific
-  "T20",                # bans print() — enforces logging discipline
+  "T20",                # bans print() â€” enforces logging discipline
 ]
 ignore = ["E501"]       # handled by formatter
 
@@ -110,3 +110,4 @@ filterwarnings = [
   "error",
   "ignore::DeprecationWarning:celery.*",
 ]
+
